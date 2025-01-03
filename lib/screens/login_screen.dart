@@ -6,7 +6,6 @@ import 'package:agrisync/widget/animted_toggle_button.dart';
 import 'package:agrisync/widget/image_assets.dart';
 import 'package:agrisync/widget/long_button.dart';
 import 'package:agrisync/widget/text_lato.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
