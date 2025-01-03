@@ -19,4 +19,5 @@ class AgrisyncImageIcon {
   String openEye = "${iconpath}open_eye.png";
   String closeEye = "${iconpath}close_eye.png";
   String email = "${iconpath}email.png";
+  String more = "${iconpath}more.png";
 }

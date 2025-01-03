@@ -1,4 +1,3 @@
-import 'package:agrisync/widget/flashy_bottom_navigation_bar.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:flutter/material.dart';
 
@@ -37,7 +36,6 @@ class _CropDetailScreenState extends State<CropDetailScreen> {
           );
         },
       ),
-      bottomNavigationBar: const FlashyBottomNavigationBar(),
     );
   }
 }

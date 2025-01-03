@@ -1,17 +1,16 @@
 import 'package:agrisync/shopping_page/Product.dart';
 import 'package:agrisync/shopping_page/item_count.dart';
 import 'package:agrisync/shopping_page/item_detail_page.dart';
-import 'package:agrisync/widget/flashy_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
-class ShoppingPage extends StatefulWidget {
-  const ShoppingPage({super.key});
+class ShoppingScreen extends StatefulWidget {
+  const ShoppingScreen({super.key});
 
   @override
-  State<ShoppingPage> createState() => _ShoppingPageState();
+  State<ShoppingScreen> createState() => _ShoppingScreenState();
 }
 
-class _ShoppingPageState extends State<ShoppingPage> {
+class _ShoppingScreenState extends State<ShoppingScreen> {
   Product products = Product(
       id: 01,
       image: "assets/farm.png",
@@ -22,12 +21,12 @@ class _ShoppingPageState extends State<ShoppingPage> {
       title: "Product");
 
   final List<String> images = [
-    'assets/p1.jpg',
-    'assets/p2.jpg',
-    'assets/p3.jpg',
-    'assets/p4.jpg',
-    'assets/post1.jpg',
-    'assets/p3.jpg'
+    'assets/farm.png',
+    'assets/farm.png',
+    'assets/farm.png',
+    'assets/farm.png',
+    'assets/farm.png',
+    'assets/farm.png',
   ];
 
   final List<String> textField = [
@@ -168,7 +167,6 @@ class _ShoppingPageState extends State<ShoppingPage> {
           ],
         ),
       ),
-      bottomNavigationBar: const FlashyBottomNavigationBar(),
     );
   }
 }

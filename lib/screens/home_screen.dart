@@ -1,6 +1,5 @@
 import 'package:agrisync/utils/agrisync_image_icon.dart';
 import 'package:agrisync/widget/drawer_child.dart';
-import 'package:agrisync/widget/flashy_bottom_navigation_bar.dart';
 import 'package:agrisync/widget/weather_card.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -24,6 +23,7 @@ class HomenScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final AppLocalizations localizations = AppLocalizations.of(context)!;
+    final primary = Theme.of(context).colorScheme.primary;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -37,10 +37,13 @@ class HomenScreenState extends State<HomeScreen> {
               builder: (context) => IconButton(
                 icon: AnimatedToggleButton(
                   currIndex: _drawerOpen,
-                  icon1: const Icon(Icons.close),
+                  icon1: Icon(
+                    Icons.close,
+                    color: primary,
+                  ),
                   icon2: Image.asset(
-                    AgrisyncImageIcon().home,
-                    color: Colors.black,
+                    AgrisyncImageIcon().more,
+                    color: primary,
                   ),
                 ),
                 onPressed: () {
@@ -99,7 +102,6 @@ class HomenScreenState extends State<HomeScreen> {
         backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
         child: const DrawerChild(),
       ),
-      bottomNavigationBar: FlashyBottomNavigationBar(),
       onDrawerChanged: (isOpen) {
         // print("Drawer is : $isOpen");
         setState(() {

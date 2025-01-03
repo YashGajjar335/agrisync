@@ -17,9 +17,16 @@ class _DrawerChildState extends State<DrawerChild> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
+    Divider divider = Divider(
+      thickness: 5,
+      color: theme.primary,
+    );
     return Column(
       children: [
-        const AgriSyncIcon(title: "UserProfile"),
+        const Padding(
+          padding: EdgeInsets.only(top: 20, left: 10),
+          child: AgriSyncIcon(title: "UserProfile"),
+        ),
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: UserAccountsDrawerHeader(
@@ -95,59 +102,37 @@ class _DrawerChildState extends State<DrawerChild> {
                 title: const TextLato(text: "AgriMart"),
                 onTap: () {},
               ),
-              ExpansionTile(
-                title: const TextLato(text: "Setting"),
+              divider,
+              ListTile(
                 leading: Image.asset(
-                  AgrisyncImageIcon().setting,
+                  AgrisyncImageIcon().profile,
                   height: 30,
                   width: 30,
                 ),
-                children: [
-                  ListTile(
-                    leading: Image.asset(
-                      AgrisyncImageIcon().profile,
-                      height: 30,
-                      width: 30,
-                    ),
-                    title: const TextLato(text: "EditProfile"),
-                    onTap: () {},
-                  ),
-                  ListTile(
-                    leading: Image.asset(
-                      AgrisyncImageIcon().language,
-                      height: 30,
-                      width: 30,
-                    ),
-                    title: const TextLato(text: "Language"),
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => const ChangeLangScreen())),
-                  ),
-                  ListTile(
-                    leading: Image.asset(
-                      AgrisyncImageIcon().onBording,
-                      height: 30,
-                      width: 30,
-                    ),
-                    title: const TextLato(text: "OnBordingScreen"),
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => const OnBordingScreen())),
-                  ),
-                  ListTile(
-                    leading: Image.asset(
-                      AgrisyncImageIcon().onBording,
-                      height: 30,
-                      width: 30,
-                    ),
-                    title: const TextLato(text: "OnBordingScreen"),
-                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => const OnBordingScreen())),
-                  ),
-                ],
+                title: const TextLato(text: "EditProfile"),
+                onTap: () {},
               ),
-              Divider(
-                thickness: 10,
-                color: theme.primary,
+              ListTile(
+                leading: Image.asset(
+                  AgrisyncImageIcon().language,
+                  height: 30,
+                  width: 30,
+                ),
+                title: const TextLato(text: "Language"),
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) => const ChangeLangScreen())),
               ),
+              ListTile(
+                leading: Image.asset(
+                  AgrisyncImageIcon().onBording,
+                  height: 30,
+                  width: 30,
+                ),
+                title: const TextLato(text: "OnBordingScreen"),
+                onTap: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const OnBordingScreen())),
+              ),
+              divider,
               ListTile(
                 leading: Image.asset(
                   AgrisyncImageIcon().feedback,
@@ -166,10 +151,7 @@ class _DrawerChildState extends State<DrawerChild> {
                 title: const TextLato(text: "help"),
                 onTap: () {},
               ),
-              Divider(
-                thickness: 10,
-                color: theme.primary,
-              ),
+              divider,
               ListTile(
                 leading: Image.asset(
                   AgrisyncImageIcon().logout,
