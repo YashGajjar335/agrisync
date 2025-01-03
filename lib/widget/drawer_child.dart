@@ -1,4 +1,4 @@
-import 'package:agrisync/onboarding%20screen/onbording_screen.dart';
+import 'package:agrisync/onbording_screen.dart/onbording_screen.dart';
 import 'package:agrisync/screens/change_lang_screen.dart';
 import 'package:agrisync/utils/agrisync_image_icon.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';

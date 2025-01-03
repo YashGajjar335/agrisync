@@ -1,4 +1,4 @@
-import 'package:agrisync/onboarding%20screen/page_formate.dart';
+import 'package:agrisync/onbording_screen.dart/page_formate.dart';
 import 'package:agrisync/screens/home_screen.dart';
 import 'package:agrisync/widget/colors.dart';
 import 'package:agrisync/widget/long_button.dart';
