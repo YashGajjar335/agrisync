@@ -1,5 +1,5 @@
 import 'package:agrisync/onbording_screen.dart/page_formate.dart';
-import 'package:agrisync/screens/home_screen.dart';
+import 'package:agrisync/screens/main_screen.dart';
 import 'package:agrisync/widget/colors.dart';
 import 'package:agrisync/widget/long_button.dart';
 import 'package:flutter/material.dart';
@@ -106,7 +106,7 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
                             // ignore: use_build_context_synchronously
                             Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
-                                  builder: (_) => const HomeScreen()),
+                                  builder: (_) => const MainScreen()),
                             );
                           },
                         ),
@@ -123,7 +123,7 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
                                 currentIndex == 0
                                     ? Navigator.of(context).pushReplacement(
                                         MaterialPageRoute(
-                                            builder: (_) => const HomeScreen()),
+                                            builder: (_) => const MainScreen()),
                                       )
                                     : pageController
                                         .jumpToPage(currentIndex - 2);

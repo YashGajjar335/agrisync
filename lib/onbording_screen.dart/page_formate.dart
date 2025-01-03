@@ -27,7 +27,11 @@ class ScreenDemo extends StatelessWidget {
             ),
           ),
         ),
-        TextLato(text: title),
+        TextLato(
+          text: title,
+          fontSize: 35,
+          fontWeight: FontWeight.bold,
+        ),
         const SizedBox(
           height: 10,
         ),

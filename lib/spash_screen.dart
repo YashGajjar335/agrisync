@@ -1,5 +1,6 @@
 import 'package:agrisync/onbording_screen.dart/onbording_screen.dart';
 import 'package:agrisync/screens/home_screen.dart';
+import 'package:agrisync/screens/main_screen.dart';
 import 'package:agrisync/widget/colors.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget _nextScreen() {
     // print("TEST: ${isOnboarded}");
     if (isOnboarded) {
-      return const HomeScreen();
+      return const MainScreen();
     } else {
       return const OnBordingScreen();
     }
