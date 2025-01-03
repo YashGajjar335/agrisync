@@ -9,12 +9,12 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   List<Map<String, String>> listPost = [
-    {'image': 'assets/p1.jpg'},
-    {'image': 'assets/p2.jpg'},
-    {'image': 'assets/p3.jpg'},
-    {'image': 'assets/p4.jpg'},
-    {'image': 'assets/post1.jpg'},
-    {'image': 'assets/post2.png'},
+    {'image': 'assets/farm.png'},
+    {'image': 'assets/farm.png'},
+    {'image': 'assets/farm.png'},
+    {'image': 'assets/farm.png'},
+    {'image': 'assets/farm.png'},
+    {'image': 'assets/farm.png'},
   ];
 
   @override
@@ -42,11 +42,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(5),
-                        child: Image.asset(
-                          'assets/profile.jpg',
-                          height: 100,
-                          width: 50,
-                          fit: BoxFit.contain,
+                        child: Icon(
+                          Icons.person,
                         ),
                       ),
                       SizedBox(
