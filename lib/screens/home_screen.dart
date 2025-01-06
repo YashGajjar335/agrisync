@@ -1,4 +1,5 @@
 import 'package:agrisync/utils/agrisync_image_icon.dart';
+import 'package:agrisync/widget/agri_mart_categories.dart';
 import 'package:agrisync/widget/drawer_child.dart';
 import 'package:agrisync/widget/weather_card.dart';
 
@@ -85,7 +86,7 @@ class HomenScreenState extends State<HomeScreen> {
               fontSize: 35,
               fontWeight: FontWeight.bold,
             ),
-            CropRecommendation(),
+            AgriMartCategories(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
