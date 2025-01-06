@@ -1,3 +1,6 @@
+import 'package:agrisync/screens/comment_screen.dart';
+import 'package:agrisync/widget/text_lato.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class ThreadCard extends StatefulWidget {
@@ -11,116 +14,226 @@ class ThreadCard extends StatefulWidget {
 
 class _ThreadCardState extends State<ThreadCard> {
   bool isLiked = false;
+  bool isSaved = false;
+  bool moreThanOneImage = false;
   final List<String> Likes = [];
   var likesCount = 0;
 
   @override
+  void initState() {
+    // check the image is one or more than one
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(5),
-      child: Column(children: [
-        postHeader(),
-        postImage(),
-        postIcons(),
-        postDetails(),
-      ]),
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        children: [
+          threadHeader(),
+          const SizedBox(
+            height: 5,
+          ),
+          threadImage(),
+          const SizedBox(
+            height: 5,
+          ),
+          threadBottom(),
+        ],
+      ),
     );
   }
 
-  Container postDetails() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(10, 0, 5, 0),
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            '128 likes',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 5),
-          Row(
+  threadBottom() {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        const TextLato(
+            text:
+                "This is a description of the post. try this -> double tap on image -> one tap on image -> tap on all icon "),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
             children: [
-              CircleAvatar(
-                radius: 15,
-                child: Image.asset(
-                  'assets/profile.jpg',
-                  width: 30,
-                  height: 30,
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    isLiked = !isLiked;
+                  });
+                },
+                child: Column(
+                  children: [
+                    Icon(
+                      !isLiked
+                          ? Icons.thumb_up_alt_outlined
+                          : Icons.thumb_up_alt,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 30,
+                    ),
+                    const TextLato(
+                      text: "10 Likes",
+                      paddingAll: 0.0,
+                    )
+                  ],
                 ),
               ),
-              Text(
-                '128 likes \t',
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              const Padding(padding: EdgeInsets.all(4)),
+              InkWell(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const CommentScreen()));
+                },
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.comment_rounded,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 30,
+                    ),
+                    const TextLato(
+                      text: "Comment",
+                      paddingAll: 0.0,
+                    ),
+                  ],
+                ),
               ),
-              Text(
-                'this is post discription.',
-                style:
-                    TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+              const Spacer(),
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    isSaved = !isSaved;
+                  });
+                },
+                child: Column(
+                  children: [
+                    Icon(
+                      !isSaved ? Icons.bookmark_outline : Icons.bookmark,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 30,
+                    ),
+                    const TextLato(
+                      text: "Save",
+                      paddingAll: 0.0,
+                    )
+                  ],
+                ),
               ),
             ],
-          )
-        ],
-      ),
-    );
-  }
-
-  Container postIcons() {
-    return Container(
-      padding: EdgeInsets.fromLTRB(5, 0, 6, 0),
-      child: Row(
-        children: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.favorite_border)),
-          IconButton(onPressed: () {}, icon: Icon(Icons.comment)),
-          Spacer(),
-          IconButton(onPressed: () {}, icon: Icon(Icons.save_alt_sharp)),
-        ],
-      ),
-    );
-  }
-
-  Container postImage() {
-    return Container(
-      padding: EdgeInsets.only(top: 10, bottom: 0, left: 10, right: 10),
-      child: Image.asset(
-        'assets/post1.jpg',
-        fit: BoxFit.fill,
-        height: 280,
-        width: double.infinity,
-      ),
-    );
-  }
-
-  Row postHeader() {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        CircleAvatar(
-          radius: 23,
-          child: Image.asset(
-            'assets/profile.jpg',
-            width: 50,
-            height: 50,
           ),
         ),
-        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('  UserName',
-              style: TextStyle(
-                color: Colors.black,
-                fontWeight: FontWeight.bold,
-              )),
-          Text(
-            '  Date',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+      ],
+    );
+  }
+
+  threadImage() {
+    return InkWell(
+      onDoubleTap: () {
+        setState(() {
+          isLiked = !isLiked;
+        });
+      },
+      onTap: () {
+        setState(() {
+          moreThanOneImage = !moreThanOneImage;
+        });
+      },
+      child: moreThanOneImage
+          ? CarouselSlider(
+              items: [
+                Image.asset(
+                  'assets/smart_farm.jpg',
+                  fit: BoxFit.fill,
+                  height: 280,
+                  width: double.infinity,
+                ),
+                Image.asset(
+                  'assets/smart_farm.jpg',
+                  fit: BoxFit.fill,
+                  height: 280,
+                  width: double.infinity,
+                ),
+                Image.asset(
+                  'assets/smart_farm.jpg',
+                  fit: BoxFit.fill,
+                  height: 280,
+                  width: double.infinity,
+                ),
+                Image.asset(
+                  'assets/smart_farm.jpg',
+                  fit: BoxFit.fill,
+                  height: 280,
+                  width: double.infinity,
+                ),
+                Image.asset(
+                  'assets/smart_farm.jpg',
+                  fit: BoxFit.fill,
+                  height: 280,
+                  width: double.infinity,
+                ),
+              ],
+              options: CarouselOptions(
+                height: 280,
+                viewportFraction: 1,
+                animateToClosest: true,
+                autoPlay: true,
+                enableInfiniteScroll: false,
+                // aspectRatio: 16 / 9,
+              ),
+            )
+          : ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Image.asset(
+                'assets/farm.png',
+                fit: BoxFit.fill,
+                height: 280,
+                width: double.infinity,
+              ),
+            ),
+    );
+  }
+
+  Row threadHeader() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            CircleAvatar(
+              radius: 23,
+              backgroundImage: AssetImage("assets/app_logo_half.JPG"),
+            ),
+            Padding(padding: EdgeInsets.all(0.2)),
+            Center(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  TextLato(
+                    text: '  UserName',
+                    paddingAll: 0.0,
+                  ),
+                  TextLato(
+                    text: '  Date',
+                    paddingAll: 0.0,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        InkWell(
+          onTap: () {
+            print("Button Click More");
+          },
+          child: Icon(
+            Icons.more_vert_outlined,
+            color: Theme.of(context).colorScheme.primary,
+            size: 25,
           ),
-        ]),
-        Spacer(flex: 2),
-        IconButton(
-            onPressed: () {
-              print('Open menu button');
-            },
-            icon: Icon(Icons.more_vert_outlined))
+        ),
       ],
     );
   }
