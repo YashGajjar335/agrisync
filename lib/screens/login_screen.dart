@@ -25,11 +25,12 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  bool _showPass = false;
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
     // double height = height(context);
-    bool _password = false;
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -43,22 +44,32 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: EdgeInsets.only(
-                    left: width(context) * 0.3,
-                    top: height(context) * 0.1,
-                    bottom: height(context) * 0.1),
-                child: const Center(child: AgriSyncIcon(title: "LOGIN")),
+              Center(
+                child: SizedBox(
+                    height: 200,
+                    width: 200,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: const Image(
+                          image: AssetImage("assets/app_logo_half.JPG")),
+                    )),
+              ),
+              const Center(
+                child: TextLato(
+                  text: "LOGIN",
+                  fontSize: 35,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Container(
-                padding: const EdgeInsets.only(left: 30, right: 30),
+                padding: const EdgeInsets.only(left: 30, right: 30, top: 100),
                 child: Column(
                   children: [
                     TextField(
+                      keyboardType: TextInputType.emailAddress,
                       controller: _controller,
                       decoration: InputDecoration(
-                        prefixIcon:
-                            ImageAssets(imagePath: AgrisyncImageIcon().email),
+                        prefixIcon: const Icon(Icons.email),
                         labelText: 'Email',
                         labelStyle: GoogleFonts.lato(
                           fontSize: 15,
@@ -67,27 +78,32 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         fillColor: Colors.white24,
                         filled: true,
-                        contentPadding: EdgeInsets.all(15.0),
+                        contentPadding: const EdgeInsets.all(15.0),
                         //  errorText: 'Email is required',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(5),
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     TextField(
+                      keyboardType: TextInputType.visiblePassword,
+                      maxLength: 8,
+                      obscureText: _showPass,
                       decoration: InputDecoration(
                         fillColor: Colors.white24,
-                        suffixIcon: GestureDetector(
+                        suffixIcon: InkWell(
                           onTap: () {
                             setState(() {
-                              _password = !_password;
+                              _showPass = !_showPass;
                             });
                           },
                           child: AnimatedToggleButton(
-                            currIndex: _password,
-                            icon1: Image.asset(AgrisyncImageIcon().openEye),
-                            icon2: Image.asset(AgrisyncImageIcon().closeEye),
+                            currIndex: _showPass,
+                            icon1: ImageAssets(
+                                imagePath: AgrisyncImageIcon().openEye),
+                            icon2: ImageAssets(
+                                imagePath: AgrisyncImageIcon().closeEye),
                           ),
                         ),
                         filled: true,
@@ -118,17 +134,17 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
               ),
-              SizedBox(height: 30),
+              const SizedBox(height: 30),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: LongButton(
                     width: double.infinity, name: "Sign In", onTap: () {}),
               ),
-              SizedBox(height: 70),
+              const SizedBox(height: 70),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextLato(text: "Don't have account?"),
+                  const TextLato(text: "Don't have account?"),
                   GestureDetector(
                       onTap: () => Navigator.pushReplacement(
                           context,

@@ -1,4 +1,4 @@
-import 'package:agrisync/onbording_screen.dart/onbording_screen.dart';
+import 'package:agrisync/screens/onbording_screen.dart';
 import 'package:agrisync/screens/home_screen.dart';
 import 'package:agrisync/screens/main_screen.dart';
 import 'package:agrisync/widget/colors.dart';

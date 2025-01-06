@@ -3,7 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 class AgriSyncIcon extends StatelessWidget {
   final String title;
-  const AgriSyncIcon({super.key, required this.title});
+  final double? size;
+  const AgriSyncIcon({super.key, required this.title, this.size});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +29,7 @@ class AgriSyncIcon extends StatelessWidget {
           style: GoogleFonts.lato(
             color: Theme.of(context).colorScheme.secondary,
             fontWeight: FontWeight.bold,
-            fontSize: 35,
+            fontSize: size ?? 35,
           ),
         ),
       ],

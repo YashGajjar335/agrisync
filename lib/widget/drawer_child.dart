@@ -1,5 +1,6 @@
-import 'package:agrisync/onbording_screen.dart/onbording_screen.dart';
+import 'package:agrisync/screens/onbording_screen.dart';
 import 'package:agrisync/screens/change_lang_screen.dart';
+import 'package:agrisync/screens/profile_screen.dart';
 import 'package:agrisync/utils/agrisync_image_icon.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:agrisync/widget/text_lato.dart';
@@ -29,28 +30,32 @@ class _DrawerChildState extends State<DrawerChild> {
         ),
         Padding(
           padding: const EdgeInsets.all(10.0),
-          child: UserAccountsDrawerHeader(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: Theme.of(context).colorScheme.primaryFixedDim,
-            ),
-            currentAccountPicture: CircleAvatar(
-              radius: 50,
-              backgroundColor: theme.primaryContainer,
-              backgroundImage: AssetImage(AgrisyncImageIcon().profile),
-            ),
-            accountName: Text(
-              "UserName",
-              style: GoogleFonts.lato(
-                  color: theme.primary, fontWeight: FontWeight.bold),
-              textAlign: TextAlign.center,
-            ),
-            accountEmail: Text(
-              "abcd123@gmail.com",
-              style: GoogleFonts.lato(
-                color: theme.primary,
+          child: InkWell(
+            onTap: () => Navigator.push(context,
+                MaterialPageRoute(builder: (context) => const ProfileScreen())),
+            child: UserAccountsDrawerHeader(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: Theme.of(context).colorScheme.primaryFixedDim,
               ),
-              textAlign: TextAlign.center,
+              currentAccountPicture: CircleAvatar(
+                radius: 50,
+                backgroundColor: theme.primaryContainer,
+                backgroundImage: AssetImage(AgrisyncImageIcon().profile),
+              ),
+              accountName: Text(
+                "UserName",
+                style: GoogleFonts.lato(
+                    color: theme.primary, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center,
+              ),
+              accountEmail: Text(
+                "abcd123@gmail.com",
+                style: GoogleFonts.lato(
+                  color: theme.primary,
+                ),
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
         ),

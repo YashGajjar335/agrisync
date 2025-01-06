@@ -8,7 +8,7 @@ class Itemdetailspage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Product product = Product(
+    final product = Product(
         id: 01,
         image: "assets/farm.png",
         color: Colors.transparent,

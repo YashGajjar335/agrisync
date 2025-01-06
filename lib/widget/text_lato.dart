@@ -6,17 +6,20 @@ class TextLato extends StatelessWidget {
   final double? fontSize;
   final Color? fontColor;
   final FontWeight? fontWeight;
+  final double? paddingAll;
   const TextLato(
       {super.key,
       required this.text,
       this.fontSize,
       this.fontColor,
-      this.fontWeight});
+      this.fontWeight,
+      this.paddingAll});
 
   @override
   Widget build(BuildContext context) {
+    double padding = paddingAll ?? 0.8;
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: EdgeInsets.all(padding),
       child: Text(
         text,
         style: GoogleFonts.lato(

@@ -1,9 +1,10 @@
+import 'package:agrisync/screens/agri_connect_screen.dart';
 import 'package:agrisync/screens/agritech_screen.dart';
-import 'package:agrisync/screens/crop_detail_screen.dart';
+import 'package:agrisync/screens/crop_categories_screen.dart';
 import 'package:agrisync/screens/home_screen.dart';
-import 'package:agrisync/screens/login_screen.dart';
-import 'package:agrisync/shopping_page/shopping_page.dart';
+import 'package:agrisync/shopping_page/agri_mart_screen.dart';
 import 'package:agrisync/utils/agrisync_image_icon.dart';
+import 'package:agrisync/widget/drawer_child.dart';
 import 'package:agrisync/widget/image_assets.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
@@ -11,7 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  final int? initPage;
+  const MainScreen({super.key, this.initPage});
 
   @override
   State<MainScreen> createState() => _MainScreenState();
@@ -21,18 +23,27 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 2;
 
   @override
+  void initState() {
+    _selectedIndex = widget.initPage ?? 2;
+    super.initState();
+  }
+
+  // final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
   Widget build(BuildContext context) {
     TextStyle labelStyle = GoogleFonts.lato(
         color: Theme.of(context).colorScheme.primary,
         fontWeight: FontWeight.bold);
     List<Widget> tabItems = const [
-      CropDetailScreen(crop: "ANY"),
-      ShoppingScreen(),
+      CropCategoriesScreen(),
+      AgriMartScreen(),
       HomeScreen(),
-      LoginScreen(),
+      AgriConnectScreen(),
       AgritechScreen(),
     ];
     return Scaffold(
+      // key: _scaffoldKey,
       extendBody: true,
       body: tabItems[_selectedIndex],
       bottomNavigationBar: CurvedNavigationBar(
@@ -84,6 +95,10 @@ class _MainScreenState extends State<MainScreen> {
             labelStyle: labelStyle,
           ),
         ],
+      ),
+      drawer: Drawer(
+        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+        child: const DrawerChild(),
       ),
     );
   }

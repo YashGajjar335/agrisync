@@ -1,4 +1,7 @@
 import 'package:agrisync/screens/login_screen.dart';
+import 'package:agrisync/utils/agrisync_image_icon.dart';
+import 'package:agrisync/widget/animted_toggle_button.dart';
+import 'package:agrisync/widget/image_assets.dart';
 import 'package:agrisync/widget/long_button.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/gestures.dart';
@@ -14,15 +17,17 @@ class SignupScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignupScreen> {
-  bool _isTextFieldVisible = false;
+  bool _isSpecialist = false;
   bool _openfile = false;
   FilePickerResult? res;
+  bool _passShow = false;
   //final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context).colorScheme;
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
           image: AssetImage('assets/login_screen_background.jpg'),
           fit: BoxFit.fill,
@@ -32,25 +37,37 @@ class _SignupScreenState extends State<SignupScreen> {
         backgroundColor: Colors.transparent,
         body: SingleChildScrollView(
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                padding: EdgeInsets.only(left: 30, right: 30),
+                padding: const EdgeInsets.only(left: 30, right: 30),
                 child: Column(
                   children: [
+                    Center(
+                      child: SizedBox(
+                          height: 200,
+                          width: 200,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: const Image(
+                                image: AssetImage("assets/app_logo_half.JPG")),
+                          )),
+                    ),
                     Container(
-                      padding: EdgeInsets.fromLTRB(10, 100, 20, 50),
+                      padding: const EdgeInsets.fromLTRB(10, 10, 20, 100),
                       child: Text(
                         'Welcome to Sign Up',
                         style: GoogleFonts.lato(
-                          fontSize: 30,
-                          color: Color.fromARGB(255, 7, 101, 10),
+                          fontSize: 35,
+                          color: theme.primary,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     TextField(
+                      keyboardType: TextInputType.text,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.people),
+                        prefixIcon: const Icon(Icons.person),
                         labelText: 'UserName',
                         labelStyle: GoogleFonts.lato(
                           fontSize: 15,
@@ -64,10 +81,11 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     TextField(
+                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
-                        prefixIcon: Icon(Icons.email),
+                        prefixIcon: const Icon(Icons.email),
                         labelText: 'Email',
                         labelStyle: GoogleFonts.lato(
                           fontSize: 15,
@@ -81,10 +99,26 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     TextField(
+                      keyboardType: TextInputType.visiblePassword,
+                      maxLength: 8,
+                      obscureText: _passShow,
                       decoration: InputDecoration(
-                        suffixIcon: Icon(Icons.visibility),
+                        suffixIcon: InkWell(
+                          onTap: () {
+                            setState(() {
+                              _passShow = !_passShow;
+                            });
+                          },
+                          child: AnimatedToggleButton(
+                              currIndex: _passShow,
+                              icon1: ImageAssets(
+                                imagePath: AgrisyncImageIcon().openEye,
+                              ),
+                              icon2: ImageAssets(
+                                  imagePath: AgrisyncImageIcon().closeEye)),
+                        ),
                         labelText: 'Password',
                         labelStyle: GoogleFonts.lato(
                           fontSize: 15,
@@ -98,14 +132,15 @@ class _SignupScreenState extends State<SignupScreen> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 30),
-                    if (_isTextFieldVisible)
+                    const SizedBox(height: 30),
+                    if (_isSpecialist)
                       LongButton(
                         onTap: () async {
                           final result = await FilePicker.platform
                               .pickFiles(allowMultiple: false);
                           if (result == null) return;
-                          print(result.files.first);
+                          // print(result.files.first);
+
                           setState(() {
                             _openfile = true;
                             res = result;
@@ -115,7 +150,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         width: double.infinity,
                       ),
                     const SizedBox(height: 10),
-                    if (_openfile && _isTextFieldVisible)
+                    if (_openfile && _isSpecialist)
                       LongButton(
                         onTap: () {
                           OpenFile.open(res?.files.first.path);
@@ -126,48 +161,44 @@ class _SignupScreenState extends State<SignupScreen> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               LongButton(width: double.infinity, name: "Sign Up", onTap: () {}),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               TextButton(
                 onPressed: () {
                   setState(() {
-                    _isTextFieldVisible = !_isTextFieldVisible;
+                    _isSpecialist = !_isSpecialist;
                     _openfile = false;
 
                     res = null;
                   });
                 },
                 child: Text(
-                  _isTextFieldVisible
+                  _isSpecialist
                       ? 'Sign up with user '
                       : 'Sign up with specialist ',
                   style: GoogleFonts.lato(
                     fontSize: 15,
-                    color: Colors.blue,
+                    color: theme.secondary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              SizedBox(
-                height: 20,
-              ),
               RichText(
                 text: TextSpan(
                   text: 'Already have an account ? ',
-                  style: TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 20,
+                  style: GoogleFonts.lato(
+                    color: theme.onSecondaryContainer,
+                    fontSize: 15,
                   ),
                   children: [
                     TextSpan(
                         text: 'Sign In',
                         style: GoogleFonts.lato(
                           fontSize: 20,
-                          color: Colors.blue,
+                          color: theme.primary,
                           fontWeight: FontWeight.bold,
                         ),
                         recognizer: TapGestureRecognizer()
@@ -175,13 +206,12 @@ class _SignupScreenState extends State<SignupScreen> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => LoginScreen()),
+                                  builder: (context) => const LoginScreen()),
                             );
                           }),
                   ],
                 ),
               ),
-              Padding(padding: EdgeInsets.only(bottom: 50))
             ],
           ),
         ),

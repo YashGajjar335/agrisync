@@ -28,7 +28,7 @@ class ItemCount extends StatelessWidget {
           color: Colors.grey,
           borderRadius: BorderRadius.circular(10),
         ),
-        padding: EdgeInsets.all(10),
+        padding: const EdgeInsets.all(10),
         child: GestureDetector(
           onTap: onPress,
           child: Column(
@@ -47,14 +47,14 @@ class ItemCount extends StatelessWidget {
                     const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                 child: Text(
                   product.title,
-                  style: TextStyle(color: Colors.black87),
+                  style: const TextStyle(color: Colors.black87),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: Text(
                   "${product.price}",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               )
             ],
