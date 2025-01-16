@@ -27,20 +27,26 @@ class _ThreadCardState extends State<ThreadCard> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      child: Column(
-        children: [
-          threadHeader(),
-          const SizedBox(
-            height: 5,
-          ),
-          threadImage(),
-          const SizedBox(
-            height: 5,
-          ),
-          threadBottom(),
-        ],
+    return Card(
+      shadowColor: Theme.of(context).colorScheme.secondary,
+      surfaceTintColor: Theme.of(context).colorScheme.secondaryContainer,
+      margin: const EdgeInsets.all(10),
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            threadHeader(),
+            const SizedBox(
+              height: 5,
+            ),
+            threadImage(),
+            const SizedBox(
+              height: 5,
+            ),
+            threadBottom(),
+          ],
+        ),
       ),
     );
   }

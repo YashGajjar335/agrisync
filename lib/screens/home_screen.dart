@@ -1,6 +1,8 @@
 import 'package:agrisync/utils/agrisync_image_icon.dart';
 import 'package:agrisync/widget/agri_mart_categories.dart';
 import 'package:agrisync/widget/drawer_child.dart';
+import 'package:agrisync/widget/thread_card.dart';
+import 'package:agrisync/widget/thread_recommendation.dart';
 import 'package:agrisync/widget/weather_card.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -64,7 +66,7 @@ class HomenScreenState extends State<HomeScreen> {
             HomeScreenTechnology(),
             SizedBox(height: 10),
             TextLato(
-              text: "Crop Information",
+              text: "Crop ",
               fontSize: 35,
               fontWeight: FontWeight.bold,
             ),
@@ -76,17 +78,20 @@ class HomenScreenState extends State<HomeScreen> {
             ),
             WeatherCard(),
             TextLato(
-              text: "Today's Communication",
+              text: "AgriConnect Update",
               fontSize: 35,
               fontWeight: FontWeight.bold,
             ),
-            HomeScreenTechnology(),
+
+            ThreadRecommendation(),
             TextLato(
-              text: "Today's MarketView",
+              text: "AgriMart",
               fontSize: 35,
               fontWeight: FontWeight.bold,
             ),
+
             AgriMartCategories(),
+            // ThreadCard(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

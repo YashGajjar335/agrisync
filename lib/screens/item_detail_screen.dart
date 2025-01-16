@@ -1,4 +1,4 @@
-import 'package:agrisync/shopping_page/product.dart';
+import 'package:agrisync/model/product.dart';
 import 'package:flutter/material.dart';
 
 class Itemdetailspage extends StatelessWidget {

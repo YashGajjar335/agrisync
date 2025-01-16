@@ -1,7 +1,5 @@
 import 'package:agrisync/screens/signup_screen.dart';
 import 'package:agrisync/utils/agrisync_image_icon.dart';
-import 'package:agrisync/utils/globle.dart';
-import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:agrisync/widget/animted_toggle_button.dart';
 import 'package:agrisync/widget/image_assets.dart';
 import 'package:agrisync/widget/long_button.dart';

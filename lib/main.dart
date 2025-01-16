@@ -1,4 +1,6 @@
+import 'package:agrisync/utils/stripe_keys.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:provider/provider.dart';
 
 import 'provider/app_lang_provider.dart';
@@ -7,13 +9,20 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Ensure bindings are initialized
+  await _setUp();
   runApp(
     ChangeNotifierProvider(
       create: (_) => AppLangProvider(), // Initialize provider
       child: const MyApp(),
     ),
   );
+}
+
+Future<void> _setUp() async {
+  String stripePublicKey = StripeKeys().publickey;
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure bindings are initialized
+  Stripe.publishableKey = stripePublicKey;
+  // await Stripe.instance.applySettings();
 }
 
 class MyApp extends StatelessWidget {

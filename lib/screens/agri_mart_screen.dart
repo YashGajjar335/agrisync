@@ -1,6 +1,6 @@
-import 'package:agrisync/shopping_page/Product.dart';
-import 'package:agrisync/shopping_page/item_count.dart';
-import 'package:agrisync/shopping_page/item_detail_page.dart';
+import 'package:agrisync/model/product.dart';
+import 'package:agrisync/widget/item_card.dart';
+import 'package:agrisync/screens/item_detail_screen.dart';
 import 'package:agrisync/widget/agri_mart_categories.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:flutter/material.dart';
@@ -29,16 +29,16 @@ class _AgriMartScreenState extends State<AgriMartScreen> {
         title: const AgriSyncIcon(title: "AgriMart"),
         actions: [
           IconButton(
-            padding: EdgeInsets.only(right: 10),
+            padding: const EdgeInsets.only(right: 10),
             onPressed: () {
               print('Add to Cart');
             },
-            icon: Icon(Icons.shopping_cart_rounded),
+            icon: const Icon(Icons.shopping_cart_rounded),
           ),
         ],
       ),
       body: Container(
-        padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -51,11 +51,11 @@ class _AgriMartScreenState extends State<AgriMartScreen> {
                 fillColor: Colors.transparent,
                 filled: true,
                 hintText: 'Search',
-                prefixIcon: Icon(Icons.search),
+                prefixIcon: const Icon(Icons.search),
                 iconColor: Colors.grey,
               ),
             ),
-            Text(
+            const Text(
               'Catogary',
               textAlign: TextAlign.center,
               style: TextStyle(
@@ -63,18 +63,18 @@ class _AgriMartScreenState extends State<AgriMartScreen> {
                   fontWeight: FontWeight.bold,
                   fontSize: 18),
             ),
-            AgriMartCategories(),
-            Divider(
+            const AgriMartCategories(),
+            const Divider(
               height: 1,
               color: Colors.black,
             ),
-            SizedBox(height: 5),
-            Text(
+            const SizedBox(height: 5),
+            const Text(
               'Fertilizer',
               textAlign: TextAlign.left,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Expanded(
@@ -82,12 +82,12 @@ class _AgriMartScreenState extends State<AgriMartScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: GridView.builder(
                   itemCount: 6,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 0.60,
                     crossAxisSpacing: 20,
                   ),
-                  itemBuilder: (context, index) => ItemCount(
+                  itemBuilder: (context, index) => ItemCard(
                     onPress: () {
                       Navigator.push(
                         context,

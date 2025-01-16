@@ -11,6 +11,7 @@ class CommentScreen extends StatefulWidget {
 
 class _CommentScreenState extends State<CommentScreen> {
   bool _isLike = false;
+  TextEditingController _textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -46,6 +47,18 @@ class _CommentScreenState extends State<CommentScreen> {
                 ),
               );
             }),
+      ),
+      bottomNavigationBar: TextField(
+        controller: _textEditingController,
+        decoration: InputDecoration(
+            border: InputBorder.none,
+            suffix: IconButton(
+              icon: const Icon(
+                Icons.send_rounded,
+                size: 30,
+              ),
+              onPressed: () {},
+            )),
       ),
     );
   }

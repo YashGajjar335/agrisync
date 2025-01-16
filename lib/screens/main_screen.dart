@@ -1,8 +1,8 @@
 import 'package:agrisync/screens/agri_connect_screen.dart';
-import 'package:agrisync/screens/agritech_screen.dart';
+import 'package:agrisync/screens/agri_tech_screen.dart';
 import 'package:agrisync/screens/crop_categories_screen.dart';
 import 'package:agrisync/screens/home_screen.dart';
-import 'package:agrisync/shopping_page/agri_mart_screen.dart';
+import 'package:agrisync/screens/agri_mart_screen.dart';
 import 'package:agrisync/utils/agrisync_image_icon.dart';
 import 'package:agrisync/widget/drawer_child.dart';
 import 'package:agrisync/widget/image_assets.dart';
@@ -40,7 +40,7 @@ class _MainScreenState extends State<MainScreen> {
       AgriMartScreen(),
       HomeScreen(),
       AgriConnectScreen(),
-      AgritechScreen(),
+      AgriTechScreen(),
     ];
     return Scaffold(
       // key: _scaffoldKey,
@@ -80,13 +80,26 @@ class _MainScreenState extends State<MainScreen> {
             label: "Home",
             labelStyle: labelStyle,
           ),
-          CurvedNavigationBarItem(
-            child: ImageAssets(
-              imagePath: AgrisyncImageIcon().socialPage,
-            ),
-            label: "AgriConnect",
-            labelStyle: labelStyle,
-          ),
+          _selectedIndex == 3
+              ? CurvedNavigationBarItem(
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.add,
+                      size: 30,
+                      weight: 10,
+                    ),
+                    onPressed: () {},
+                  ),
+                  label: "Add Thread",
+                  labelStyle: labelStyle,
+                )
+              : CurvedNavigationBarItem(
+                  child: ImageAssets(
+                    imagePath: AgrisyncImageIcon().socialPage,
+                  ),
+                  label: "AgriConnect",
+                  labelStyle: labelStyle,
+                ),
           CurvedNavigationBarItem(
             child: ImageAssets(
               imagePath: AgrisyncImageIcon().technology,

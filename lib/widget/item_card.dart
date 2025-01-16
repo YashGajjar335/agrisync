@@ -1,11 +1,11 @@
-import 'package:agrisync/shopping_page/product.dart';
+import 'package:agrisync/model/product.dart';
 import 'package:flutter/material.dart';
 
-class ItemCount extends StatelessWidget {
+class ItemCard extends StatelessWidget {
   final Product? products;
   final Function() onPress;
 
-  const ItemCount({
+  const ItemCard({
     super.key,
     required this.onPress,
     this.products,
