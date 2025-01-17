@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:async';
 
 import 'package:agrisync/utils/stripe_keys.dart';
@@ -10,7 +12,8 @@ class StripeServices {
 
   Future<void> makePayment() async {
     try {
-      String? paymetnIntentClientSecret = await _createPaymentIntent(10, "usd");
+      String? paymetnIntentClientSecret =
+          await _createPaymentIntent(1000000, "INR");
       print("paymetnIntentClientSecret : $paymetnIntentClientSecret");
       if (paymetnIntentClientSecret == null) return;
       await Stripe.instance.initPaymentSheet(
@@ -46,13 +49,11 @@ class StripeServices {
               contentType: Headers.formUrlEncodedContentType,
               headers: headers));
 
+      print(response);
       if (response.data != null) {
-        print(response.statusCode);
-        print(response.data["client_secret"]);
+        // print(response.data["client_secret"]);
 
         return response.data["client_secret"];
-      } else {
-        return null;
       }
     } catch (e) {
       print("_createPaymentIntent(amount, currency) : $e");
