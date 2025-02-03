@@ -1,6 +1,7 @@
 // import 'package:agrisync/screens/payment_screen.dart';
 // import 'package:agrisync/widget/text_lato.dart';
-import 'package:agrisync/services/stripe_services.dart';
+import 'package:agrisync/widget/agri_sync_icon.dart';
+import 'package:agrisync/widget/agri_tech_card.dart';
 import 'package:flutter/material.dart';
 
 class AgriTechScreen extends StatelessWidget {
@@ -10,18 +11,10 @@ class AgriTechScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Hello"),
+        title: const AgriSyncIcon(title: "AgriTech"),
       ),
-      body: Center(
-        child: TextButton(
-          onPressed: () {
-            StripeServices.instance.makePayment();
-          },
-          child: const Icon(
-            Icons.payment_rounded,
-            size: 30,
-          ),
-        ),
+      body: const Center(
+        child: AgriTechCard(),
       ),
     );
   }

@@ -1,7 +1,10 @@
+import 'package:agrisync/screens/auth/login_screen.dart';
 import 'package:agrisync/screens/onbording_screen.dart';
-import 'package:agrisync/screens/change_lang_screen.dart';
+import 'package:agrisync/screens/change_language_screen.dart';
 import 'package:agrisync/screens/profile_screen.dart';
+import 'package:agrisync/services/login_services.dart';
 import 'package:agrisync/utils/agrisync_image_icon.dart';
+import 'package:agrisync/utils/globle.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:flutter/material.dart';
@@ -164,7 +167,16 @@ class _DrawerChildState extends State<DrawerChild> {
                   width: 30,
                 ),
                 title: const TextLato(text: "LogOut"),
-                onTap: () {},
+                onTap: () async {
+                  String? res = await LoginServices.instance.logOut();
+                  res == null
+                      ? Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const LoginScreen(),
+                          ))
+                      : showSnackBar(res, context);
+                },
               ),
             ],
           ),

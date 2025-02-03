@@ -1,3 +1,5 @@
+import 'package:agrisync/screens/home_screen.dart';
+import 'package:agrisync/screens/main_screen.dart';
 import 'package:agrisync/screens/profile_screen.dart';
 import 'package:agrisync/utils/agrisync_image_icon.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';
@@ -21,7 +23,23 @@ class _AgriConnectScreenState extends State<AgriConnectScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: const AgriSyncIcon(title: "AgriConnect"),
+        leading: IconButton(
+          icon: const Padding(
+            padding: EdgeInsets.only(left: 12.0),
+            child: Icon(
+              Icons.arrow_back_ios,
+              size: 30,
+            ),
+          ),
+          onPressed: () {
+            Navigator.pushReplacement(
+                context, MaterialPageRoute(builder: (_) => const MainScreen()));
+          },
+        ),
+        title: const AgriSyncIcon(
+          title: "AgriConnect",
+          size: 30,
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -61,6 +79,22 @@ class _AgriConnectScreenState extends State<AgriConnectScreen> {
             itemBuilder: (context, item) {
               return const ThreadCard();
             }),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: const [
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.add,
+                weight: 20,
+              ),
+              label: "Add Thread"),
+          BottomNavigationBarItem(
+              icon: Icon(
+                Icons.bookmark,
+                weight: 20,
+              ),
+              label: "Saved Thread"),
+        ],
       ),
     );
   }

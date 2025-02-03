@@ -20,6 +20,7 @@
   "language":"ભાષા",
   "english":"અંગ્રેજી",
   "hindi":"હિંદી",
-  "gujrati":"ગુજરાતી"
-
+  "gujrati":"ગુજરાતી",
+  "selectLanguage": "ભાષા પસંદ કરો",
+  "appLanguage": "અંગ્રેજી"
 }

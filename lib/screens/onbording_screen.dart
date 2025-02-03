@@ -1,5 +1,6 @@
-import 'package:agrisync/widget/page_formate.dart';
+import 'package:agrisync/screens/change_language_screen.dart';
 import 'package:agrisync/screens/main_screen.dart';
+import 'package:agrisync/widget/page_formate.dart';
 import 'package:agrisync/widget/colors.dart';
 import 'package:agrisync/widget/long_button.dart';
 import 'package:flutter/material.dart';
@@ -18,13 +19,14 @@ class OnBordingScreen extends StatefulWidget {
 class _OnBordingScreenState extends State<OnBordingScreen> {
   PageController pageController = PageController();
   int currentIndex = 0;
+  int lastIndex = 6;
 
   @override
   Widget build(BuildContext context) {
     final AppLocalizations localizations = AppLocalizations.of(context)!;
-
     // ignore: unused_local_variable
     String buttonText = localizations.skip;
+
     return Scaffold(
       backgroundColor: whiteGreen,
       body: Column(
@@ -34,7 +36,7 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
               controller: pageController,
               onPageChanged: (index) {
                 currentIndex = index;
-                if (index == 5) {
+                if (index == lastIndex) {
                   buttonText = localizations.getStart;
                 } else {
                   buttonText = localizations.skip;
@@ -42,6 +44,9 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
                 setState(() {});
               },
               children: [
+                const ChangeLangScreen(
+                  isPop: false,
+                ),
                 PageFormate(
                     imagePath: "assets/page11.png",
                     title: localizations.cropcultivation,
@@ -81,7 +86,7 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
                     child: SmoothPageIndicator(
                         axisDirection: Axis.horizontal,
                         controller: pageController,
-                        count: 6,
+                        count: lastIndex,
                         effect: const ExpandingDotsEffect(
                           spacing: 8.0,
                           radius: 10.0,
@@ -94,11 +99,11 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
                         )),
                   ),
                 ),
-                currentIndex == 5
+                currentIndex == lastIndex
                     ? Center(
                         child: LongButton(
                           width: 300,
-                          name: localizations.getStart,
+                          buttonText: localizations.getStart,
                           onTap: () async {
                             // child: button(330, 'Get Start', () async {
                             final prefs = await SharedPreferences.getInstance();
@@ -116,7 +121,7 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
                         children: [
                           LongButton(
                               width: 130,
-                              name: currentIndex == 0
+                              buttonText: currentIndex == 0
                                   ? localizations.skip
                                   : localizations.previous,
                               onTap: () {
@@ -130,7 +135,7 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
                               }),
                           LongButton(
                               width: 130,
-                              name: localizations.next,
+                              buttonText: localizations.next,
                               onTap: () async {
                                 pageController.nextPage(
                                     duration: const Duration(milliseconds: 100),

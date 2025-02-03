@@ -20,5 +20,7 @@
   "language":"Language",
   "english":"English",
   "hindi":"Hindi",
-  "gujrati":"Gujrati"
+  "gujrati":"Gujrati",
+  "selectLanguage" : "Select The Language",
+  "appLanguage":"English"
 }

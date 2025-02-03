@@ -109,11 +109,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: [
                   LongButton(
                       width: width(context) * 0.4,
-                      name: "Edit Profile",
+                      buttonText: "Edit Profile",
                       onTap: () {}),
                   LongButton(
                       width: width(context) * 0.4,
-                      name: "Add Thread",
+                      buttonText: "Add Thread",
                       onTap: () {}),
                 ],
               ),

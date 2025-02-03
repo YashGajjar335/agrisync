@@ -14,13 +14,14 @@ class AgriMartScreen extends StatefulWidget {
 
 class _AgriMartScreenState extends State<AgriMartScreen> {
   Product products = Product(
-      id: 01,
-      image: "assets/farm.png",
-      color: Colors.transparent,
-      description: "description",
-      price: 500,
-      size: 10,
-      title: "Product");
+      id: 1,
+      image: 'assets/farm.png',
+      color: Colors.black,
+      description:
+          'Often called Lord Krishna, he is one of the most widely worshiped and popular Hindu deities. Krishna is the eighth avatar (or incarnation) of Vishnu',
+      price: 280,
+      size: 12,
+      title: 'Title 1');
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +93,9 @@ class _AgriMartScreenState extends State<AgriMartScreen> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const Itemdetailspage()),
+                            builder: (context) => ItemsDetailsPage(
+                                  product: products,
+                                )),
                       );
                     },
                   ),

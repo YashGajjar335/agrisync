@@ -80,7 +80,7 @@ class _CropDetailScreenState extends State<CropDetailScreen> {
                       "Wheat is a staple grain used to make flour for bread, biscuits, and pasta.Bran is used as animal feed."),
               LongButton(
                   width: double.infinity,
-                  name: "Start Plant Health Reminder",
+                  buttonText: "Start Plant Health Reminder",
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => PlantHealthReminder(

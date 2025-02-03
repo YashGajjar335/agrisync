@@ -1,7 +1,6 @@
 import 'package:agrisync/utils/agrisync_image_icon.dart';
 import 'package:agrisync/widget/agri_mart_categories.dart';
 import 'package:agrisync/widget/drawer_child.dart';
-import 'package:agrisync/widget/thread_card.dart';
 import 'package:agrisync/widget/thread_recommendation.dart';
 import 'package:agrisync/widget/weather_card.dart';
 
@@ -60,7 +59,8 @@ class HomenScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: SafeArea(
+      body: Padding(
+        padding: const EdgeInsets.all(10),
         child: ListView(
           children: const [
             HomeScreenTechnology(),

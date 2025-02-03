@@ -65,7 +65,7 @@ class _PlantHealthReminderState extends State<PlantHealthReminder> {
               pageNumber == 0
                   ? LongButton(
                       width: double.infinity,
-                      name: "Start",
+                      buttonText: "Start",
                       onTap: () {
                         setState(() {
                           _pagecontroller.nextPage(
@@ -80,7 +80,7 @@ class _PlantHealthReminderState extends State<PlantHealthReminder> {
                         children: [
                           LongButton(
                             width: width(context) * 0.4,
-                            name: "Previous ",
+                            buttonText: "Previous ",
                             onTap: () {
                               setState(() {
                                 _pagecontroller.previousPage(
@@ -91,7 +91,7 @@ class _PlantHealthReminderState extends State<PlantHealthReminder> {
                           ),
                           LongButton(
                             width: width(context) * 0.4,
-                            name: pageNumber == cropStep.length - 1
+                            buttonText: pageNumber == cropStep.length - 1
                                 ? "Finish"
                                 : "Next ",
                             onTap: () {

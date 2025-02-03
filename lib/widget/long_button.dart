@@ -4,13 +4,15 @@ import 'package:google_fonts/google_fonts.dart';
 
 class LongButton extends StatelessWidget {
   final double width;
-  final String name;
+  final String buttonText;
+  final bool isLoading;
   final void Function() onTap;
   const LongButton(
       {super.key,
       required this.width,
-      required this.name,
-      required this.onTap});
+      required this.buttonText,
+      required this.onTap,
+      this.isLoading = false});
 
   @override
   Widget build(BuildContext context) {
@@ -26,13 +28,17 @@ class LongButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(8),
           ),
           child: Center(
-            child: Text(
-              name,
-              style: GoogleFonts.lato(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white),
-            ),
+            child: isLoading
+                ? const CircularProgressIndicator(
+                    color: Colors.white,
+                  )
+                : Text(
+                    buttonText,
+                    style: GoogleFonts.lato(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white),
+                  ),
           ),
         ),
       ),

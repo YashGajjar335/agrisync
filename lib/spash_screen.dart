@@ -1,6 +1,4 @@
 import 'package:agrisync/screens/onbording_screen.dart';
-import 'package:agrisync/screens/home_screen.dart';
-import 'package:agrisync/screens/main_screen.dart';
 import 'package:agrisync/widget/colors.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +7,13 @@ import 'package:lottie/lottie.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  final Widget nextScreen;
+  final int? second;
+  const SplashScreen({
+    super.key,
+    required this.nextScreen,
+    this.second,
+  });
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -34,7 +38,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget _nextScreen() {
     // print("TEST: ${isOnboarded}");
     if (isOnboarded) {
-      return const MainScreen();
+      return widget.nextScreen;
     } else {
       return const OnBordingScreen();
     }
@@ -47,7 +51,7 @@ class _SplashScreenState extends State<SplashScreen> {
         children: [
           TweenAnimationBuilder(
             tween: Tween<double>(begin: 0.0, end: 30.0),
-            duration: const Duration(seconds: 3),
+            duration: Duration(seconds: widget.second ?? 3),
             builder: (BuildContext context, double value, Widget? child) {
               return Text(
                 'AgrySync',
