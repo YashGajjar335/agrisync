@@ -2,7 +2,7 @@ import 'package:agrisync/model/cart_items.dart';
 import 'package:agrisync/model/order.dart';
 import 'package:agrisync/model/product.dart';
 import 'package:agrisync/model/user_address.dart';
-import 'package:agrisync/screens/product_order_screen.dart';
+import 'package:agrisync/screens/agri_mart/product_order_screen.dart';
 import 'package:flutter/material.dart';
 
 class AddToCartBuyButton extends StatelessWidget {

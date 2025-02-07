@@ -1,11 +1,17 @@
-import 'package:agrisync/screens/comment_screen.dart';
+import 'package:agrisync/model/thread.dart';
+import 'package:agrisync/screens/agriConnect/comment_screen.dart';
+import 'package:agrisync/services/agri_connect_services.dart';
+import 'package:agrisync/utils/globle.dart';
+import 'package:agrisync/widget/string_image.dart';
+import 'package:agrisync/widget/string_image_in_circle_avtar.dart';
 import 'package:agrisync/widget/text_lato.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 
 class ThreadCard extends StatefulWidget {
+  final Thread thread;
   const ThreadCard({
     super.key,
+    required this.thread,
   });
 
   @override
@@ -13,16 +19,42 @@ class ThreadCard extends StatefulWidget {
 }
 
 class _ThreadCardState extends State<ThreadCard> {
+  final AgriConnectService agriConnect = AgriConnectService.instance;
+  // String userName = "userName";
+  // String photoUrl = "";
   bool isLiked = false;
   bool isSaved = false;
-  bool moreThanOneImage = false;
-  final List<String> Likes = [];
-  var likesCount = 0;
+  int totalLike = 0;
 
   @override
   void initState() {
-    // check the image is one or more than one
+    loadThreadData();
+    loadUserData();
     super.initState();
+  }
+
+  void loadUserData() async {
+    final user = await agriConnect.getUser(widget.thread.uid);
+    widget.thread.userName = await user['uname'];
+    widget.thread.userProfilePic = await user['profilePic'];
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void loadThreadData() {
+    isLiked = widget.thread.isLiked;
+    isSaved = widget.thread.isSaved;
+    totalLike = widget.thread.totalLike;
+    if (mounted) {
+      setState(() {});
+    }
+    // isLiked = await agriConnect.isLike(widget.thread.threadId);
+    // isSaved = await agriConnect.isSaved(widget.thread.threadId);
+    // print(thread.threadId);
+    // if (mounted) {
+    //   setState(() {});
+    // }
   }
 
   @override
@@ -37,13 +69,17 @@ class _ThreadCardState extends State<ThreadCard> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             threadHeader(),
-            const SizedBox(
-              height: 5,
+            const SizedBox(height: 5),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: StringImage(
+                base64ImageString: widget.thread.photoUrl,
+                fit: BoxFit.contain,
+                height: 280,
+                width: double.infinity,
+              ),
             ),
-            threadImage(),
-            const SizedBox(
-              height: 5,
-            ),
+            const SizedBox(height: 5),
             threadBottom(),
           ],
         ),
@@ -51,54 +87,77 @@ class _ThreadCardState extends State<ThreadCard> {
     );
   }
 
-  threadBottom() {
+  void likeThread() async {
+    bool newLikedState = !isLiked;
+    setState(() => isLiked = newLikedState);
+
+    final res = await agriConnect.likeThread(widget.thread.threadId);
+    if (mounted && res != null) {
+      // setState(() {}); // Update UI only if necessary
+    }
+  }
+
+  void saveThreads() async {
+    bool newSavedState = !isSaved;
+    setState(() => isSaved = newSavedState);
+
+    final res = await agriConnect.savedThread(widget.thread.threadId);
+    if (mounted && res != null) {
+      // setState(() {});
+    }
+  }
+
+  Widget threadBottom() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const TextLato(
-            text:
-                "This is a description of the post. try this -> double tap on image -> one tap on image -> tap on all icon "),
+        TextLato(text: widget.thread.description),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
             children: [
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    isLiked = !isLiked;
-                  });
-                },
-                child: Column(
+              IconButton(
+                iconSize: 30,
+                icon: Column(
                   children: [
                     Icon(
-                      !isLiked
-                          ? Icons.thumb_up_alt_outlined
-                          : Icons.thumb_up_alt,
+                      isLiked
+                          ? Icons.thumb_up_alt
+                          : Icons.thumb_up_alt_outlined,
                       color: Theme.of(context).colorScheme.primary,
-                      size: 30,
                     ),
-                    const TextLato(
-                      text: "10 Likes",
+                    TextLato(
+                      text: "$totalLike Likes",
                       paddingAll: 0.0,
-                    )
+                    ),
                   ],
                 ),
+                onPressed: () {
+                  if (!isLiked) {
+                    totalLike += 1;
+                  } else {
+                    totalLike -= 1;
+                  }
+                  likeThread();
+                },
               ),
               const Padding(padding: EdgeInsets.all(4)),
-              InkWell(
-                onTap: () {
+              IconButton(
+                iconSize: 30,
+                onPressed: () {
                   Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const CommentScreen()));
-                },
-                child: Column(
-                  children: [
-                    Icon(
-                      Icons.comment_rounded,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 30,
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AgriConnectCommentScreen(
+                        threadId: widget.thread.threadId,
+                      ),
                     ),
+                  );
+                },
+                icon: Column(
+                  children: [
+                    Icon(Icons.comment_rounded,
+                        color: Theme.of(context).colorScheme.primary),
                     const TextLato(
                       text: "Comment",
                       paddingAll: 0.0,
@@ -107,21 +166,20 @@ class _ThreadCardState extends State<ThreadCard> {
                 ),
               ),
               const Spacer(),
-              InkWell(
-                onTap: () {
-                  setState(() {
-                    isSaved = !isSaved;
-                  });
+              IconButton(
+                iconSize: 30,
+                onPressed: () {
+                  setState(() => isSaved = !isSaved);
+                  saveThreads();
                 },
-                child: Column(
+                icon: Column(
                   children: [
                     Icon(
-                      !isSaved ? Icons.bookmark_outline : Icons.bookmark,
+                      isSaved ? Icons.bookmark : Icons.bookmark_outline,
                       color: Theme.of(context).colorScheme.primary,
-                      size: 30,
                     ),
-                    const TextLato(
-                      text: "Save",
+                    TextLato(
+                      text: isSaved ? "Saved" : "Save",
                       paddingAll: 0.0,
                     )
                   ],
@@ -134,112 +192,53 @@ class _ThreadCardState extends State<ThreadCard> {
     );
   }
 
-  threadImage() {
-    return InkWell(
-      onDoubleTap: () {
-        setState(() {
-          isLiked = !isLiked;
-        });
-      },
-      onTap: () {
-        setState(() {
-          moreThanOneImage = !moreThanOneImage;
-        });
-      },
-      child: moreThanOneImage
-          ? CarouselSlider(
-              items: [
-                Image.asset(
-                  'assets/smart_farm.jpg',
-                  fit: BoxFit.fill,
-                  height: 280,
-                  width: double.infinity,
-                ),
-                Image.asset(
-                  'assets/smart_farm.jpg',
-                  fit: BoxFit.fill,
-                  height: 280,
-                  width: double.infinity,
-                ),
-                Image.asset(
-                  'assets/smart_farm.jpg',
-                  fit: BoxFit.fill,
-                  height: 280,
-                  width: double.infinity,
-                ),
-                Image.asset(
-                  'assets/smart_farm.jpg',
-                  fit: BoxFit.fill,
-                  height: 280,
-                  width: double.infinity,
-                ),
-                Image.asset(
-                  'assets/smart_farm.jpg',
-                  fit: BoxFit.fill,
-                  height: 280,
-                  width: double.infinity,
-                ),
-              ],
-              options: CarouselOptions(
-                height: 280,
-                viewportFraction: 1,
-                animateToClosest: true,
-                autoPlay: true,
-                enableInfiniteScroll: false,
-                // aspectRatio: 16 / 9,
-              ),
-            )
-          : ClipRRect(
-              borderRadius: BorderRadius.circular(10),
-              child: Image.asset(
-                'assets/farm.png',
-                fit: BoxFit.fill,
-                height: 280,
-                width: double.infinity,
-              ),
-            ),
-    );
-  }
-
+  /// 🔹 Header Section with User Avatar
   Row threadHeader() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        const Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+        Row(
           children: [
-            CircleAvatar(
-              radius: 23,
-              backgroundImage: AssetImage("assets/app_logo_half.JPG"),
-            ),
-            Padding(padding: EdgeInsets.all(0.2)),
-            Center(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  TextLato(
-                    text: '  UserName',
-                    paddingAll: 0.0,
+            widget.thread.userProfilePic != null &&
+                    widget.thread.userProfilePic!.isNotEmpty
+                ? StringImageInCircleAvatar(
+                    base64ImageString: widget.thread.userProfilePic!)
+                : const CircleAvatar(
+                    radius: 23,
+                    backgroundImage: AssetImage("assets/app_logo_half.JPG"),
                   ),
-                  TextLato(
-                    text: '  Date',
-                    paddingAll: 0.0,
-                  ),
-                ],
-              ),
+            const SizedBox(width: 8),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextLato(
+                    text: widget.thread.userName ?? "userName",
+                    paddingAll: 0.0),
+                TextLato(
+                  text: simplyDateFormat(
+                      time: widget.thread.uploadAt, dateOnly: true),
+                  paddingAll: 0.0,
+                ),
+              ],
             ),
           ],
         ),
-        InkWell(
-          onTap: () {
-            print("Button Click More");
-          },
-          child: Icon(
-            Icons.more_vert_outlined,
-            color: Theme.of(context).colorScheme.primary,
-            size: 25,
+        if (isSameUser(widget.thread.uid))
+          IconButton(
+            iconSize: 25,
+            onPressed: () {
+              alertMessage("Delete Thread",
+                  "Do you really want to delete this Thread..?", () async {
+                final res = await agriConnect.deleteThread(
+                    widget.thread.threadId, widget.thread.uid);
+                showSnackBar(res ?? "Thread Deleted", context);
+              }, context);
+            },
+            icon: Icon(
+              Icons.delete_rounded,
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
-        ),
       ],
     );
   }

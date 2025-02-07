@@ -1,6 +1,5 @@
 import 'package:agrisync/admin/screen/admin_login_screen.dart';
 import 'package:agrisync/admin/screen/admin_main_screen.dart';
-import 'package:agrisync/spash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 

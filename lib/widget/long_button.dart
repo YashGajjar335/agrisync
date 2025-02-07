@@ -7,12 +7,13 @@ class LongButton extends StatelessWidget {
   final String buttonText;
   final bool isLoading;
   final void Function() onTap;
-  const LongButton(
-      {super.key,
-      required this.width,
-      required this.buttonText,
-      required this.onTap,
-      this.isLoading = false});
+  const LongButton({
+    super.key,
+    required this.width,
+    required this.buttonText,
+    required this.onTap,
+    this.isLoading = false,
+  });
 
   @override
   Widget build(BuildContext context) {

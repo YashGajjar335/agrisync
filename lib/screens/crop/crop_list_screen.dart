@@ -1,4 +1,4 @@
-import 'package:agrisync/screens/crop_detail_screen.dart';
+import 'package:agrisync/screens/crop/crop_detail_screen.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:flutter/material.dart';
 

@@ -18,15 +18,15 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 void main() async {
   await _setUp();
   // // for_admin
-  runApp(const AdminMyApp());
+  // runApp(const AdminMyApp());
   // // ----------------------------------------------------------
   // // for user
-  // runApp(
-  //   ChangeNotifierProvider(
-  //     create: (_) => AppLangProvider(), // Initialize provider
-  //     child: const MyApp(),
-  //   ),
-  // );
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => AppLangProvider(), // Initialize provider
+      child: const MyApp(),
+    ),
+  );
   // // -------------------------------------------------------------
 }
 

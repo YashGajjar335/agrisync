@@ -1,5 +1,5 @@
 import 'package:agrisync/model/product.dart';
-import 'package:agrisync/screens/agri_mart_cart_screen.dart';
+import 'package:agrisync/screens/agri_mart/agri_mart_cart_screen.dart';
 import 'package:agrisync/widget/add_to_cart_buy_button.dart';
 import 'package:agrisync/widget/out_lined_button.dart';
 import 'package:flutter/material.dart';

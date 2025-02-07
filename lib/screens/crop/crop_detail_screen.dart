@@ -1,4 +1,5 @@
-import 'package:agrisync/screens/plant_health_reminder.dart';
+import 'package:agrisync/model/farmer.dart';
+import 'package:agrisync/screens/crop/plant_health_reminder.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:agrisync/widget/long_button.dart';
 import 'package:agrisync/widget/text_lato.dart';

@@ -12,14 +12,14 @@ import 'package:agrisync/widget/crop_recommendation.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class AgriSyncHomeScreen extends StatefulWidget {
+  const AgriSyncHomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => HomenScreenState();
+  State<AgriSyncHomeScreen> createState() => HomenScreenState();
 }
 
-class HomenScreenState extends State<HomeScreen> {
+class HomenScreenState extends State<AgriSyncHomeScreen> {
   bool _drawerOpen = false;
 
   @override

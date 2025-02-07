@@ -22,7 +22,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final _auth = LoginServices.instance;
+  final _auth = AuthServices.instance;
   String? res;
   bool isLoad = false;
 

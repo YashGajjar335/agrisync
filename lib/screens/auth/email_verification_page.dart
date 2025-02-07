@@ -26,23 +26,27 @@ class _EmailVerificationScreenState extends State<EmailVerificationScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(minutes: 2), () {
-      checkMaxTime();
-      deleteCurrentUser();
-    });
     user?.sendEmailVerification();
     timer =
         Timer.periodic(const Duration(seconds: 3), (_) => checkEmailVerified());
+
+    Timer(const Duration(minutes: 1, seconds: 30), () {
+      // print("time strat now!");
+      if (!isEmailVerified) {
+        checkMaxTime();
+      }
+      // deleteCurrentUser();
+    });
   }
 
   checkMaxTime() async {
-    print('time ended');
+    deleteCurrentUser();
   }
 
   deleteCurrentUser() async {
     var auth = FirebaseAuth.instance;
     String uid = auth.currentUser!.uid;
-    await FirebaseFirestore.instance.collection("Farmer").doc(uid).delete();
+    await FirebaseFirestore.instance.collection("users").doc(uid).delete();
     await auth.currentUser!.delete();
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (_) => const LoginScreen()));

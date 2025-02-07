@@ -29,8 +29,8 @@ class _ViewUsersListState extends State<ViewUsersList> {
           }
           if (snapshot.connectionState == ConnectionState.active) {
             // print(farmer.email);
+            // print("snap : $snap");
             final snap = snapshot.data!.docs;
-            print("snap : $snap");
             return ListView.builder(
                 itemCount: snap.length,
                 itemBuilder: (context, i) {
@@ -49,8 +49,9 @@ class _ViewUsersListState extends State<ViewUsersList> {
                   );
                 });
           }
-          return const Center(
-            child: Text("Hello please wait"),
+          return Center(
+            child: CircularProgressIndicator(
+                color: Theme.of(context).colorScheme.primary),
           );
         },
       ),

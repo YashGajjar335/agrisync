@@ -1,8 +1,8 @@
-import 'package:agrisync/screens/agri_connect_screen.dart';
-import 'package:agrisync/screens/agri_tech_screen.dart';
-import 'package:agrisync/screens/crop_categories_screen.dart';
-import 'package:agrisync/screens/home_screen.dart';
-import 'package:agrisync/screens/agri_mart_screen.dart';
+import 'package:agrisync/screens/agriConnect/agri_connect_screen.dart';
+import 'package:agrisync/screens/agri_tech/agri_tech_screen.dart';
+import 'package:agrisync/screens/crop/crop_categories_screen.dart';
+import 'package:agrisync/screens/agri_sync_home_screen.dart';
+import 'package:agrisync/screens/agri_mart/agri_mart_screen.dart';
 import 'package:agrisync/spash_screen.dart';
 import 'package:agrisync/utils/agrisync_image_icon.dart';
 import 'package:agrisync/widget/drawer_child.dart';
@@ -39,11 +39,12 @@ class _MainScreenState extends State<MainScreen> {
     List<Widget> tabItems = const [
       CropCategoriesScreen(),
       AgriMartScreen(),
-      HomeScreen(),
-      SplashScreen(
-        nextScreen: AgriConnectScreen(),
-      ),
-      AgriTechScreen(),
+      AgriSyncHomeScreen(), AgriConnectScreen(),
+
+      AgriTechScreen()
+      // SplashScreen(
+      //   nextScreen: AgriTechScreen(),
+      // )
     ];
     return Scaffold(
       // key: _scaffoldKey,

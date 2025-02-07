@@ -1,6 +1,6 @@
 import 'package:agrisync/model/product.dart';
 import 'package:agrisync/widget/item_card.dart';
-import 'package:agrisync/screens/item_detail_screen.dart';
+import 'package:agrisync/screens/agri_mart/item_detail_screen.dart';
 import 'package:agrisync/widget/agri_mart_categories.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:flutter/material.dart';

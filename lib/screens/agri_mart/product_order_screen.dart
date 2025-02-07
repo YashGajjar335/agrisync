@@ -1,5 +1,5 @@
 import 'package:agrisync/model/order.dart';
-import 'package:agrisync/widget/add_address.dart';
+import 'package:agrisync/screens/agri_mart/add_address.dart';
 import 'package:agrisync/widget/make_payment.dart';
 import 'package:flutter/material.dart';
 

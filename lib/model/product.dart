@@ -48,22 +48,20 @@ class Products {
   });
 
   // Convert a Product object to a Map
-  Map<String, dynamic> toJson() {
-    return {
-      'productId': productId,
-      'name': name,
-      'description': description,
-      'category': category,
-      'price': price,
-      'unit': unit,
-      'stockQuantity': stockQuantity,
-      'imageUrl': imageUrl,
-      'createdAt': Timestamp.fromDate(createdAt),
-      'expireAt': Timestamp.fromDate(expireAt),
-      'status': status,
-      'averageRating': averageRating,
-    };
-  }
+  Map<String, dynamic> toJson() => {
+        'productId': productId,
+        'name': name,
+        'description': description,
+        'category': category,
+        'price': price,
+        'unit': unit,
+        'stockQuantity': stockQuantity,
+        'imageUrl': imageUrl,
+        'createdAt': Timestamp.fromDate(createdAt),
+        'expireAt': Timestamp.fromDate(expireAt),
+        'status': status,
+        'averageRating': averageRating,
+      };
 
   // Create a Product object from a Map
   factory Products.fromSnap(DocumentSnapshot doc) {

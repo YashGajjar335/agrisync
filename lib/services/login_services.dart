@@ -4,11 +4,11 @@ import 'package:agrisync/utils/globle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-class LoginServices {
-  LoginServices._();
+class AuthServices {
+  AuthServices._();
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  static final LoginServices instance = LoginServices._();
+  static final AuthServices instance = AuthServices._();
 // farmer SignUp
   Future<String?> signUpFarmer(
     String email,
@@ -28,9 +28,11 @@ class LoginServices {
         profilePic: "",
         uname: name,
         email: email,
+        followers: [],
+        following: [],
         // password: password,
       );
-      await _firestore.collection(user.role).doc(user.uid).set(user.toJson());
+      await _firestore.collection("users").doc(user.uid).set(user.toJson());
       return null;
     } on FirebaseAuthException catch (e) {
       if (e.code == "invalid-email") {
@@ -61,9 +63,11 @@ class LoginServices {
         email: email,
         // password: password,
         validProof: doc,
+        followers: [],
+        following: [],
       );
       await _firestore
-          .collection(specialist.role)
+          .collection("users")
           .doc(specialist.uid)
           .set(specialist.toJson());
       res = null;
@@ -93,6 +97,7 @@ class LoginServices {
     return res;
   }
 
+// log out
   Future<String?> logOut() async {
     try {
       await auth.signOut();
@@ -104,6 +109,7 @@ class LoginServices {
     }
   }
 
+// forgot password
   String forgotPassword(String email) {
     if (email.isNotEmpty) {
       auth.sendPasswordResetEmail(email: email);
@@ -113,5 +119,12 @@ class LoginServices {
     } else {
       return "Full fill the email feild first ";
     }
+  }
+
+  Future<Map<String, dynamic>> getCurrentUserDetail() async {
+    String uid = auth.currentUser!.uid;
+    final snap = await _firestore.collection("users").doc(uid).get();
+    Map<String, dynamic> user = snap.data() as Map<String, dynamic>;
+    return user;
   }
 }

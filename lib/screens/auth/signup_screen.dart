@@ -334,7 +334,7 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() {
       _isLoad = true;
     });
-    String? res = await LoginServices.instance.signUpFarmer(
+    String? res = await AuthServices.instance.signUpFarmer(
         _emailController.text,
         _passwordController.text,
         _userNamecontroller.text);
@@ -353,7 +353,7 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() {
       _isLoad = true;
     });
-    String? res = await LoginServices.instance.signUpSpecialist(
+    String? res = await AuthServices.instance.signUpSpecialist(
         _userNamecontroller.text,
         _emailController.text,
         _passwordController.text,

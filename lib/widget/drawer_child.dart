@@ -168,7 +168,7 @@ class _DrawerChildState extends State<DrawerChild> {
                 ),
                 title: const TextLato(text: "LogOut"),
                 onTap: () async {
-                  String? res = await LoginServices.instance.logOut();
+                  String? res = await AuthServices.instance.logOut();
                   res == null
                       ? Navigator.pushReplacement(
                           context,
