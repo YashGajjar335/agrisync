@@ -4,7 +4,7 @@ class ProductReview {
   String productId;
   String uid;
   String review;
-  String rating;
+  double rating;
 
   ProductReview(
       {required this.productId,
@@ -21,13 +21,13 @@ class ProductReview {
     };
   }
 
-  factory ProductReview.fromSnap(DocumentSnapshot snap) {
-    Map<String, dynamic> map = snap.data as Map<String, dynamic>;
+  static ProductReview fromSnap(DocumentSnapshot snap) {
+    Map<String, dynamic> map = snap.data() as Map<String, dynamic>;
     return ProductReview(
       productId: map['productId'] ?? "",
       uid: map['uid'] ?? "",
       review: map['review'] ?? "",
-      rating: map['rating'] ?? "",
+      rating: map['rating'] ?? 0.0,
     );
   }
 }

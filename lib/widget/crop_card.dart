@@ -36,7 +36,7 @@ class CropCard extends StatelessWidget {
               text: cropName,
               fontSize: 60,
               fontWeight: FontWeight.bold,
-              fontColor: color,
+              color: color,
             )
           ],
         ),

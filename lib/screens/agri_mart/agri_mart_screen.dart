@@ -1,8 +1,13 @@
 import 'package:agrisync/model/product.dart';
-import 'package:agrisync/widget/item_card.dart';
-import 'package:agrisync/screens/agri_mart/item_detail_screen.dart';
+import 'package:agrisync/utils/globle.dart';
+import 'package:agrisync/widget/product_card.dart';
+import 'package:agrisync/screens/agri_mart/product_detail_screen.dart';
 import 'package:agrisync/widget/agri_mart_categories.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';
+import 'package:agrisync/widget/text_lato.dart';
+import 'package:agrisync/widget/waiting_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class AgriMartScreen extends StatefulWidget {
@@ -37,13 +42,12 @@ class _AgriMartScreenState extends State<AgriMartScreen> {
             icon: const Icon(Icons.shopping_cart_rounded),
           ),
         ],
-      ),
-      body: Container(
-        padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextField(
+        bottom: PreferredSize(
+          preferredSize: const Size(double.infinity, 50),
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+            child: TextField(
               cursorColor: Colors.red,
               decoration: InputDecoration(
                 border:
@@ -56,13 +60,19 @@ class _AgriMartScreenState extends State<AgriMartScreen> {
                 iconColor: Colors.grey,
               ),
             ),
-            const Text(
-              'Catogary',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18),
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const TextLato(
+              text: 'Catogary',
+              color: Colors.black,
+              fontWeight: FontWeight.bold,
+              fontSize: 18,
             ),
             const AgriMartCategories(),
             const Divider(
@@ -78,29 +88,44 @@ class _AgriMartScreenState extends State<AgriMartScreen> {
             const SizedBox(
               height: 10,
             ),
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: GridView.builder(
-                  itemCount: 6,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.60,
-                    crossAxisSpacing: 20,
-                  ),
-                  itemBuilder: (context, index) => ItemCard(
-                    onPress: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => ItemsDetailsPage(
-                                  product: products,
-                                )),
-                      );
-                    },
-                  ),
-                ),
-              ),
+            Column(
+              children: [
+                StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection("Products")
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.active) {
+                        if (snapshot.hasData) {
+                          int size = snapshot.data!.size;
+                          return GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: size,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 0.60,
+                              crossAxisSpacing: 10,
+                            ),
+                            itemBuilder: (context, index) => ProductCard(
+                              products: Products.fromSnap(
+                                snapshot.data!.docs[index],
+                              ),
+                            ),
+                          );
+                        } else {
+                          return const WaitingScreen();
+                        }
+                      }
+
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const WaitingScreen();
+                      }
+
+                      return const WaitingScreenWithWarnning();
+                    })
+              ],
             ),
           ],
         ),

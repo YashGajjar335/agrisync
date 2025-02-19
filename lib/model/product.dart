@@ -20,47 +20,43 @@ class Product {
 // for project implimantation
 class Products {
   String productId;
-  String name;
+  String productName;
   String description;
-  String category;
+  List<String> categories;
   double price;
   String unit;
   int stockQuantity;
-  List<String> imageUrl;
+  List<String> productImageUrl;
   DateTime createdAt;
   DateTime expireAt;
-  String status; // Available or not
   double averageRating;
 
   Products({
     required this.productId,
-    required this.name,
+    required this.productName,
     required this.description,
-    required this.category,
+    required this.categories,
     required this.price,
     required this.unit,
     required this.stockQuantity,
-    required this.imageUrl,
+    required this.productImageUrl,
     required this.createdAt,
     required this.expireAt,
-    required this.status,
     required this.averageRating,
   });
 
   // Convert a Product object to a Map
   Map<String, dynamic> toJson() => {
         'productId': productId,
-        'name': name,
+        'name': productName,
         'description': description,
-        'category': category,
+        'categories': categories,
         'price': price,
         'unit': unit,
         'stockQuantity': stockQuantity,
-        'imageUrl': imageUrl,
+        'imageUrl': productImageUrl,
         'createdAt': Timestamp.fromDate(createdAt),
         'expireAt': Timestamp.fromDate(expireAt),
-        'status': status,
-        'averageRating': averageRating,
       };
 
   // Create a Product object from a Map
@@ -68,33 +64,31 @@ class Products {
     Map<String, dynamic> map = doc.data() as Map<String, dynamic>;
     return Products(
       productId: map['productId'] ?? '',
-      name: map['name'] ?? '',
+      productName: map['name'] ?? '',
       description: map['description'] ?? '',
-      category: map['category'] ?? '',
+      categories: List<String>.from(map['categories'] ?? []),
       price: (map['price'] ?? 0).toDouble(),
       unit: map['unit'] ?? '',
       stockQuantity: map['stockQuantity'] ?? 0,
-      imageUrl: List<String>.from(map['imageUrl'] ?? []),
+      productImageUrl: List<String>.from(map['imageUrl'] ?? []),
       createdAt: (map['createdAt'] as Timestamp).toDate(),
       expireAt: (map['expireAt'] as Timestamp).toDate(),
-      status: map['status'] ?? 'unavailable',
       averageRating: map['averageRating'] ?? 0.0,
     );
   }
 }
 
-Products product = Products(
-  productId: "123",
-  name: "Product Name",
-  description: "This is a test product",
-  category: "Fertilizers",
-  price: 100.0,
-  unit: "kg",
-  stockQuantity: 50,
-  imageUrl: ["This is First ImageUrl ", "This is second"],
-  createdAt: DateTime.now(),
-  expireAt: DateTime.now().add(const Duration(days: 30)),
-  status: "available",
-  averageRating:
-      12, // this is find from the poductReview all the review's ratinf devide by the
-);
+// Products product = Products(
+//   productId: "123",
+//   productName: "Product Name",
+//   description: "This is a test product",
+//   categories: ["Fertilizers"],
+//   price: 100.0,
+//   unit: "kg",
+//   stockQuantity: 50,
+//   productImageUrl: ["This is First ImageUrl ", "This is second"],
+//   createdAt: DateTime.now(),
+//   expireAt: DateTime.now().add(const Duration(days: 30)),
+//   averageRating:
+//       12, // this is find from the poductReview all the review's ratinf devide by the
+// );

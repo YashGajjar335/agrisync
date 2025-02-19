@@ -39,12 +39,9 @@ class _MainScreenState extends State<MainScreen> {
     List<Widget> tabItems = const [
       CropCategoriesScreen(),
       AgriMartScreen(),
-      AgriSyncHomeScreen(), AgriConnectScreen(),
-
-      AgriTechScreen()
-      // SplashScreen(
-      //   nextScreen: AgriTechScreen(),
-      // )
+      AgriSyncHomeScreen(),
+      AgriConnectScreen(),
+      AgriTechScreen(),
     ];
     return Scaffold(
       // key: _scaffoldKey,

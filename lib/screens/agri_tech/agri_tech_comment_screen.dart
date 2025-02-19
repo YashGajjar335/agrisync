@@ -1,13 +1,10 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:agrisync/model/comment.dart';
-import 'package:agrisync/services/agri_connect_services.dart';
 import 'package:agrisync/services/agri_tech_service.dart';
 import 'package:agrisync/utils/globle.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';
-import 'package:agrisync/widget/agri_tech_card.dart';
 import 'package:agrisync/widget/agri_tech_comment_card.dart';
-import 'package:agrisync/widget/comment_card.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';

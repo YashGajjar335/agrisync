@@ -3,7 +3,7 @@
 import 'package:agrisync/screens/auth/email_verification_page.dart';
 import 'package:agrisync/screens/auth/login_screen.dart';
 import 'package:agrisync/screens/main_screen.dart';
-import 'package:agrisync/services/login_services.dart';
+import 'package:agrisync/services/auth_services.dart';
 import 'package:agrisync/utils/agrisync_image_icon.dart';
 import 'package:agrisync/utils/globle.dart';
 import 'package:agrisync/widget/animted_toggle_button.dart';

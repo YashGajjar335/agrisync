@@ -1,6 +1,6 @@
 import 'package:agrisync/screens/main_screen.dart';
 import 'package:agrisync/screens/auth/signup_screen.dart';
-import 'package:agrisync/services/login_services.dart';
+import 'package:agrisync/services/auth_services.dart';
 import 'package:agrisync/utils/agrisync_image_icon.dart';
 import 'package:agrisync/utils/globle.dart';
 import 'package:agrisync/widget/animted_toggle_button.dart';
@@ -156,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               },
                               child: TextLato(
                                 text: "Forgot Password?",
-                                fontColor: theme.primary,
+                                color: theme.primary,
                               ))),
                     ],
                   ),
@@ -186,7 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 builder: (context) => const SignupScreen())),
                         child: TextLato(
                           text: "Sign up",
-                          fontColor: theme.primary,
+                          color: theme.primary,
                           fontWeight: FontWeight.bold,
                           fontSize: 17,
                         ))

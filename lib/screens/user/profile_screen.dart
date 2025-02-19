@@ -4,7 +4,8 @@ import 'package:agrisync/model/technology.dart';
 import 'package:agrisync/model/thread.dart';
 import 'package:agrisync/screens/agriConnect/add_thread.dart';
 import 'package:agrisync/screens/agri_tech/add_technology.dart';
-import 'package:agrisync/services/login_services.dart';
+import 'package:agrisync/screens/user/edit_profile.dart';
+import 'package:agrisync/services/auth_services.dart';
 import 'package:agrisync/utils/globle.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:agrisync/widget/long_button.dart';
@@ -135,7 +136,10 @@ class _FarmerDetailState extends State<FarmerDetail> {
                 LongButton(
                     width: width(context) * 0.4,
                     buttonText: "Edit Profile",
-                    onTap: () {}),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const EditProfile()))),
                 LongButton(
                     width: width(context) * 0.4,
                     buttonText: "Add Thread",
@@ -280,7 +284,10 @@ class _SpecialistDetailState extends State<SpecialistDetail> {
                 LongButton(
                     width: width(context) * 0.25,
                     buttonText: "Edit Profile",
-                    onTap: () {}),
+                    onTap: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const EditProfile()))),
                 LongButton(
                     width: width(context) * 0.25,
                     buttonText: "Add Thread",

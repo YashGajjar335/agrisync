@@ -1,6 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:agrisync/screens/agri_tech/agri_tech_screen.dart';
 import 'package:agrisync/services/agri_tech_service.dart';
 import 'package:agrisync/utils/globle.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';

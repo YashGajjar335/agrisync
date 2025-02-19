@@ -89,26 +89,27 @@ class MyApp extends StatelessWidget {
                 return const SplashScreen(
                   nextScreen: MainScreen(),
                 );
-              } else if (snapshot.hasError) {
+              }
+
+              if (snapshot.hasError) {
                 return Scaffold(
                   body: Center(
                     child: Text(snapshot.error.toString()),
                   ),
                 );
               }
-
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Scaffold(
-                  body: Center(
-                    // CircularProgressIndicator
-                    child: CircularProgressIndicator(
-                      color: Colors.green,
-                    ),
-                  ),
-                );
-              }
             }
-            return const SplashScreen(nextScreen: LoginScreen());
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Scaffold(
+                body: Center(
+                  // CircularProgressIndicator
+                  child: CircularProgressIndicator(
+                    color: Colors.green,
+                  ),
+                ),
+              );
+            }
+            return const LoginScreen();
           },
         )
         // SplashScreen(

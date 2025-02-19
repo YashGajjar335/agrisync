@@ -3,27 +3,29 @@ import 'package:agrisync/widget/long_button.dart';
 import 'package:flutter/material.dart';
 
 class MakePayment extends StatefulWidget {
-  const MakePayment({super.key});
+  final double amount;
+  const MakePayment({super.key, required this.amount});
 
   @override
   State<MakePayment> createState() => _MakePaymentState();
 }
 
 class _MakePaymentState extends State<MakePayment> {
+  bool isLoad = false;
   @override
   Widget build(BuildContext context) {
-    bool _isLoad = false;
     return LongButton(
       width: double.infinity,
-      buttonText: _isLoad ? "Wait.." : "Make Payment",
+      isLoading: isLoad,
+      buttonText: "Make Payment",
       onTap: () {
         setState(() {
-          _isLoad = true;
+          isLoad = true;
         });
         StripeServices payment = StripeServices.instance;
-        payment.makePayment().whenComplete(() {
+        payment.makePayment(widget.amount).whenComplete(() {
           setState(() {
-            _isLoad = false;
+            isLoad = false;
           });
         });
       },

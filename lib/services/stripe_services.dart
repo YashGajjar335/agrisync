@@ -10,16 +10,16 @@ class StripeServices {
   StripeServices._();
   static final StripeServices instance = StripeServices._();
 
-  Future<void> makePayment() async {
+  Future<void> makePayment(double amount) async {
     try {
       String? paymetnIntentClientSecret =
-          await _createPaymentIntent(1000000, "INR");
+          await _createPaymentIntent(amount, "INR");
       print("paymetnIntentClientSecret : $paymetnIntentClientSecret");
       if (paymetnIntentClientSecret == null) return;
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
           paymentIntentClientSecret: paymetnIntentClientSecret,
-          merchantDisplayName: "Yash Gajjar",
+          merchantDisplayName: "AgriSync",
         ),
       );
       await _processPayment();

@@ -1,3 +1,4 @@
+import 'package:agrisync/admin/screen/add_product_form_page.dart';
 import 'package:agrisync/admin/screen/admin_login_screen.dart';
 import 'package:agrisync/admin/screen/view_users_list.dart';
 import 'package:agrisync/admin/service/admin_login_service.dart';
@@ -36,6 +37,19 @@ class _AdminMainScreenState extends State<AdminMainScreen> {
               onPressed: () {
                 Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const ViewUsersList()));
+              },
+              child: const Text("viewUser"),
+            ),
+          ),
+
+          // add ProductButton
+          Center(
+            child: TextButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const AddProductFormPage()));
               },
               child: const Text("viewUser"),
             ),

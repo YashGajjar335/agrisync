@@ -1,12 +1,14 @@
 import 'package:agrisync/screens/auth/login_screen.dart';
 import 'package:agrisync/screens/onbording_screen.dart';
 import 'package:agrisync/screens/change_language_screen.dart';
-import 'package:agrisync/screens/profile_screen.dart';
-import 'package:agrisync/services/login_services.dart';
+import 'package:agrisync/screens/user/edit_profile.dart';
+import 'package:agrisync/screens/user/profile_screen.dart';
+import 'package:agrisync/services/auth_services.dart';
 import 'package:agrisync/utils/agrisync_image_icon.dart';
 import 'package:agrisync/utils/globle.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:agrisync/widget/text_lato.dart';
+import 'package:agrisync/widget/user_profile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -34,82 +36,15 @@ class _DrawerChildState extends State<DrawerChild> {
         Padding(
           padding: const EdgeInsets.all(10.0),
           child: InkWell(
-            onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (context) => const ProfileScreen())),
-            child: UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8),
-                color: Theme.of(context).colorScheme.primaryFixedDim,
-              ),
-              currentAccountPicture: CircleAvatar(
-                radius: 50,
-                backgroundColor: theme.primaryContainer,
-                backgroundImage: AssetImage(AgrisyncImageIcon().profile),
-              ),
-              accountName: Text(
-                "UserName",
-                style: GoogleFonts.lato(
-                    color: theme.primary, fontWeight: FontWeight.bold),
-                textAlign: TextAlign.center,
-              ),
-              accountEmail: Text(
-                "abcd123@gmail.com",
-                style: GoogleFonts.lato(
-                  color: theme.primary,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const ProfileScreen())),
+              child: const UserProfileCard()),
         ),
         Expanded(
           child: ListView(
             children: [
-              ListTile(
-                leading: Image.asset(
-                  AgrisyncImageIcon().home,
-                  height: 30,
-                  width: 30,
-                ),
-                title: const TextLato(text: "Home"),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Image.asset(
-                  AgrisyncImageIcon().cropHealthReminder,
-                  height: 30,
-                  width: 30,
-                ),
-                title: const TextLato(text: "Crop Health Reminder"),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Image.asset(
-                  AgrisyncImageIcon().technology,
-                  height: 30,
-                  width: 30,
-                ),
-                title: const TextLato(text: "Crop Technologu"),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Image.asset(
-                  AgrisyncImageIcon().socialPage,
-                  height: 30,
-                  width: 30,
-                ),
-                title: const TextLato(text: "Communication"),
-                onTap: () {},
-              ),
-              ListTile(
-                leading: Image.asset(
-                  AgrisyncImageIcon().shoppingCart,
-                  height: 30,
-                  width: 30,
-                ),
-                title: const TextLato(text: "AgriMart"),
-                onTap: () {},
-              ),
               divider,
               ListTile(
                 leading: Image.asset(
@@ -117,8 +52,9 @@ class _DrawerChildState extends State<DrawerChild> {
                   height: 30,
                   width: 30,
                 ),
-                title: const TextLato(text: "EditProfile"),
-                onTap: () {},
+                title: const TextLato(text: "Edit Profile"),
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const EditProfile())),
               ),
               ListTile(
                 leading: Image.asset(

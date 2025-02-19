@@ -1,12 +1,9 @@
 import 'package:agrisync/model/technology.dart';
 import 'package:agrisync/screens/agri_tech/saved_technology.dart';
-import 'package:agrisync/screens/main_screen.dart';
-import 'package:agrisync/screens/profile_screen.dart';
-import 'package:agrisync/screens/agriConnect/save_thread_screen.dart';
-import 'package:agrisync/services/login_services.dart';
+import 'package:agrisync/screens/user/profile_screen.dart';
+import 'package:agrisync/services/auth_services.dart';
 import 'package:agrisync/utils/agrisync_image_icon.dart';
 import 'package:agrisync/screens/agri_tech/add_technology.dart';
-import 'package:agrisync/screens/agriConnect/add_thread.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:agrisync/widget/agri_tech_card.dart';
 import 'package:agrisync/widget/image_assets.dart';
@@ -145,14 +142,13 @@ class _AllTechnologiesState extends State<AllTechnologies> {
                       ),
                     )
                   : ListView.builder(
-                          itemCount: techCount,
-                          itemBuilder: (context, item) {
-                            return TechnologyCard(
-                              technology: Technology.fromSnap(
-                                  snapshot.data!.docs[item]),
-                            );
-                          }
-                    );
+                      itemCount: techCount,
+                      itemBuilder: (context, item) {
+                        return TechnologyCard(
+                          technology:
+                              Technology.fromSnap(snapshot.data!.docs[item]),
+                        );
+                      });
             } else if (snapshot.hasError) {
               final snapError = snapshot.error;
               return Center(

@@ -26,30 +26,46 @@ class AdminMyApp extends StatelessWidget {
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
-            // check connection and return
+            // Check connection state
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Scaffold(
+                body: Center(
+                  child: CircularProgressIndicator(
+                    color: Colors.green,
+                  ),
+                ),
+              );
+            }
+
+            // Handle errors
+            if (snapshot.hasError) {
+              return Scaffold(
+                body: Center(
+                  child: Text(
+                    'An error occurred: ${snapshot.error.toString()}',
+                    style: const TextStyle(color: Colors.red),
+                  ),
+                ),
+              );
+            }
+
+            // Check if the user is authenticated
             if (snapshot.connectionState == ConnectionState.active) {
               if (snapshot.hasData) {
+                // User is authenticated
                 return const AdminMainScreen();
-              } else if (snapshot.hasError) {
-                return Scaffold(
-                  body: Center(
-                    child: Text(snapshot.error.toString()),
-                  ),
-                );
-              }
-
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Scaffold(
-                  body: Center(
-                    // CircularProgressIndicator
-                    child: CircularProgressIndicator(
-                      color: Colors.green,
-                    ),
-                  ),
-                );
+              } else {
+                // User is not authenticated
+                return const AdminLoginScreen();
               }
             }
-            return const AdminLoginScreen();
+
+            // Fallback for other states (e.g., ConnectionState.done)
+            return const Scaffold(
+              body: Center(
+                child: Text('Something went wrong. Please try again later.'),
+              ),
+            );
           },
         )
         // SplashScreen(

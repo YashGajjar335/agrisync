@@ -86,7 +86,7 @@ class _TechnologyCardState extends State<TechnologyCard> {
               text: widget.technology.title,
               fontSize: 24,
               fontWeight: FontWeight.bold,
-              fontColor: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).colorScheme.primary,
             ),
             const SizedBox(height: 5),
             ClipRRect(

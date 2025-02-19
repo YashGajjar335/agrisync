@@ -4,16 +4,18 @@ import 'package:google_fonts/google_fonts.dart';
 class TextLato extends StatelessWidget {
   final String text;
   final double? fontSize;
-  final Color? fontColor;
+  final Color? color;
   final FontWeight? fontWeight;
   final double? paddingAll;
+  final int? maxLine;
   const TextLato(
       {super.key,
       required this.text,
       this.fontSize,
-      this.fontColor,
+      this.color,
       this.fontWeight,
-      this.paddingAll});
+      this.paddingAll,
+      this.maxLine});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +23,10 @@ class TextLato extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.all(padding),
       child: Text(
+        maxLines: maxLine,
         text,
         style: GoogleFonts.lato(
-          color: fontColor ?? Theme.of(context).colorScheme.secondary,
+          color: color ?? Theme.of(context).colorScheme.secondary,
           fontWeight: fontWeight ?? FontWeight.normal,
           fontSize: fontSize ?? 16,
         ),

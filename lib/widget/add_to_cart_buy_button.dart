@@ -1,51 +1,28 @@
-import 'package:agrisync/model/cart_items.dart';
-import 'package:agrisync/model/order.dart';
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:agrisync/model/product.dart';
-import 'package:agrisync/model/user_address.dart';
 import 'package:agrisync/screens/agri_mart/product_order_screen.dart';
+import 'package:agrisync/services/agri_mart_service_user.dart';
+import 'package:agrisync/utils/globle.dart';
+import 'package:agrisync/widget/text_lato.dart';
 import 'package:flutter/material.dart';
 
-class AddToCartBuyButton extends StatelessWidget {
-  const AddToCartBuyButton({
+class AddToCartAndBuyButton extends StatefulWidget {
+  // final String addressId;
+  final Products products;
+  const AddToCartAndBuyButton({
     super.key,
-    required this.product,
+    // required this.addressId,
+    required this.products,
   });
 
-  final Product product;
+  @override
+  State<AddToCartAndBuyButton> createState() => _AddToCartAndBuyButtonState();
+}
+
+class _AddToCartAndBuyButtonState extends State<AddToCartAndBuyButton> {
   @override
   Widget build(BuildContext context) {
-    UserAddress address = UserAddress(
-      street: '123 Main St',
-      city: 'Springfield',
-      state: 'IL',
-      postalCode: '62701',
-    );
-
-    Order order = Order(
-      product: product,
-      quantity: 2,
-      paymentStatus: false,
-      shippingAddress: address,
-    );
-
-    void addToCart(Product product) {
-      CartItem? existingCartItem = cart.firstWhere(
-        (cartItem) => cartItem.product.id == product.id,
-        orElse: () => CartItem(product: product, quantity: 0),
-      );
-
-      if (existingCartItem.quantity > 0) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('${product.title} already in Cart'),
-          duration: const Duration(
-            seconds: 1,
-          ),
-        ));
-      } else {
-        cart.add(CartItem(product: product));
-      }
-    }
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Row(
@@ -56,16 +33,13 @@ class AddToCartBuyButton extends StatelessWidget {
             width: 58,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(18),
-                border: Border.all(color: product.color)),
+                border:
+                    Border.all(color: Theme.of(context).colorScheme.primary)),
             child: IconButton(
-              onPressed: () {
-                addToCart(product);
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                  content: Text('${product.title} added to cart'),
-                  duration: const Duration(
-                    seconds: 1,
-                  ),
-                ));
+              onPressed: () async {
+                final res = await AgriMartServiceUser.instance
+                    .addToCart(widget.products.productId);
+                showSnackBar(res ?? "Products added to cart", context);
               },
               icon: const Icon(Icons.shopping_cart),
             ),
@@ -85,16 +59,15 @@ class AddToCartBuyButton extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                               builder: (context) => ProductOrderScreen(
-                                    order: order,
+                                    productList: {widget.products.productId: 1},
                                   )),
                         );
                       },
-                      child: Text(
-                        'Buy Now'.toUpperCase(),
-                        style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
+                      child: TextLato(
+                        text: 'Buy Now'.toUpperCase(),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
                       )),
                 )),
           ),

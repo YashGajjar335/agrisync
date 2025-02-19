@@ -9,6 +9,7 @@ class AuthServices {
   final FirebaseAuth auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static final AuthServices instance = AuthServices._();
+
 // farmer SignUp
   Future<String?> signUpFarmer(
     String email,
@@ -126,5 +127,20 @@ class AuthServices {
     final snap = await _firestore.collection("users").doc(uid).get();
     Map<String, dynamic> user = snap.data() as Map<String, dynamic>;
     return user;
+  }
+
+  Future<String?> updateUsernameAndProfilePic(
+      String photoUrl, String userName) async {
+    try {
+      String uid = auth.currentUser!.uid;
+
+      await _firestore.collection("users").doc(uid).update({
+        "uname": userName,
+        "profilePic": photoUrl,
+      });
+      return null;
+    } catch (e) {
+      return e.toString();
+    }
   }
 }
