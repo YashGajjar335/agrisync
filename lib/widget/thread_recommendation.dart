@@ -1,4 +1,5 @@
 import 'package:agrisync/model/thread.dart';
+import 'package:agrisync/utils/globle.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:agrisync/widget/thread_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,7 +26,7 @@ class ThreadRecommendation extends StatelessWidget {
                     itemCount: count <= 5 ? count : 5,
                     itemBuilder: (context, item) {
                       return SizedBox(
-                        width: 400,
+                        width: width(context) - 20,
                         child: ThreadCard(
                             thread: Thread.fromSnap(snapshot.data!.docs[item])),
                       );

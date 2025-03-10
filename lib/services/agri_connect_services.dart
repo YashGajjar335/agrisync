@@ -110,6 +110,27 @@ class AgriConnectService {
     }
   }
 
+  // save Thread
+  Future<String?> savedThread(String threadId) async {
+    try {
+      final snap = await _firestore.collection("Thread").doc(threadId).get();
+      List<String> save = List<String>.from(snap['save'] ?? []);
+
+      if (save.contains(uid)) {
+        save.remove(uid);
+      } else {
+        save.add(uid);
+      }
+      await _firestore
+          .collection("Thread")
+          .doc(threadId)
+          .update({'save': save});
+      return null;
+    } catch (e) {
+      return e.toString();
+    }
+  }
+
 // like the thread
   Future<String?> likeThread(String threadId) async {
     try {
@@ -204,26 +225,6 @@ class AgriConnectService {
             .doc(commentId)
             .delete();
       }
-      return null;
-    } catch (e) {
-      return e.toString();
-    }
-  }
-
-  Future<String?> savedThread(String threadId) async {
-    try {
-      final snap = await _firestore.collection("Thread").doc(threadId).get();
-      List<String> save = List<String>.from(snap['save'] ?? []);
-
-      if (save.contains(uid)) {
-        save.remove(uid);
-      } else {
-        save.add(uid);
-      }
-      await _firestore
-          .collection("Thread")
-          .doc(threadId)
-          .update({'save': save});
       return null;
     } catch (e) {
       return e.toString();

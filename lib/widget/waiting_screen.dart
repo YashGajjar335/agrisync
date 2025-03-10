@@ -1,8 +1,10 @@
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class WaitingScreen extends StatelessWidget {
-  const WaitingScreen({super.key});
+  final String? message;
+  const WaitingScreen({super.key, this.message});
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +27,7 @@ class WaitingScreenWithWarnning extends StatelessWidget {
           CircularProgressIndicator(
             color: Theme.of(context).colorScheme.primary,
           ),
-          const TextLato(text: "Something wrong..!"),
+          TextLato(text: AppLocalizations.of(context)!.somethingWrong),
         ],
       ),
     );

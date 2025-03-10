@@ -5,6 +5,7 @@ import 'package:agrisync/utils/globle.dart';
 import 'package:agrisync/widget/string_image.dart';
 import 'package:agrisync/widget/string_image_in_circle_avtar.dart';
 import 'package:agrisync/widget/text_lato.dart';
+import 'package:agrisync/widget/waiting_screen.dart';
 import 'package:flutter/material.dart';
 
 class TechnologyCard extends StatefulWidget {
@@ -22,6 +23,7 @@ class _TechnologyCardState extends State<TechnologyCard> {
   final AgriTechService agriTechService = AgriTechService.instance;
   bool isLiked = false;
   bool isSaved = false;
+  bool isLoad = true;
   int totalLike = 0;
 
   @override
@@ -36,7 +38,9 @@ class _TechnologyCardState extends State<TechnologyCard> {
     isSaved = widget.technology.save.contains(AgriTechService.instance.uid);
     totalLike = widget.technology.like.length;
     if (mounted) {
-      setState(() {});
+      setState(() {
+        isLoad = false;
+      });
     }
   }
 
@@ -60,12 +64,18 @@ class _TechnologyCardState extends State<TechnologyCard> {
   }
 
   void saveTechnology() async {
-    bool newSavedState = !isSaved;
-    setState(() => isSaved = newSavedState);
+    // Toggle locally for faster UI response
+    final previousState = isSaved; // Store previous state
+    setState(() => isSaved = !isSaved);
 
-    final res = await agriTechService.saveTechnology(widget.technology.techId);
-    if (mounted && res != null) {
-      // setState(() {});
+    // Call Firebase and revert on failure
+    final result =
+        await agriTechService.saveTechnology(widget.technology.techId);
+    if (mounted && result == null) {
+      setState(() {
+        isSaved = previousState;
+        isLoad = false;
+      }); // Revert if failed
     }
   }
 
@@ -110,7 +120,9 @@ class _TechnologyCardState extends State<TechnologyCard> {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        TextLato(text: widget.technology.description),
+        TextLato(
+          text: widget.technology.description,
+        ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Row(
@@ -133,9 +145,9 @@ class _TechnologyCardState extends State<TechnologyCard> {
                 ),
                 onPressed: () {
                   if (isLiked) {
-                    totalLike += 1;
-                  } else {
                     totalLike -= 1;
+                  } else {
+                    totalLike += 1;
                   }
                   likeTechnology();
                 },
@@ -165,25 +177,30 @@ class _TechnologyCardState extends State<TechnologyCard> {
                 ),
               ),
               const Spacer(),
-              IconButton(
-                iconSize: 30,
-                onPressed: () {
-                  setState(() => isSaved = !isSaved);
-                  saveTechnology();
-                },
-                icon: Column(
-                  children: [
-                    Icon(
-                      isSaved ? Icons.bookmark : Icons.bookmark_outline,
-                      color: Theme.of(context).colorScheme.primary,
+              isLoad
+                  ? const WaitingScreen()
+                  : IconButton(
+                      iconSize: 30,
+                      onPressed: () {
+                        setState(() {
+                          isSaved = !isSaved;
+                          isLoad = true;
+                        });
+                        saveTechnology();
+                      },
+                      icon: Column(
+                        children: [
+                          Icon(
+                            isSaved ? Icons.bookmark : Icons.bookmark_outline,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          TextLato(
+                            text: isSaved ? "Saved" : "Save",
+                            paddingAll: 0.0,
+                          )
+                        ],
+                      ),
                     ),
-                    TextLato(
-                      text: isSaved ? "Saved" : "Save",
-                      paddingAll: 0.0,
-                    )
-                  ],
-                ),
-              ),
             ],
           ),
         ),

@@ -1,4 +1,3 @@
-import 'package:agrisync/admin/admin_app.dart';
 import 'package:agrisync/screens/auth/email_verification_page.dart';
 import 'package:agrisync/screens/auth/login_screen.dart';
 import 'package:agrisync/screens/main_screen.dart';
@@ -32,10 +31,10 @@ void main() async {
 
 Future<void> _setUp() async {
   String stripePublicKey = StripeKeys().publickey;
-  WidgetsFlutterBinding.ensureInitialized(); // Ensure bindings are initialized
   Stripe.publishableKey = stripePublicKey;
-  // await Stripe.instance.applySettings();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure bindings are initialized
+  // await Stripe.instance.applySettings();
   await Firebase.initializeApp(
       options: const FirebaseOptions(
     apiKey: "AIzaSyC88c4Zmuy7E71ocZ2xhxAYuEtLe1R0QV8",

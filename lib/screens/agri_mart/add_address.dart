@@ -30,13 +30,18 @@ class _AddAddressState extends State<AddAddress> {
     bool serviceEnabled;
     LocationPermission permission;
 
+    // Check if location services are enabled
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Location services are disabled.')));
-      return;
+      bool userTurnedOn = await Geolocator.openLocationSettings();
+      if (!userTurnedOn) {
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Please enable location services.')));
+        return;
+      }
     }
 
+    // Check location permission
     permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
@@ -49,10 +54,12 @@ class _AddAddressState extends State<AddAddress> {
 
     if (permission == LocationPermission.deniedForever) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Location permissions are permanently denied.')));
+          content: Text('Location permissions are permanently denied. '
+              'Please enable them from settings.')));
       return;
     }
 
+    // Fetch current location
     try {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);

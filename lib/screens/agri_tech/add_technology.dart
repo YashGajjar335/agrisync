@@ -7,6 +7,7 @@ import 'package:agrisync/widget/long_button.dart';
 import 'package:agrisync/widget/string_image.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class AddTechnology extends StatefulWidget {
   const AddTechnology({super.key});
@@ -24,10 +25,11 @@ class _AddTechnologyState extends State<AddTechnology> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const AgriSyncIcon(
-          title: "Add Technology",
+        title: AgriSyncIcon(
+          title: appLocalizations.add_technology,
           size: 30,
         ),
         centerTitle: true,
@@ -54,7 +56,7 @@ class _AddTechnologyState extends State<AddTechnology> {
                 // Button to select the photo
                 LongButton(
                   width: 300,
-                  buttonText: "Select Photo",
+                  buttonText: appLocalizations.selectPhoto,
                   onTap: () async {
                     final image = await pickImageAndConvertToBase64();
                     if (image != null) {
@@ -71,12 +73,12 @@ class _AddTechnologyState extends State<AddTechnology> {
                   keyboardType: TextInputType.text,
                   validator: (val) {
                     if (val!.isEmpty) {
-                      return "Enter the Technology Title";
+                      return appLocalizations.enter_technology_title;
                     }
                     return null;
                   },
                   decoration: InputDecoration(
-                    label: const TextLato(text: "Technology Title"),
+                    label: TextLato(text: appLocalizations.technology_title),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -89,12 +91,12 @@ class _AddTechnologyState extends State<AddTechnology> {
                   keyboardType: TextInputType.text,
                   validator: (val) {
                     if (val!.isEmpty) {
-                      return "Enter the Description";
+                      return appLocalizations.enter_description;
                     }
                     return null;
                   },
                   decoration: InputDecoration(
-                    label: const TextLato(text: "Description"),
+                    label: TextLato(text: appLocalizations.description),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                     ),
@@ -105,7 +107,7 @@ class _AddTechnologyState extends State<AddTechnology> {
                 LongButton(
                   isLoading: _isLoading,
                   width: 200,
-                  buttonText: "Share Technology",
+                  buttonText: appLocalizations.upload_technology,
                   onTap: () async {
                     if (_formKey.currentState!.validate()) {
                       setState(() {
@@ -115,8 +117,8 @@ class _AddTechnologyState extends State<AddTechnology> {
                           .uploadTechnology(_titleController.text,
                               _descriptionController.text, imageUrl);
                       if (res == null) {
-                        showSnackBar(
-                            "Technology Uploaded Successfully", context);
+                        showSnackBar(appLocalizations.technology_upload_success,
+                            context);
                         // Navigator.pushReplacement(
                         //   context,
                         //   MaterialPageRoute(

@@ -8,14 +8,19 @@ class TextLato extends StatelessWidget {
   final FontWeight? fontWeight;
   final double? paddingAll;
   final int? maxLine;
-  const TextLato(
-      {super.key,
-      required this.text,
-      this.fontSize,
-      this.color,
-      this.fontWeight,
-      this.paddingAll,
-      this.maxLine});
+  final TextAlign? textAlign;
+  final List<FontFeature>? fontFeatures;
+  const TextLato({
+    super.key,
+    required this.text,
+    this.fontSize,
+    this.color,
+    this.fontWeight,
+    this.paddingAll,
+    this.maxLine,
+    this.textAlign,
+    this.fontFeatures,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +30,12 @@ class TextLato extends StatelessWidget {
       child: Text(
         maxLines: maxLine,
         text,
+        textAlign: textAlign,
         style: GoogleFonts.lato(
           color: color ?? Theme.of(context).colorScheme.secondary,
           fontWeight: fontWeight ?? FontWeight.normal,
           fontSize: fontSize ?? 16,
+          fontFeatures: fontFeatures ?? [],
         ),
       ),
     );

@@ -1,12 +1,15 @@
-import 'package:agrisync/model/farmer.dart';
+import 'package:agrisync/model/crop_model.dart';
 import 'package:agrisync/screens/crop/plant_health_reminder.dart';
+import 'package:agrisync/utils/globle.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:agrisync/widget/long_button.dart';
+import 'package:agrisync/widget/string_image.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class CropDetailScreen extends StatefulWidget {
-  final String crop;
+  final Crop crop;
   const CropDetailScreen({super.key, required this.crop});
 
   @override
@@ -14,11 +17,35 @@ class CropDetailScreen extends StatefulWidget {
 }
 
 class _CropDetailScreenState extends State<CropDetailScreen> {
+  int appLanguage() {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+    String appLanguage = appLocalizations.appLanguage;
+    if (appLanguage == "en") {
+      return 0;
+    } else if (appLanguage == "hi") {
+      return 1;
+    } else if (appLanguage == "gu") {
+      return 2;
+    }
+    return 0;
+  }
+
+  String cropcategories = "zaid";
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+    int stepCount = widget.crop.language[appLocalizations.appLanguage]!.length;
+
+    int appLang = appLanguage();
     return Scaffold(
       appBar: AppBar(
-        title: AgriSyncIcon(title: widget.crop),
+        title: AgriSyncIcon(title: widget.crop.cropName[appLang]),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -32,61 +59,47 @@ class _CropDetailScreenState extends State<CropDetailScreen> {
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(
-                    "assets/page11.png",
-                    fit: BoxFit.fill,
-                  ),
+                  child: widget.crop.cropImage.isNotEmpty
+                      ? StringImage(
+                          base64ImageString: widget.crop.cropImage,
+                          height: height(context) * 0.3,
+                          width: width(context) * 0.9,
+                        )
+                      : Image.asset(
+                          "assets/page11.png",
+                          fit: BoxFit.fill,
+                        ),
                 ),
               ),
               Center(
                 child: TextLato(
-                  text: widget.crop,
+                  text: widget.crop.category,
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const InfoCrop(
-                  title: "Growing Season:",
-                  des: "Ideal planting time: October-November."),
-              const InfoCrop(
-                  title: "Climatic Conditions:",
-                  des:
-                      "Requires a cool climate during growth and a warm, dry climate during maturity."),
-              const InfoCrop(title: "Temperature range: ", des: "10-25°C."),
-              const InfoCrop(
-                  title: "Rainfall requirement:",
-                  des: "50-100 cm (requires well-drained soil)."),
-              const InfoCrop(
-                  title: "Soil Type:",
-                  des:
-                      "Loamy or clayey soil, rich in organic matter.\n   pH range: 6-7.5."),
-              const InfoCrop(
-                  title: "Fertilizers Required:",
-                  des:
-                      "Nitrogen: Urea \n    Phosphorus & Potash: DAP (Di-Ammonium Phosphate)"),
-              const InfoCrop(
-                  title: "Harvesting Time:",
-                  des:
-                      "Ready for harvest in 4-5 months after sowing (e.g., March-April)."),
-              const InfoCrop(
-                  title: "Common Diseases:",
-                  des:
-                      "Rust (yellow, brown, black),Powdery mildew,Smut diseases"),
-              const InfoCrop(
-                  title: "Yield:",
-                  des: "With proper care: 3-4 tons per hectare (approx)"),
-              const InfoCrop(
-                  title: "Uses:",
-                  des:
-                      "Wheat is a staple grain used to make flour for bread, biscuits, and pasta.Bran is used as animal feed."),
+              ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: stepCount,
+                  itemBuilder: (context, item) {
+                    final step =
+                        widget.crop.language[appLocalizations.appLanguage];
+                    return InfoCrop(
+                        title: step![item].title, des: step![item].description);
+                  }),
               LongButton(
                   width: double.infinity,
-                  buttonText: "Start Plant Health Reminder",
+                  buttonText:
+                      "${appLocalizations.crophealthreminder} ${appLocalizations.getStart}",
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => PlantHealthReminder(
-                              cropSteps: [],
-                              cropName: widget.crop,
+                              cropSteps: widget.crop
+                                      .language[appLocalizations.appLanguage] ??
+                                  [],
+                              cropName: widget.crop.cropName[appLang],
+                              cropImage: widget.crop.images,
                             )));
                   })
             ],

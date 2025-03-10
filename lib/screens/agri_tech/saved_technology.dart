@@ -1,6 +1,7 @@
 import 'package:agrisync/model/technology.dart';
 import 'package:agrisync/widget/agri_tech_card.dart';
 import 'package:agrisync/widget/text_lato.dart';
+import 'package:agrisync/widget/waiting_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -66,16 +67,7 @@ class _SavedTechnologiesScreenState extends State<SavedTechnologiesScreen> {
               ),
             );
           }
-          return Center(
-            child: Column(
-              children: [
-                CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const TextLato(text: "Something went wrong..!"),
-              ],
-            ),
-          );
+          return const WaitingScreenWithWarnning();
         });
   }
 }

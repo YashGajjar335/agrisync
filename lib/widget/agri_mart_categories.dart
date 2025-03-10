@@ -1,6 +1,10 @@
+import 'dart:convert';
+
+import 'package:agrisync/screens/agri_mart/show_product.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class AgriMartCategories extends StatefulWidget {
   const AgriMartCategories({super.key});
@@ -31,6 +35,9 @@ class _AgriMartCategoriesState extends State<AgriMartCategories> {
 
   @override
   Widget build(BuildContext context) {
+    final cropCategories = List<String>.from(
+        jsonDecode(AppLocalizations.of(context)!.cropCategories));
+
     return Padding(
       padding: const EdgeInsets.only(
         top: 8,
@@ -40,7 +47,7 @@ class _AgriMartCategoriesState extends State<AgriMartCategories> {
         height: 175,
         child: ListView.builder(
             scrollDirection: Axis.horizontal,
-            itemCount: images.length,
+            itemCount: textField.length,
             itemBuilder: (context, index) {
               return ClipRect(
                 child: Container(
@@ -54,9 +61,13 @@ class _AgriMartCategoriesState extends State<AgriMartCategories> {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(100),
                         child: GestureDetector(
-                            onTap: () {},
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => ShowProduct(
+                                        categories: textField[index]))),
                             child: Image.asset(
-                              images[index],
+                              'assets/crop_cat/${textField[index]}.jpeg',
                               fit: BoxFit.fill,
                               height: 100,
                               width: 100,
@@ -68,7 +79,7 @@ class _AgriMartCategoriesState extends State<AgriMartCategories> {
                       Container(
                           padding: const EdgeInsets.symmetric(horizontal: 3),
                           child: Text(
-                            textField[index],
+                            cropCategories[index],
                             maxLines: 2,
                             style: GoogleFonts.lato(
                               color: Theme.of(context).colorScheme.primary,

@@ -52,9 +52,7 @@ class HomeScreenTechnology extends StatelessWidget {
                                       selectionColor: Colors.red,
                                       tech.title,
                                       style: GoogleFonts.lato(
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .primary,
+                                        color: Colors.white,
                                         fontSize: 30,
                                         fontWeight: FontWeight.bold,
                                       ),

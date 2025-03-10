@@ -1,3 +1,4 @@
+import 'package:agrisync/screens/agri_mart/user_order_screen.dart';
 import 'package:agrisync/screens/auth/login_screen.dart';
 import 'package:agrisync/screens/onbording_screen.dart';
 import 'package:agrisync/screens/change_language_screen.dart';
@@ -10,7 +11,7 @@ import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:agrisync/widget/user_profile_card.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class DrawerChild extends StatefulWidget {
   const DrawerChild({super.key});
@@ -22,6 +23,7 @@ class DrawerChild extends StatefulWidget {
 class _DrawerChildState extends State<DrawerChild> {
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     final theme = Theme.of(context).colorScheme;
     Divider divider = Divider(
       thickness: 5,
@@ -29,9 +31,9 @@ class _DrawerChildState extends State<DrawerChild> {
     );
     return Column(
       children: [
-        const Padding(
-          padding: EdgeInsets.only(top: 20, left: 10),
-          child: AgriSyncIcon(title: "UserProfile"),
+        Padding(
+          padding: const EdgeInsets.only(top: 30, left: 10),
+          child: AgriSyncIcon(title: appLocalizations.user_profile),
         ),
         Padding(
           padding: const EdgeInsets.all(10.0),
@@ -52,9 +54,19 @@ class _DrawerChildState extends State<DrawerChild> {
                   height: 30,
                   width: 30,
                 ),
-                title: const TextLato(text: "Edit Profile"),
+                title: TextLato(text: appLocalizations.edit_profile),
                 onTap: () => Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const EditProfile())),
+              ),
+              ListTile(
+                leading: Image.asset(
+                  AgrisyncImageIcon().shoppingCart,
+                  height: 30,
+                  width: 30,
+                ),
+                title: TextLato(text: appLocalizations.my_order),
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const UserOrderScreen())),
               ),
               ListTile(
                 leading: Image.asset(
@@ -62,7 +74,7 @@ class _DrawerChildState extends State<DrawerChild> {
                   height: 30,
                   width: 30,
                 ),
-                title: const TextLato(text: "Language"),
+                title: TextLato(text: appLocalizations.language),
                 onTap: () => Navigator.of(context).push(MaterialPageRoute(
                     builder: (_) => const ChangeLangScreen())),
               ),
@@ -72,7 +84,7 @@ class _DrawerChildState extends State<DrawerChild> {
                   height: 30,
                   width: 30,
                 ),
-                title: const TextLato(text: "OnBordingScreen"),
+                title: TextLato(text: appLocalizations.onboarding_screen),
                 onTap: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const OnBordingScreen())),
               ),
@@ -83,8 +95,10 @@ class _DrawerChildState extends State<DrawerChild> {
                   height: 30,
                   width: 30,
                 ),
-                title: const TextLato(text: "feedback"),
-                onTap: () {},
+                title: TextLato(text: appLocalizations.feedback),
+                onTap: () {
+                  showSnackBar("We have this work left to do.", context);
+                },
               ),
               ListTile(
                 leading: Image.asset(
@@ -92,8 +106,10 @@ class _DrawerChildState extends State<DrawerChild> {
                   height: 30,
                   width: 30,
                 ),
-                title: const TextLato(text: "help"),
-                onTap: () {},
+                title: TextLato(text: appLocalizations.help),
+                onTap: () {
+                  showSnackBar("We have this work left to do.", context);
+                },
               ),
               divider,
               ListTile(
@@ -102,7 +118,7 @@ class _DrawerChildState extends State<DrawerChild> {
                   height: 30,
                   width: 30,
                 ),
-                title: const TextLato(text: "LogOut"),
+                title: TextLato(text: appLocalizations.logout),
                 onTap: () async {
                   String? res = await AuthServices.instance.logOut();
                   res == null

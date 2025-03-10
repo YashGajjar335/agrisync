@@ -64,9 +64,10 @@ class _OnBordingScreenState extends State<OnBordingScreen> {
                     title: localizations.crophealthreminder,
                     description: localizations.crophealthreminderdec),
                 PageFormate(
-                    imagePath: "assets/technology.jpg",
-                    title: localizations.agritech,
-                    description: localizations.agritechdec),
+                  imagePath: "assets/technology.jpg",
+                  title: localizations.agritech,
+                  description: localizations.agritechdec,
+                ),
                 PageFormate(
                     imagePath: "assets/lastpage3.jpg",
                     title: localizations.startMes,

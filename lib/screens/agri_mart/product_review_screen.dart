@@ -1,12 +1,11 @@
 import 'package:agrisync/model/product_review.dart';
-import 'package:agrisync/services/agri_mart_service_user.dart';
 import 'package:agrisync/widget/review_card.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:agrisync/widget/waiting_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_stars/flutter_rating_stars.dart';
 import 'package:rating_summary/rating_summary.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProductReviewScreen extends StatefulWidget {
   final String productId;
@@ -19,14 +18,15 @@ class ProductReviewScreen extends StatefulWidget {
 class _ProductReviewScreenState extends State<ProductReviewScreen> {
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Container(
       color: Theme.of(context).colorScheme.secondaryContainer,
       child: Column(
         children: [
           Column(
             children: [
-              const TextLato(
-                text: 'Rating & Review',
+              TextLato(
+                text: appLocalizations.rating_review,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
@@ -95,11 +95,12 @@ class _ProductReviewScreenState extends State<ProductReviewScreen> {
                           height: 10,
                         ),
                         totalReviews == 0
-                            ? const SizedBox(
+                            ? SizedBox(
                                 height: 50,
                                 child: Center(
-                                    child:
-                                        TextLato(text: "No Review available")),
+                                    child: TextLato(
+                                        text: appLocalizations
+                                            .no_review_available)),
                               )
                             : ListView.builder(
                                 physics: const NeverScrollableScrollPhysics(),

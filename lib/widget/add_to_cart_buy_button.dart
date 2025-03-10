@@ -6,14 +6,17 @@ import 'package:agrisync/services/agri_mart_service_user.dart';
 import 'package:agrisync/utils/globle.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class AddToCartAndBuyButton extends StatefulWidget {
   // final String addressId;
   final Products products;
+  final int nuOfProduct;
   const AddToCartAndBuyButton({
     super.key,
     // required this.addressId,
     required this.products,
+    required this.nuOfProduct,
   });
 
   @override
@@ -23,6 +26,7 @@ class AddToCartAndBuyButton extends StatefulWidget {
 class _AddToCartAndBuyButtonState extends State<AddToCartAndBuyButton> {
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 20),
       child: Row(
@@ -39,7 +43,8 @@ class _AddToCartAndBuyButtonState extends State<AddToCartAndBuyButton> {
               onPressed: () async {
                 final res = await AgriMartServiceUser.instance
                     .addToCart(widget.products.productId);
-                showSnackBar(res ?? "Products added to cart", context);
+                showSnackBar(
+                    res ?? appLocalizations.products_added_to_cart, context);
               },
               icon: const Icon(Icons.shopping_cart),
             ),
@@ -59,12 +64,15 @@ class _AddToCartAndBuyButtonState extends State<AddToCartAndBuyButton> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => ProductOrderScreen(
-                                    productList: {widget.products.productId: 1},
+                                    productList: {
+                                      widget.products.productId:
+                                          widget.nuOfProduct
+                                    },
                                   )),
                         );
                       },
                       child: TextLato(
-                        text: 'Buy Now'.toUpperCase(),
+                        text: appLocalizations.buy,
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,

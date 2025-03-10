@@ -46,7 +46,7 @@ class UserAddress {
 
   // Create a UserAddress object from a Map (for fetching from DB)
   static UserAddress fromSnap(DocumentSnapshot snap) {
-    Map<String, dynamic> map = snap.data as Map<String, dynamic>;
+    Map<String, dynamic> map = snap.data() as Map<String, dynamic>;
     return UserAddress(
       id: map['id'] ?? '',
       userId: map['userId'] ?? '',

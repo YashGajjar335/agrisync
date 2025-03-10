@@ -1,18 +1,18 @@
 import 'package:agrisync/model/cart_items.dart';
+import 'package:agrisync/model/payment.dart';
 import 'package:agrisync/model/product.dart';
 import 'package:agrisync/model/product_review.dart';
 import 'package:agrisync/model/user_address.dart';
+import 'package:agrisync/utils/globle.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:uuid/uuid.dart';
-import 'package:uuid/v4.dart';
+import 'package:agrisync/model/order.dart';
 
 class AgriMartServiceUser {
   AgriMartServiceUser._();
   static AgriMartServiceUser instance = AgriMartServiceUser._();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String productCollection = "Products";
-  final String reviewCollection = "ProductReview";
   final String uid = FirebaseAuth.instance.currentUser!.uid;
 
   Future<Products?> getProduct(String productId) async {
@@ -29,13 +29,17 @@ class AgriMartServiceUser {
   Future<UserAddress?> getUserAddress() async {
     try {
       final snap = await _firestore
-          .collection("users")
-          .doc(uid)
           .collection("Address")
-          .doc()
+          .where('userId', isEqualTo: uid)
           .get();
-      return UserAddress.fromSnap(snap[0]);
+      if (snap.docs.first.exists) {
+        UserAddress userAddress = UserAddress.fromSnap(snap.docs.first);
+        return userAddress;
+      } else {
+        return null;
+      }
     } catch (e) {
+      print("ERROR agriMartService : getUserAdress : ${e.toString()}");
       return null;
     }
   }
@@ -65,12 +69,7 @@ class AgriMartServiceUser {
         country: country,
         postalCode: postalCode,
       );
-      await _firestore
-          .collection('users')
-          .doc(uid)
-          .collection("Address")
-          .doc(id)
-          .set(address.toMap());
+      await _firestore.collection("Address").doc(id).set(address.toMap());
       return null;
     } catch (e) {
       return e.toString();
@@ -129,6 +128,60 @@ class AgriMartServiceUser {
     } catch (e) {
       print("Error adding to cart: $e");
       return "Failed to add product to cart";
+    }
+  }
+
+  Future<String?> confirmOrder(
+    Payment p,
+    Map<String, int> items,
+    double totalAmount,
+    String addressId,
+  ) async {
+    try {
+      String orderId = const Uuid().v4();
+      String paymentId = const Uuid().v4();
+
+      Payment payment = Payment(
+          paymentId: paymentId,
+          amount: p.amount,
+          status: p.status,
+          customerId: uid,
+          orderId: orderId,
+          paymentIntentId: p.paymentIntentId);
+
+      await _firestore
+          .collection(paymentCollection)
+          .doc(payment.paymentId)
+          .set(payment.toJson());
+
+      OrderModel orderModel = OrderModel(
+        orderId: orderId,
+        userId: uid,
+        items: items,
+        totalAmount: totalAmount,
+        orderStatus: "pending",
+        orderDate: DateTime.now(),
+        addressId: addressId,
+        transactionId: payment.paymentId,
+      );
+
+      orderModel.items.forEach((productId, quantity) async {
+        Products? products = await getProduct(productId);
+        if (products != null) {
+          await _firestore
+              .collection(productCollection)
+              .doc(productId)
+              .update({"stockQuantity": products.stockQuantity -= quantity});
+        }
+      });
+
+      await _firestore
+          .collection(orderCollection)
+          .doc(orderId)
+          .set(orderModel.toMap());
+      return null;
+    } catch (e) {
+      return e.toString();
     }
   }
 }

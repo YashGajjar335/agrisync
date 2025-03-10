@@ -9,6 +9,7 @@ import 'package:agrisync/widget/waiting_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyCartScreen extends StatefulWidget {
   const MyCartScreen({super.key});
@@ -22,8 +23,15 @@ class _MyCartScreenState extends State<MyCartScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const AgriSyncIcon(title: "My Cart")),
+      appBar: AppBar(
+        title: AgriSyncIcon(
+          title: appLocalizations.my_cart,
+          color: Theme.of(context).colorScheme.secondaryContainer,
+        ),
+        backgroundColor: const Color(0xff338864),
+      ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection("userCart")
@@ -34,7 +42,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
             return const WaitingScreen();
           }
           if (!snapshot.hasData || !snapshot.data!.exists) {
-            return const Center(child: TextLato(text: "Your cart is empty."));
+            return Center(child: TextLato(text: appLocalizations.cart_empty));
           }
 
           CartItems cartItems = CartItems.fromSnap(snapshot.data!);
@@ -59,8 +67,9 @@ class _MyCartScreenState extends State<MyCartScreen> {
                     }
                     if (!productSnapshot.hasData ||
                         !productSnapshot.data!.exists) {
-                      return const Center(
-                          child: TextLato(text: "Product not found."));
+                      return Center(
+                          child: TextLato(
+                              text: appLocalizations.product_not_found));
                     }
 
                     Products product = Products.fromSnap(productSnapshot.data!);
@@ -78,8 +87,8 @@ class _MyCartScreenState extends State<MyCartScreen> {
                         subtitle: TextLato(text: "₹ ${product.price}"),
                         trailing: TextLato(text: "X $quantity"),
                         children: [
-                          const TextLato(
-                              text: "Product Info:",
+                          TextLato(
+                              text: appLocalizations.product_info,
                               fontSize: 18,
                               fontWeight: FontWeight.bold),
                           TextLato(text: product.description),
@@ -90,7 +99,7 @@ class _MyCartScreenState extends State<MyCartScreen> {
                                   builder: (_) =>
                                       ProductDetailsPage(products: product)),
                             ),
-                            child: const TextLato(text: "Show More"),
+                            child: TextLato(text: appLocalizations.show_more),
                           ),
                         ],
                       ),
@@ -107,7 +116,8 @@ class _MyCartScreenState extends State<MyCartScreen> {
                         builder: (_) => ProductOrderScreen(
                             productList: cartItems.products))),
                 child: TextLato(
-                  text: "buy now".toUpperCase(),
+                  text: "${appLocalizations.buy}  ",
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),

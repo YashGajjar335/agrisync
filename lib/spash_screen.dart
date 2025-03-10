@@ -4,6 +4,7 @@ import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -46,6 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return AnimatedSplashScreen(
       splash: Column(
         children: [
@@ -54,7 +56,7 @@ class _SplashScreenState extends State<SplashScreen> {
             duration: Duration(seconds: widget.second ?? 3),
             builder: (BuildContext context, double value, Widget? child) {
               return Text(
-                'AgrySync',
+                appLocalizations.agrisync,
                 style: GoogleFonts.lato(
                   fontSize: 50,
                   fontWeight: FontWeight.bold,

@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 
 class CropCard extends StatelessWidget {
   final String imagePath;
-  final String cropName;
+  final String cropCategoriesName;
   final Color color;
+  final String cropCategories;
   const CropCard(
       {super.key,
       required this.imagePath,
-      required this.cropName,
-      required this.color});
+      required this.cropCategoriesName,
+      required this.color,
+      required this.cropCategories});
 
   @override
   Widget build(BuildContext context) {
@@ -18,27 +20,33 @@ class CropCard extends StatelessWidget {
       onTap: () => Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => CropListScreen(crop: cropName))),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            SizedBox(
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Image.asset(
-                    imagePath,
-                    fit: BoxFit.fill,
-                  )),
-            ),
-            TextLato(
-              text: cropName,
-              fontSize: 60,
-              fontWeight: FontWeight.bold,
-              color: color,
-            )
-          ],
+              builder: (context) => CropListScreen(
+                    cropcategories: cropCategories,
+                    cropCategoriesName: cropCategoriesName,
+                  ))),
+      child: Card(
+        elevation: 4,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              SizedBox(
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      imagePath,
+                      fit: BoxFit.fill,
+                    )),
+              ),
+              TextLato(
+                text: cropCategoriesName,
+                fontSize: 60,
+                fontWeight: FontWeight.bold,
+                color: color,
+              )
+            ],
+          ),
         ),
       ),
     );

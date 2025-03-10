@@ -7,6 +7,8 @@ class StringImage extends StatefulWidget {
   final BoxFit? fit;
   final double? width;
   final double? height;
+  final bool? defaultHeight;
+  final bool? defaultwidth;
   final BorderRadius? borderRadius;
 
   const StringImage({
@@ -16,6 +18,8 @@ class StringImage extends StatefulWidget {
     this.width,
     this.height,
     this.borderRadius,
+    this.defaultHeight = false,
+    this.defaultwidth = false,
   });
 
   @override

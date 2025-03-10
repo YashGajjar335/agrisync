@@ -27,10 +27,12 @@ class _ReviewCardState extends State<ReviewCard> {
   }
 
   loadData() async {
-    final user = await AuthServices.instance.getCurrentUserDetail();
-    userName = user['uname'];
-    userProfilePic = user['profilePic'];
-    setState(() {});
+    final user =
+        await AuthServices.instance.getUserInfo(widget.productReview.uid);
+    setState(() {
+      userName = user['uname'];
+      userProfilePic = user['profilePic'];
+    });
   }
 
   @override

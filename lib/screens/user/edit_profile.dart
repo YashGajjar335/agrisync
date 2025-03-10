@@ -3,8 +3,8 @@ import 'package:agrisync/utils/globle.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:agrisync/widget/long_button.dart';
 import 'package:agrisync/widget/string_image_in_circle_avtar.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});
@@ -34,11 +34,12 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: const AgriSyncIcon(
-          title: "Edit Profile",
+        title: AgriSyncIcon(
+          title: appLocalizations.edit_profile,
         ),
       ),
       body: Container(
@@ -116,7 +117,7 @@ class _EditProfileState extends State<EditProfile> {
                   LongButton(
                       isLoading: _isLoad,
                       width: double.infinity,
-                      buttonText: "Submit",
+                      buttonText: appLocalizations.submit,
                       onTap: () async {
                         setState(() {
                           _isLoad = !_isLoad;
@@ -127,13 +128,14 @@ class _EditProfileState extends State<EditProfile> {
                                   photoUrl ?? "", _nameController.text.trim());
                           if (res == null) {
                             showSnackBar(
-                                "Profile Updated Successfully", context);
+                                appLocalizations.profile_updated_success,
+                                context);
                             Navigator.pop(context);
                           } else {
                             showSnackBar(res, context);
                           }
                         } else {
-                          showSnackBar("Enter Name ", context);
+                          showSnackBar(appLocalizations.enterUserName, context);
                         }
 
                         setState(() {

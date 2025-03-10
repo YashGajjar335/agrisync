@@ -2,13 +2,22 @@
 
 import 'dart:async';
 
+import 'package:agrisync/model/payment.dart';
 import 'package:agrisync/utils/stripe_keys.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:uuid/uuid.dart';
 
 class StripeServices {
   StripeServices._();
   static final StripeServices instance = StripeServices._();
+  Payment? payment;
+
+  Future<Payment?> makePaymentGetPayment(double amount) async {
+    await makePayment(amount);
+    return payment;
+  }
 
   Future<void> makePayment(double amount) async {
     try {
@@ -22,7 +31,15 @@ class StripeServices {
           merchantDisplayName: "AgriSync",
         ),
       );
-      await _processPayment();
+      final bool paymentSatus = await _processPayment();
+      payment = Payment(
+        paymentId: "",
+        amount: amount,
+        status: paymentSatus ? "successful" : "failed",
+        customerId: "",
+        paymentIntentId: paymetnIntentClientSecret,
+        orderId: '',
+      );
     } catch (e) {
       print("make payment : $e");
     }
@@ -61,11 +78,13 @@ class StripeServices {
     return null;
   }
 
-  Future<void> _processPayment() async {
+  Future<bool> _processPayment() async {
     try {
       await Stripe.instance.presentPaymentSheet();
+      return true;
     } catch (e) {
       print("_processPayment : $e");
+      return false;
     }
   }
 

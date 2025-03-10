@@ -12,9 +12,9 @@ import 'package:agrisync/widget/long_button.dart';
 import 'package:agrisync/widget/string_image.dart';
 import 'package:agrisync/widget/string_image_in_circle_avtar.dart';
 import 'package:agrisync/widget/text_lato.dart';
-import 'package:agrisync/widget/thread_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -48,9 +48,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const AgriSyncIcon(title: "Profile"),
+        title: AgriSyncIcon(title: appLocalizations.profile),
       ),
       body: farmer == null && specialist == null
           ? Center(
@@ -85,6 +86,7 @@ class _FarmerDetailState extends State<FarmerDetail> {
   int userThreads = 0;
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.only(top: 30, bottom: 10),
@@ -96,6 +98,7 @@ class _FarmerDetailState extends State<FarmerDetail> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     widget.farmer.profilePic.isEmpty
                         ? const CircleAvatar(
@@ -110,13 +113,14 @@ class _FarmerDetailState extends State<FarmerDetail> {
                     const SizedBox(
                       width: 24,
                     ),
-                    NumberAndText(number: userThreads, lable: "Thread"),
+                    NumberAndText(
+                        number: userThreads, lable: appLocalizations.thread),
                     NumberAndText(
                         number: widget.farmer.following.length,
-                        lable: "Following"),
+                        lable: appLocalizations.following),
                     NumberAndText(
                         number: widget.farmer.followers.length,
-                        lable: "Followers"),
+                        lable: appLocalizations.followers),
                   ],
                 ),
               ),
@@ -135,23 +139,23 @@ class _FarmerDetailState extends State<FarmerDetail> {
               children: [
                 LongButton(
                     width: width(context) * 0.4,
-                    buttonText: "Edit Profile",
+                    buttonText: appLocalizations.edit_profile,
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (_) => const EditProfile()))),
                 LongButton(
                     width: width(context) * 0.4,
-                    buttonText: "Add Thread",
+                    buttonText: appLocalizations.add_thread,
                     onTap: () => Navigator.push(context,
                         MaterialPageRoute(builder: (_) => const AddThread()))),
               ],
             ),
-            const Padding(
+            Padding(
               padding: EdgeInsets.only(top: 40, bottom: 20),
               child: Center(
                   child: TextLato(
-                text: "Your Thread",
+                text: appLocalizations.your_thread,
                 fontWeight: FontWeight.bold,
                 fontSize: 30,
               )),
@@ -172,11 +176,11 @@ class _FarmerDetailState extends State<FarmerDetail> {
                       userThreads = threadCount;
 
                       return threadCount == 0
-                          ? const SizedBox(
+                          ? SizedBox(
                               height: 400,
                               width: double.infinity,
                               child: TextLato(
-                                text: "No Thread ",
+                                text: appLocalizations.no_thread_available,
                               ),
                             )
                           : GridView.builder(
@@ -233,6 +237,7 @@ class _SpecialistDetailState extends State<SpecialistDetail> {
   int userThreads = 0;
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return SafeArea(
       child: Container(
         padding: const EdgeInsets.only(top: 30, bottom: 10),
@@ -258,13 +263,14 @@ class _SpecialistDetailState extends State<SpecialistDetail> {
                     const SizedBox(
                       width: 24,
                     ),
-                    NumberAndText(number: userThreads, lable: "Thread"),
+                    NumberAndText(
+                        number: userThreads, lable: appLocalizations.thread),
                     NumberAndText(
                         number: widget.specialist.following.length,
-                        lable: "Following"),
+                        lable: appLocalizations.following),
                     NumberAndText(
                         number: widget.specialist.followers.length,
-                        lable: "Followers"),
+                        lable: appLocalizations.followers),
                   ],
                 ),
               ),
@@ -283,19 +289,19 @@ class _SpecialistDetailState extends State<SpecialistDetail> {
               children: [
                 LongButton(
                     width: width(context) * 0.25,
-                    buttonText: "Edit Profile",
+                    buttonText: appLocalizations.edit_profile,
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (_) => const EditProfile()))),
                 LongButton(
                     width: width(context) * 0.25,
-                    buttonText: "Add Thread",
+                    buttonText: appLocalizations.add_thread,
                     onTap: () => Navigator.push(context,
                         MaterialPageRoute(builder: (_) => const AddThread()))),
                 LongButton(
                     width: width(context) * 0.25,
-                    buttonText: "Add Technology",
+                    buttonText: appLocalizations.add_technology,
                     onTap: () => Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -307,9 +313,9 @@ class _SpecialistDetailState extends State<SpecialistDetail> {
               child: DefaultTabController(
                   length: 2,
                   child: Scaffold(
-                    appBar: const TabBar(tabs: [
-                      TextLato(text: "Your Threads"),
-                      TextLato(text: "Your Technologies")
+                    appBar: TabBar(tabs: [
+                      TextLato(text: appLocalizations.your_thread),
+                      TextLato(text: appLocalizations.your_technologies)
                     ]),
                     body: TabBarView(
                       children: [
@@ -327,11 +333,12 @@ class _SpecialistDetailState extends State<SpecialistDetail> {
                                   userThreads = threadCount;
 
                                   return threadCount == 0
-                                      ? const SizedBox(
+                                      ? SizedBox(
                                           height: 400,
                                           width: double.infinity,
                                           child: TextLato(
-                                            text: "No Thread ",
+                                            text: appLocalizations
+                                                .no_thread_available,
                                           ),
                                         )
                                       : GridView.builder(
@@ -397,11 +404,12 @@ class _SpecialistDetailState extends State<SpecialistDetail> {
                                       snapshot.data!.size;
 
                                   return technologyCount == 0
-                                      ? const SizedBox(
+                                      ? SizedBox(
                                           height: 400,
                                           width: double.infinity,
                                           child: TextLato(
-                                            text: "No Technology ",
+                                            text:
+                                                appLocalizations.add_technology,
                                           ),
                                         )
                                       : GridView.builder(

@@ -1,17 +1,19 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:agrisync/model/order.dart';
+import 'package:agrisync/model/payment.dart';
 import 'package:agrisync/model/product.dart';
 import 'package:agrisync/model/user_address.dart';
 import 'package:agrisync/screens/agri_mart/add_address.dart';
+import 'package:agrisync/screens/agri_mart/user_order_screen.dart';
 import 'package:agrisync/services/agri_mart_service_user.dart';
+import 'package:agrisync/services/stripe_services.dart';
 import 'package:agrisync/utils/globle.dart';
-import 'package:agrisync/widget/make_payment.dart';
-import 'package:agrisync/widget/string_image.dart';
+import 'package:agrisync/widget/long_button.dart';
 import 'package:agrisync/widget/string_image_in_circle_avtar.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:agrisync/widget/waiting_screen.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class ProductOrderScreen extends StatefulWidget {
   final Map<String, int> productList;
@@ -24,9 +26,11 @@ class ProductOrderScreen extends StatefulWidget {
 class _ProductOrderScreenState extends State<ProductOrderScreen> {
   // List<Products> productList = [];
   UserAddress? userAddress;
-  double totalamount = 0;
+  Payment? payment;
+  double totalAmount = 0;
   bool isLoadAddress = false;
   bool isLoadProduct = false;
+  bool isLoadPayment = false;
 
   @override
   void initState() {
@@ -41,7 +45,7 @@ class _ProductOrderScreenState extends State<ProductOrderScreen> {
           await AgriMartServiceUser.instance.getProduct(productId);
       if (product != null) {
         setState(() {
-          totalamount += (product.price * quantity);
+          totalAmount += (product.price * quantity);
         });
       } else {
         showSnackBar("Product total price failed ", context);
@@ -51,22 +55,23 @@ class _ProductOrderScreenState extends State<ProductOrderScreen> {
 
   loadAddress() async {
     setState(() {
-      isLoadAddress = true;
+      isLoadAddress = false;
     });
     AgriMartServiceUser agrimartservice = AgriMartServiceUser.instance;
     userAddress = await agrimartservice.getUserAddress();
-    setState(() {
-      isLoadAddress = false;
-    });
+    print(userAddress == null);
+    isLoadAddress = true;
+    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff338864),
         title: Text(
-          'Order Details',
+          appLocalizations.order_details,
           style: Theme.of(context)
               .textTheme
               .headlineSmall
@@ -74,54 +79,64 @@ class _ProductOrderScreenState extends State<ProductOrderScreen> {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(08),
         child: ListView(
           children: [
+            // product List
             Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15)),
-              elevation: 5,
-              margin: const EdgeInsets.only(bottom: 16, right: 10, left: 10),
+              margin: const EdgeInsets.all(8),
               child: ListView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
                 itemCount: widget.productList.length,
-                itemBuilder: (context, item) {
-                  widget.productList.forEach((productId, quantity) {
-                    FutureBuilder(
-                      future:
-                          AgriMartServiceUser.instance.getProduct(productId),
-                      builder: (context, snap) {
-                        Products? product = snap.data;
-                        return Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          elevation: 5,
-                          margin: const EdgeInsets.only(
-                              bottom: 16, right: 10, left: 10),
-                          child: ListTile(
-                            leading: StringImage(
-                                base64ImageString: product!.productImageUrl[0]),
-                            title: TextLato(
-                                text: product.productName,
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold),
-                            subtitle: TextLato(
-                                text: "₹ ${product.price}",
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold),
-                            trailing: TextLato(
-                              text:
-                                  'X $quantity = ₹ ${product.price * quantity}',
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                itemBuilder: (context, index) {
+                  String productId = widget.productList.keys.elementAt(index);
+                  int quantity = widget.productList.values.elementAt(index);
+
+                  return FutureBuilder(
+                    future: AgriMartServiceUser.instance.getProduct(productId),
+                    builder: (context, snap) {
+                      if (snap.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      } else if (snap.hasError) {
+                        return Center(
+                            child:
+                                Text(appLocalizations.error_loading_product));
+                      } else if (!snap.hasData || snap.data == null) {
+                        return Center(
+                            child: TextLato(
+                                text: appLocalizations.product_not_found));
+                      }
+
+                      Products product = snap.data!;
+                      return Card(
+                        child: ListTile(
+                          leading: StringImageInCircleAvatar(
+                            base64ImageString: product.productImageUrl[0],
                           ),
-                        );
-                      },
-                    );
-                  });
+                          title: TextLato(
+                            text: product.productName,
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          subtitle: TextLato(
+                            text: "₹ ${product.price}",
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          trailing: TextLato(
+                            text: 'X $quantity = ₹ ${product.price * quantity}',
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      );
+                    },
+                  );
                 },
               ),
             ),
+            // total amount
             Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15)),
@@ -130,17 +145,18 @@ class _ProductOrderScreenState extends State<ProductOrderScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  const TextLato(
-                    text: "Total Amount : ",
+                  TextLato(
+                    text: "${appLocalizations.total_price} : ",
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
                   TextLato(
-                    text: "₹ $totalamount",
+                    text: "₹ $totalAmount",
                   )
                 ],
               ),
             ),
+            // address
             isLoadAddress
                 ? Card(
                     shape: RoundedRectangleBorder(
@@ -156,8 +172,8 @@ class _ProductOrderScreenState extends State<ProductOrderScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              const TextLato(
-                                text: 'Shipping Address',
+                              TextLato(
+                                text: appLocalizations.shipping_address,
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -179,32 +195,56 @@ class _ProductOrderScreenState extends State<ProductOrderScreen> {
                                     },
                                     child: TextLato(
                                         text: userAddress == null
-                                            ? 'Add Address'
-                                            : 'Chnage',
+                                            ? appLocalizations.add_address
+                                            : appLocalizations.change,
                                         fontSize: 15,
                                         fontWeight: FontWeight.bold),
                                   )),
                             ],
                           ),
+                          // userAddress
                           if (userAddress != null)
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TextLato(
-                                    text: 'Street: ${userAddress!.street}',
+                                    text:
+                                        '${appLocalizations.name} : ${userAddress!.fullName}',
                                     fontSize: 15,
                                     color: Colors.black87),
                                 TextLato(
-                                    text: 'City: ${userAddress!.city}',
+                                    text:
+                                        '${appLocalizations.mobile_no} : ${userAddress!.phoneNumber}',
                                     fontSize: 15,
                                     color: Colors.black87),
                                 TextLato(
-                                    text: 'State: ${userAddress!.state}',
+                                    text:
+                                        '${appLocalizations.flat_no} : ${userAddress!.flatNumber}',
+                                    fontSize: 15,
+                                    color: Colors.black87),
+                                TextLato(
+                                    text:
+                                        '${appLocalizations.street_road} : ${userAddress!.streetRoad}',
+                                    fontSize: 15,
+                                    color: Colors.black87),
+                                TextLato(
+                                    text:
+                                        '${appLocalizations.street} : ${userAddress!.street}',
+                                    fontSize: 15,
+                                    color: Colors.black87),
+                                TextLato(
+                                    text:
+                                        '${appLocalizations.city} : ${userAddress!.city}',
+                                    fontSize: 15,
+                                    color: Colors.black87),
+                                TextLato(
+                                    text:
+                                        '${appLocalizations.state} : ${userAddress!.state}',
                                     fontSize: 15,
                                     color: Colors.black87),
                                 TextLato(
                                   text:
-                                      'Postal Code: ${userAddress!.postalCode}',
+                                      '${appLocalizations.postal_code} : ${userAddress!.postalCode}',
                                   fontSize: 15,
                                   color: Colors.black87,
                                 ),
@@ -218,6 +258,7 @@ class _ProductOrderScreenState extends State<ProductOrderScreen> {
                     height: 100,
                     child: WaitingScreen(),
                   ),
+            // make payment
             Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(15)),
@@ -225,42 +266,57 @@ class _ProductOrderScreenState extends State<ProductOrderScreen> {
               margin: const EdgeInsets.only(bottom: 16, right: 10, left: 10),
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: MakePayment(amount: totalamount),
+                child: LongButton(
+                  width: double.infinity,
+                  isLoading: isLoadPayment,
+                  buttonText: appLocalizations.make_payment,
+                  onTap: () async {
+                    setState(() {
+                      isLoadPayment = true;
+                    });
+
+                    try {
+                      if (userAddress == null) {
+                        showSnackBar(appLocalizations.fill_address, context);
+                      } else {
+                        StripeServices paymentService = StripeServices.instance;
+                        payment = await paymentService
+                            .makePaymentGetPayment(totalAmount);
+
+                        if (payment == null || payment!.status == "failed") {
+                          showSnackBar(
+                              appLocalizations.payment_failed, context);
+                        } else {
+                          final res = await AgriMartServiceUser.instance
+                              .confirmOrder(payment!, widget.productList,
+                                  totalAmount, userAddress!.id);
+
+                          if (res == null) {
+                            showSnackBar(
+                                appLocalizations.order_confirmed, context);
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (_) => const UserOrderScreen()));
+                          } else {
+                            showSnackBar(res.toString(), context);
+                          }
+                        }
+                      }
+                    } catch (e) {
+                      showSnackBar("Error: ${e.toString()}", context);
+                    } finally {
+                      setState(() {
+                        isLoadPayment = false;
+                      });
+                    }
+                  },
+                ),
               ),
             ),
+
             const SizedBox(
               height: 30,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 50, right: 50),
-              child: ElevatedButton(
-                onPressed: () {
-                  Order order = Order(
-                    orderId: "123",
-                    userId: "userId",
-                    items: widget.productList,
-                    totalAmount: totalamount,
-                    paymentMethod: "Card",
-                    orderStatus: "orderStatus",
-                    orderDate: DateTime.now(),
-                    addressId: "addressId",
-                    transactionId: "transactionId",
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Order Confirmed')));
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  textStyle: const TextStyle(fontSize: 18),
-                  backgroundColor: const Color(0xff338864),
-                ),
-                child: const TextLato(
-                  text: 'Confirm Order',
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
             ),
           ],
         ),

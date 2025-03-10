@@ -9,7 +9,7 @@ import 'package:agrisync/widget/string_image.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:rating_summary/rating_summary.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ProductDetailsPage extends StatefulWidget {
   final Products products;
@@ -20,12 +20,17 @@ class ProductDetailsPage extends StatefulWidget {
 }
 
 class _ProductDetailsPageState extends State<ProductDetailsPage> {
-  int noOfProduct = 0;
+  int noOfProduct = 1;
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff338864),
+        title: TextLato(
+          text: widget.products.productName,
+          color: Colors.white,
+        ),
         leading: IconButton(
             onPressed: () => Navigator.pop(context),
             icon: const Icon(
@@ -33,9 +38,6 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
               color: Colors.white,
             )),
         actions: [
-          IconButton(
-              onPressed: () => print('this is for Search'),
-              icon: const Icon(Icons.search, color: Colors.white)),
           IconButton(
             onPressed: () => Navigator.push(
               context,
@@ -58,7 +60,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 Container(
                   padding:
                       EdgeInsets.only(top: height(context) * 0.30, left: 20.0),
-                  margin: EdgeInsets.only(top: height(context) * 0.39),
+                  margin: EdgeInsets.only(top: height(context) * 0.36),
                   // padding: EdgeInsets.only(top: 400, left: 16),
                   // height: 500,
                   decoration: BoxDecoration(
@@ -76,8 +78,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const TextLato(
-                                text: 'Manufacture Date',
+                              TextLato(
+                                text: appLocalizations.manufacture_date,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
                               ),
@@ -92,8 +94,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                           Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              const TextLato(
-                                text: 'Expire Date',
+                              TextLato(
+                                text: appLocalizations.expire_date,
                                 fontWeight: FontWeight.bold,
                                 fontSize: 20,
                               ),
@@ -109,7 +111,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                       ),
                       const SizedBox(height: 10),
                       //product description
-                      const TextLato(text: "Description"),
+                      TextLato(text: appLocalizations.product_info),
                       Container(
                           padding: const EdgeInsets.symmetric(vertical: 20.0),
                           child: Text(
@@ -117,7 +119,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             softWrap: true,
                           )),
                       const SizedBox(height: 10),
-                      // product count
+                      // product count button
                       Row(children: [
                         OutLinedButton(
                             icons: Icons.remove,
@@ -137,15 +139,21 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         OutLinedButton(
                             icons: Icons.add,
                             onPress: () {
-                              setState(() {
-                                noOfProduct++;
-                              });
+                              if (noOfProduct ==
+                                  widget.products.stockQuantity) {
+                                showSnackBar(
+                                    appLocalizations.out_of_stock, context);
+                              } else {
+                                setState(() {
+                                  noOfProduct++;
+                                });
+                              }
                             }),
                       ]),
                       const SizedBox(height: 10),
-                      // chage
+                      // add to cart button
                       AddToCartAndBuyButton(
-                        products: widget.products,
+                        products: widget.products, nuOfProduct: noOfProduct,
                         // addressId: ,
                       ),
                       const SizedBox(height: 10),
@@ -159,8 +167,8 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const TextLato(
-                        text: 'ProductName',
+                      TextLato(
+                        text: appLocalizations.product_name,
                         color: Colors.black,
                       ),
                       TextLato(
@@ -176,7 +184,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                    text: 'price\n',
+                                    text: '${appLocalizations.price} \n',
                                     style: GoogleFonts.lato(
                                       fontWeight: FontWeight.bold,
                                       color:
@@ -213,10 +221,11 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                   );
                                 },
                                 child: StringImage(
+                                  height: 380,
                                   borderRadius: BorderRadius.circular(20),
                                   base64ImageString:
                                       widget.products.productImageUrl[0],
-                                  fit: BoxFit.contain,
+                                  fit: BoxFit.cover,
                                 ),
                               ),
                             ),
@@ -228,6 +237,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                 ),
               ],
             ),
+            //product review screen and rating screen
             ProductReviewScreen(productId: widget.products.productId)
           ],
         ),
@@ -238,7 +248,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
             MaterialPageRoute(
                 builder: (_) =>
                     AddReviewForProduct(productId: widget.products.productId))),
-        child: Icon(Icons.rate_review_rounded),
+        child: const Icon(Icons.rate_review_rounded),
       ),
     );
   }

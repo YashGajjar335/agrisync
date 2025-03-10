@@ -10,6 +10,7 @@ import 'package:agrisync/widget/image_assets.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class AgriTechScreen extends StatefulWidget {
   const AgriTechScreen({super.key});
@@ -36,32 +37,33 @@ class _AgriTechScreenState extends State<AgriTechScreen> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          bottom: const TabBar(
+          bottom: TabBar(
             tabs: [
               Tab(
-                icon: Icon(
+                icon: const Icon(
                   Icons.border_all_rounded,
                   weight: 20,
                 ),
-                text: "All Technologies",
+                text: appLocalizations.all_technologies,
               ),
               Tab(
-                icon: Icon(
+                icon: const Icon(
                   Icons.bookmark_rounded,
                   weight: 20,
                 ),
-                text: "Saved Technologies",
+                text: appLocalizations.saved_technologies,
               ),
             ],
           ),
-          title: const AgriSyncIcon(
-            title: "AgriTech",
+          title: AgriSyncIcon(
+            title: appLocalizations.agritech,
             size: 30,
           ),
           actions: [
@@ -127,6 +129,7 @@ class AllTechnologies extends StatefulWidget {
 class _AllTechnologiesState extends State<AllTechnologies> {
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return StreamBuilder(
         stream: FirebaseFirestore.instance.collection("Technology").snapshots(),
         builder: (context, snapshot) {
@@ -134,9 +137,9 @@ class _AllTechnologiesState extends State<AllTechnologies> {
             if (snapshot.hasData) {
               final techCount = snapshot.data!.size;
               return techCount == 0
-                  ? const Center(
+                  ? Center(
                       child: TextLato(
-                        text: "No Data Found..! ",
+                        text: appLocalizations.no_technology_available,
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ),
@@ -176,7 +179,7 @@ class _AllTechnologiesState extends State<AllTechnologies> {
                 CircularProgressIndicator(
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                const TextLato(text: "Something Wrong..!"),
+                TextLato(text: appLocalizations.somethingWrong),
               ],
             ),
           );

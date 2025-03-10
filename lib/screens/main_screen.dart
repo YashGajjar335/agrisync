@@ -3,13 +3,13 @@ import 'package:agrisync/screens/agri_tech/agri_tech_screen.dart';
 import 'package:agrisync/screens/crop/crop_categories_screen.dart';
 import 'package:agrisync/screens/agri_sync_home_screen.dart';
 import 'package:agrisync/screens/agri_mart/agri_mart_screen.dart';
-import 'package:agrisync/spash_screen.dart';
 import 'package:agrisync/utils/agrisync_image_icon.dart';
 import 'package:agrisync/widget/drawer_child.dart';
 import 'package:agrisync/widget/image_assets.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar.dart';
 import 'package:curved_labeled_navigation_bar/curved_navigation_bar_item.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import 'package:google_fonts/google_fonts.dart';
 
 class MainScreen extends StatefulWidget {
@@ -33,9 +33,12 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalization = AppLocalizations.of(context)!;
+
     TextStyle labelStyle = GoogleFonts.lato(
         color: Theme.of(context).colorScheme.primary,
         fontWeight: FontWeight.bold);
+
     List<Widget> tabItems = const [
       CropCategoriesScreen(),
       AgriMartScreen(),
@@ -43,6 +46,7 @@ class _MainScreenState extends State<MainScreen> {
       AgriConnectScreen(),
       AgriTechScreen(),
     ];
+
     return Scaffold(
       // key: _scaffoldKey,
       extendBody: true,
@@ -64,35 +68,35 @@ class _MainScreenState extends State<MainScreen> {
               height: 20,
               width: 20,
             ),
-            label: "Crop",
+            label: appLocalization.crop,
             labelStyle: labelStyle,
           ),
           CurvedNavigationBarItem(
             child: ImageAssets(
               imagePath: AgrisyncImageIcon().shoppingCart,
             ),
-            label: "AgriMart",
+            label: appLocalization.agrimart,
             labelStyle: labelStyle,
           ),
           CurvedNavigationBarItem(
             child: ImageAssets(
               imagePath: AgrisyncImageIcon().home,
             ),
-            label: "Home",
+            label: appLocalization.home,
             labelStyle: labelStyle,
           ),
           CurvedNavigationBarItem(
             child: ImageAssets(
               imagePath: AgrisyncImageIcon().socialPage,
             ),
-            label: "AgriConnect",
+            label: appLocalization.agriconnect,
             labelStyle: labelStyle,
           ),
           CurvedNavigationBarItem(
             child: ImageAssets(
               imagePath: AgrisyncImageIcon().technology,
             ),
-            label: "AgriTech",
+            label: appLocalization.agritech,
             labelStyle: labelStyle,
           ),
         ],

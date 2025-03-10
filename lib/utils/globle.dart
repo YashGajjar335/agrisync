@@ -3,31 +3,58 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:agrisync/screens/agri_tech/agri_tech_screen.dart';
-import 'package:agrisync/screens/crop/crop_list_screen.dart';
-import 'package:agrisync/screens/agri_sync_home_screen.dart';
-import 'package:agrisync/screens/auth/login_screen.dart';
-import 'package:agrisync/screens/agri_mart/agri_mart_screen.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
+
+// AppLocalizations? appLocalization;
 
 double height(BuildContext context) => MediaQuery.of(context).size.height;
 double width(BuildContext context) => MediaQuery.of(context).size.width;
 
+const primaryColor = Color.fromRGBO(107, 157, 252, 1);
+const secondaryColor = Color(0xffa1c6fd);
+const tertiaryColor = Color(0xff205cf1);
+const blackColor = Color(0xff1a1d26);
+
+const greyColor = Color(0xffd9dadb);
+
+final Shader shader =
+    const LinearGradient(colors: <Color>[Color(0xffABCFF2), Color(0xff9AC6F3)])
+        .createShader(const Rect.fromLTRB(0.0, 0.0, 200.0, 70.0));
+
+const linearGradientBlue = LinearGradient(
+    begin: Alignment.bottomRight,
+    end: Alignment.topLeft,
+    colors: [Color(0xff6b9dfc), Color(0xff205cf1)],
+    stops: [0.0, 0.1]);
+
+const linearGradientPurple = LinearGradient(
+    begin: Alignment.bottomRight,
+    end: Alignment.topLeft,
+    colors: [Color(0xff51087E), Color(0xff6C0BA9)],
+    stops: [0.0, 1.0]);
+
+const String productCollection = "Products";
+const String reviewCollection = "ProductReview";
+const String paymentCollection = "Payment";
+const String orderCollection = "Order";
+final String uid = FirebaseAuth.instance.currentUser!.uid;
+
 // String userPhotoUrl =
 //     "/9j/4QBqRXhpZgAATU0AKgAAAAgABAEAAAQAAAABAAAEsAEBAAQAAAABAAADiYdpAAQAAAABAAAAPgESAAMAAAABAAAAAAAAAAAAAZIIAAMAAAABAAAAAAAAAAAAAQESAAMAAAABAAAAAAAAAAD/4AAQSkZJRgABAQAAAQABAAD/4gIoSUNDX1BST0ZJTEUAAQEAAAIYAAAAAAQwAABtbnRyUkdCIFhZWiAAAAAAAAAAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAAHRyWFlaAAABZAAAABRnWFlaAAABeAAAABRiWFlaAAABjAAAABRyVFJDAAABoAAAAChnVFJDAAABoAAAAChiVFJDAAABoAAAACh3dHB0AAAByAAAABRjcHJ0AAAB3AAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAFgAAAAcAHMAUgBHAEIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFhZWiAAAAAAAABvogAAOPUAAAOQWFlaIAAAAAAAAGKZAAC3hQAAGNpYWVogAAAAAAAAJKAAAA+EAAC2z3BhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABYWVogAAAAAAAA9tYAAQAAAADTLW1sdWMAAAAAAAAAAQAAAAxlblVTAAAAIAAAABwARwBvAG8AZwBsAGUAIABJAG4AYwAuACAAMgAwADEANv/bAEMAEAsMDgwKEA4NDhIREBMYKBoYFhYYMSMlHSg6Mz08OTM4N0BIXE5ARFdFNzhQbVFXX2JnaGc+TXF5cGR4XGVnY//bAEMBERIS";
 
-String appLocalization = "package:flutter_gen/gen_l10n/app_localizations.dart";
+String appLocalizationDirectory =
+    "package:flutter_gen/gen_l10n/app_localizations.dart";
 String assets = "assets/";
-List<Widget> tabItems = const [
-  CropListScreen(crop: "ANY"),
-  AgriMartScreen(),
-  AgriSyncHomeScreen(),
-  LoginScreen(),
-  AgriTechScreen(),
-];
+// List<Widget> tabItems = const [
+//   AgriMartScreen(),
+//   AgriSyncHomeScreen(),
+//   LoginScreen(),
+//   AgriTechScreen(),
+// ];
 
 Future<String?> pickImageAndConvertToBase64({int imageQuality = 10}) async {
   try {
@@ -90,6 +117,7 @@ showSnackBar(String content, BuildContext context) {
     SnackBar(
       content: TextLato(
         text: content,
+        color: Colors.white,
       ),
     ),
   );

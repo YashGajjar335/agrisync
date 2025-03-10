@@ -129,6 +129,12 @@ class AuthServices {
     return user;
   }
 
+  Future<Map<String, dynamic>> getUserInfo(String uid) async {
+    final snap = await _firestore.collection("users").doc(uid).get();
+    Map<String, dynamic> user = snap.data() as Map<String, dynamic>;
+    return user;
+  }
+
   Future<String?> updateUsernameAndProfilePic(
       String photoUrl, String userName) async {
     try {

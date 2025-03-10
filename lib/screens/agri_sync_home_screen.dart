@@ -1,9 +1,8 @@
+import 'package:agrisync/screens/weather/weather_screen.dart';
 import 'package:agrisync/utils/agrisync_image_icon.dart';
 import 'package:agrisync/widget/agri_mart_categories.dart';
 import 'package:agrisync/widget/drawer_child.dart';
 import 'package:agrisync/widget/thread_recommendation.dart';
-import 'package:agrisync/widget/weather_card.dart';
-
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:agrisync/widget/animted_toggle_button.dart';
@@ -24,14 +23,15 @@ class HomenScreenState extends State<AgriSyncHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final AppLocalizations localizations = AppLocalizations.of(context)!;
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     final primary = Theme.of(context).colorScheme.primary;
     return Scaffold(
+      // backgroundColor: Theme.of(context).colorScheme.surfaceContainer,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.transparent,
         // Theme.of(context).colorScheme.secondaryContainer,
-        title: AgriSyncIcon(title: localizations.agrisync),
+        title: AgriSyncIcon(title: appLocalizations.agrisync),
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 20),
@@ -62,43 +62,63 @@ class HomenScreenState extends State<AgriSyncHomeScreen> {
       body: Padding(
         padding: const EdgeInsets.all(10),
         child: ListView(
-          children: const [
-            HomeScreenTechnology(),
-            SizedBox(height: 10),
+          children: [
+            const HomeScreenTechnology(),
+            const SizedBox(height: 10),
             TextLato(
-              text: "Crop ",
+              text: appLocalizations.crop,
               fontSize: 35,
               fontWeight: FontWeight.bold,
             ),
-            CropRecommendation(),
-            TextLato(
-              text: "Weather",
-              fontSize: 35,
-              fontWeight: FontWeight.bold,
+            const CropRecommendation(),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: InkWell(
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) => const WeatherHomeScreen())),
+                child: Card(
+                  margin: const EdgeInsets.all(2),
+                  elevation: 04,
+                  child: ListTile(
+                    leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(20),
+                        child: Image.asset("assets/heavycloudy.png")),
+                    title: TextLato(
+                      text: appLocalizations.weather,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ),
             ),
-            WeatherCard(),
             TextLato(
-              text: "AgriConnect Update",
+              text: appLocalizations.agri_connect_update,
               fontSize: 35,
               fontWeight: FontWeight.bold,
             ),
 
-            ThreadRecommendation(),
+            const ThreadRecommendation(),
             TextLato(
-              text: "AgriMart",
+              text: appLocalizations.agrimart,
               fontSize: 35,
               fontWeight: FontWeight.bold,
             ),
 
-            AgriMartCategories(),
+            const AgriMartCategories(),
             // ThreadCard(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                AgriSyncIcon(title: "AgriSync"),
-              ],
+            Card(
+              elevation: 4,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  AgriSyncIcon(title: appLocalizations.agrisync),
+                ],
+              ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             )
           ],

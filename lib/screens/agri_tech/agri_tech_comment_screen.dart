@@ -8,6 +8,7 @@ import 'package:agrisync/widget/agri_tech_comment_card.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class AgriTechCommentScreen extends StatefulWidget {
   final String techId;
@@ -21,9 +22,10 @@ class _AgriTechCommentScreenState extends State<AgriTechCommentScreen> {
   final TextEditingController _commentController = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const AgriSyncIcon(title: "Comment"),
+        title: AgriSyncIcon(title: appLocalizations.comment),
       ),
       body: Column(
         children: [
@@ -40,9 +42,9 @@ class _AgriTechCommentScreenState extends State<AgriTechCommentScreen> {
                       int commentCount = snapshot.data!.size;
 
                       return commentCount == 0
-                          ? const Center(
+                          ? Center(
                               child: TextLato(
-                                text: "No Comment..",
+                                text: appLocalizations.no_comment,
                                 fontSize: 30,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -64,11 +66,11 @@ class _AgriTechCommentScreenState extends State<AgriTechCommentScreen> {
                       ),
                     );
                   }
-                  return const Center(
+                  return Center(
                     child: Column(
                       children: [
                         TextLato(
-                          text: "Something Wrong..!",
+                          text: appLocalizations.somethingWrong,
                         ),
                       ],
                     ),
@@ -81,7 +83,7 @@ class _AgriTechCommentScreenState extends State<AgriTechCommentScreen> {
             child: TextField(
               controller: _commentController,
               decoration: InputDecoration(
-                  label: const TextLato(text: "add Comment"),
+                  label: TextLato(text: appLocalizations.add_comment),
                   border: const OutlineInputBorder(
                       borderSide:
                           BorderSide(width: 3, color: Colors.lightGreenAccent),
@@ -95,12 +97,13 @@ class _AgriTechCommentScreenState extends State<AgriTechCommentScreen> {
                     onPressed: () async {
                       String comment = _commentController.text.trim();
                       if (comment.isEmpty) {
-                        showSnackBar("Enter the comment first", context);
+                        showSnackBar(appLocalizations.enter_comment, context);
                       } else {
                         final res = await AgriTechService.instance
                             .uploadComment(widget.techId, comment);
                         if (res == null) {
-                          showSnackBar("Comment Uploded", context);
+                          showSnackBar(
+                              appLocalizations.comment_uploaded, context);
                           _commentController.clear();
                           FocusScope.of(context).unfocus();
                         } else {

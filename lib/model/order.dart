@@ -1,23 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Order {
+class OrderModel {
   String orderId;
   String userId;
   Map<String, int> items;
   double totalAmount;
-  String paymentMethod; // e.g., "Credit Card", "UPI", "Cash on Delivery"
+  // String paymentMethod; // e.g., "Credit Card", "UPI", "Cash on Delivery"
   String orderStatus; // e.g., "Pending", "Shipped", "Delivered", "Cancelled"
   DateTime orderDate;
   DateTime? deliveryDate;
   String addressId; // Reference to UserAddress
   String transactionId; // Payment transaction ID (if applicable)
 
-  Order({
+  OrderModel({
     required this.orderId,
     required this.userId,
     required this.items,
     required this.totalAmount,
-    required this.paymentMethod,
+    // required this.paymentMethod,
     required this.orderStatus,
     required this.orderDate,
     this.deliveryDate,
@@ -32,7 +32,7 @@ class Order {
       'userId': userId,
       'items': items, // This is already a Map<String, int>
       'totalAmount': totalAmount,
-      'paymentMethod': paymentMethod,
+      // // 'paymentMethod': paymentMethod,
       'orderStatus': orderStatus,
       'orderDate': orderDate.toIso8601String(),
       'deliveryDate': deliveryDate?.toIso8601String(),
@@ -42,14 +42,14 @@ class Order {
   }
 
   // Create an Order object from a Firestore DocumentSnapshot
-  static Order fromMap(DocumentSnapshot doc) {
+  static OrderModel fromSnap(DocumentSnapshot doc) {
     if (!doc.exists) {
       throw Exception("Order document does not exist");
     }
 
     Map<String, dynamic> map = doc.data() as Map<String, dynamic>;
 
-    return Order(
+    return OrderModel(
       orderId: doc.id, // Use Firestore document ID as orderId
       userId: map['userId'] ?? '',
       items: (map['items'] as Map<String, dynamic>?)?.map(
@@ -57,7 +57,7 @@ class Order {
           ) ??
           {},
       totalAmount: (map['totalAmount'] ?? 0).toDouble(),
-      paymentMethod: map['paymentMethod'] ?? '',
+      // paymentMethod: map['paymentMethod'] ?? '',
       orderStatus: map['orderStatus'] ?? 'Pending',
       orderDate: DateTime.parse(map['orderDate']),
       deliveryDate: map['deliveryDate'] != null

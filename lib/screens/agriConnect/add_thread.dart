@@ -8,6 +8,7 @@ import 'package:agrisync/widget/long_button.dart';
 import 'package:agrisync/widget/string_image.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class AddThread extends StatefulWidget {
   const AddThread({super.key});
@@ -25,10 +26,11 @@ class _AddThreadState extends State<AddThread> {
   bool _isLoad = false;
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     final _formKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
-        title: const AgriSyncIcon(title: "Upload Thread"),
+        title: AgriSyncIcon(title: appLocalizations.upload_thread),
         centerTitle: true,
       ),
       body: Form(
@@ -51,7 +53,7 @@ class _AddThreadState extends State<AddThread> {
                 // button for select the photo
                 LongButton(
                   width: 300,
-                  buttonText: "Select Photo ",
+                  buttonText: appLocalizations.selectPhoto,
                   onTap: () async {
                     final image = await pickImageAndConvertToBase64();
                     imageUrl = image!;
@@ -65,14 +67,14 @@ class _AddThreadState extends State<AddThread> {
                   keyboardType: TextInputType.text,
                   validator: (val) {
                     if (val!.isEmpty) {
-                      return "Enter The Description";
+                      return appLocalizations.enter_description;
                     }
                     return null;
                   },
                   decoration: InputDecoration(
-                    errorText: "Enter the description",
-                    label: const TextLato(
-                      text: "Description",
+                    errorText: appLocalizations.enter_description,
+                    label: TextLato(
+                      text: appLocalizations.description,
                     ),
                     border: UnderlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -85,7 +87,7 @@ class _AddThreadState extends State<AddThread> {
                 LongButton(
                     isLoading: _isLoad,
                     width: 200,
-                    buttonText: "Share Thread",
+                    buttonText: appLocalizations.upload_thread,
                     onTap: () async {
                       setState(() {
                         _isLoad = true;
@@ -94,7 +96,8 @@ class _AddThreadState extends State<AddThread> {
                         final res = await AgriConnectService.instance
                             .uploadThread(imageUrl, _description.text.trim());
                         if (res == null) {
-                          showSnackBar("Thread Upload Successfully", context);
+                          showSnackBar(
+                              appLocalizations.thread_upload_success, context);
                           // Navigator.pushReplacement(
                           //     context,
                           //     MaterialPageRoute(

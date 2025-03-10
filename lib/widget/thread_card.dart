@@ -5,6 +5,7 @@ import 'package:agrisync/utils/globle.dart';
 import 'package:agrisync/widget/string_image.dart';
 import 'package:agrisync/widget/string_image_in_circle_avtar.dart';
 import 'package:agrisync/widget/text_lato.dart';
+import 'package:agrisync/widget/waiting_screen.dart';
 import 'package:flutter/material.dart';
 
 class ThreadCard extends StatefulWidget {
@@ -24,6 +25,7 @@ class _ThreadCardState extends State<ThreadCard> {
   // String photoUrl = "";
   bool isLiked = false;
   bool isSaved = false;
+  bool isLoad = true;
   int totalLike = 0;
 
   @override
@@ -47,7 +49,9 @@ class _ThreadCardState extends State<ThreadCard> {
     isSaved = widget.thread.isSaved;
     totalLike = widget.thread.totalLike;
     if (mounted) {
-      setState(() {});
+      setState(() {
+        isLoad = false;
+      });
     }
     // isLiked = await agriConnect.isLike(widget.thread.threadId);
     // isSaved = await agriConnect.isSaved(widget.thread.threadId);
@@ -97,13 +101,28 @@ class _ThreadCardState extends State<ThreadCard> {
     }
   }
 
-  void saveThreads() async {
-    bool newSavedState = !isSaved;
-    setState(() => isSaved = newSavedState);
+  // void saveThreads() async {
+  //   bool newSavedState = !isSaved;
+  //   setState(() => isSaved = newSavedState);
 
-    final res = await agriConnect.savedThread(widget.thread.threadId);
-    if (mounted && res != null) {
-      // setState(() {});
+  //   final res = await agriConnect.savedThread(widget.thread.threadId);
+  //   if (mounted && res != null) {
+  //     // setState(() {});
+  //   }
+  // }
+
+  void saveThreads() async {
+    // Toggle locally for faster UI response
+    final previousState = isSaved; // Store previous state
+    setState(() => isSaved = !isSaved);
+
+    // Call Firebase and revert on failure
+    final result = await agriConnect.savedThread(widget.thread.threadId);
+    if (mounted && result == null) {
+      setState(() {
+        isSaved = previousState;
+        isLoad = false;
+      }); // Revert if failed
     }
   }
 
@@ -166,25 +185,30 @@ class _ThreadCardState extends State<ThreadCard> {
                 ),
               ),
               const Spacer(),
-              IconButton(
-                iconSize: 30,
-                onPressed: () {
-                  setState(() => isSaved = !isSaved);
-                  saveThreads();
-                },
-                icon: Column(
-                  children: [
-                    Icon(
-                      isSaved ? Icons.bookmark : Icons.bookmark_outline,
-                      color: Theme.of(context).colorScheme.primary,
+              isLoad
+                  ? const WaitingScreen()
+                  : IconButton(
+                      iconSize: 30,
+                      onPressed: () {
+                        setState(() {
+                          isSaved = !isSaved;
+                          isLoad = true;
+                        });
+                        saveThreads();
+                      },
+                      icon: Column(
+                        children: [
+                          Icon(
+                            isSaved ? Icons.bookmark : Icons.bookmark_outline,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                          TextLato(
+                            text: isSaved ? "Saved" : "Save",
+                            paddingAll: 0.0,
+                          )
+                        ],
+                      ),
                     ),
-                    TextLato(
-                      text: isSaved ? "Saved" : "Save",
-                      paddingAll: 0.0,
-                    )
-                  ],
-                ),
-              ),
             ],
           ),
         ),

@@ -1,6 +1,7 @@
 import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:agrisync/widget/crop_card.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class CropCategoriesScreen extends StatefulWidget {
   const CropCategoriesScreen({super.key});
@@ -12,27 +13,31 @@ class CropCategoriesScreen extends StatefulWidget {
 class _CropCategoriesScreenState extends State<CropCategoriesScreen> {
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: const AgriSyncIcon(title: "Crop"),
+        title: AgriSyncIcon(title: appLocalizations.crop),
       ),
-      body: const SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Column(
           children: [
             CropCard(
-              imagePath: "assets/farm.png",
-              cropName: "Khrif",
+              imagePath: "assets/kharif.png",
+              cropCategoriesName: appLocalizations.kharif,
               color: Colors.white,
+              cropCategories: 'Kharif',
             ),
             CropCard(
-              imagePath: "assets/farm.png",
-              cropName: "Zaid",
+              imagePath: "assets/zaid.png",
+              cropCategoriesName: appLocalizations.zaid,
               color: Colors.white,
+              cropCategories: 'Zaid',
             ),
             CropCard(
-              imagePath: "assets/farm.png",
-              cropName: "Rabi",
+              imagePath: "assets/rabi.png",
+              cropCategoriesName: appLocalizations.rabi,
               color: Colors.white,
+              cropCategories: 'Rabi',
             ),
           ],
         ),

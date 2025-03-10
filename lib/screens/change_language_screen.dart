@@ -82,7 +82,10 @@ class _ChangeLangScreenState extends State<ChangeLangScreen> {
       actions: [
         TextButton(
           onPressed: selectedLang != null ? () => setLang(selectedLang!) : null,
-          child: const Text('done'),
+          child: const Icon(
+            Icons.done_rounded,
+            weight: 20,
+          ),
         ),
       ],
     );

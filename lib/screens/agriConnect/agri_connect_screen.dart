@@ -8,6 +8,7 @@ import 'package:agrisync/widget/image_assets.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:agrisync/widget/thread_card.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class AgriConnectScreen extends StatefulWidget {
   const AgriConnectScreen({super.key});
@@ -22,32 +23,33 @@ class _AgriConnectScreenState extends State<AgriConnectScreen> {
   get itemBuilder => null;
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return DefaultTabController(
       length: 2,
       child: Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          bottom: const TabBar(
+          bottom: TabBar(
             tabs: [
               Tab(
-                icon: Icon(
+                icon: const Icon(
                   Icons.border_all_rounded,
                   weight: 20,
                 ),
-                text: "All Threads",
+                text: appLocalizations.all_threads,
               ),
               Tab(
-                icon: Icon(
+                icon: const Icon(
                   Icons.bookmark,
                   weight: 20,
                 ),
-                text: "Saved Threads",
+                text: appLocalizations.saved_threads,
               ),
             ],
           ),
-          title: const AgriSyncIcon(
-            title: "AgriConnect",
+          title: AgriSyncIcon(
+            title: appLocalizations.agriconnect,
             size: 25,
           ),
           actions: [
@@ -87,10 +89,10 @@ class _AgriConnectScreenState extends State<AgriConnectScreen> {
           child: FloatingActionButton(
             onPressed: () => Navigator.push(
                 context, MaterialPageRoute(builder: (_) => const AddThread())),
-            child: const Icon(
+            child: Icon(
               Icons.add,
               size: 25,
-              semanticLabel: "Add",
+              semanticLabel: appLocalizations.add_thread,
             ),
           ),
         ),
@@ -134,17 +136,18 @@ class AllThread extends StatefulWidget {
 class _AllThreadState extends State<AllThread> {
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return FutureBuilder(
         future: AgriConnectService.instance.getAllThreads(),
         builder: (context, snapshot) {
-          print(snapshot);
+          // print(snapshot);
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasData) {
               final threadCount = snapshot.data!.length;
               return threadCount == 0
-                  ? const Center(
+                  ? Center(
                       child: TextLato(
-                        text: "No Data available",
+                        text: appLocalizations.no_thread_available,
                         fontSize: 30,
                         fontWeight: FontWeight.bold,
                       ),
@@ -193,7 +196,7 @@ class _AllThreadState extends State<AllThread> {
                 CircularProgressIndicator(
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                const TextLato(text: "Something Wrong..!"),
+                TextLato(text: appLocalizations.somethingWrong),
               ],
             ),
           );

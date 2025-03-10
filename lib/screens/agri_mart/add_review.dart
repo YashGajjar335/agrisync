@@ -7,17 +7,17 @@ import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class AddReviewForProduct extends StatefulWidget {
   final String productId;
   const AddReviewForProduct({super.key, required this.productId});
 
   @override
-  // ignore: library_private_types_in_public_api
-  _AddReviewForProductState createState() => _AddReviewForProductState();
+  AddReviewForProductState createState() => AddReviewForProductState();
 }
 
-class _AddReviewForProductState extends State<AddReviewForProduct> {
+class AddReviewForProductState extends State<AddReviewForProduct> {
   double _rating = 0;
   final TextEditingController _reviewController = TextEditingController();
 
@@ -61,14 +61,15 @@ class _AddReviewForProductState extends State<AddReviewForProduct> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: const AgriSyncIcon(title: 'Add Review')),
+      appBar: AppBar(title: AgriSyncIcon(title: appLocalizations.add_review)),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TextLato(text: 'Rate the Product:', fontSize: 18),
+            TextLato(text: '${appLocalizations.rate_product} :', fontSize: 18),
             const SizedBox(height: 10),
             RatingBar.builder(
               initialRating: _rating,
@@ -91,15 +92,14 @@ class _AddReviewForProductState extends State<AddReviewForProduct> {
             TextField(
               controller: _reviewController,
               maxLines: 4,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Write your review here...',
-              ),
+              decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  hintText: appLocalizations.write_review),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _submitReview,
-              child: const TextLato(text: 'Submit Review'),
+              child: TextLato(text: appLocalizations.submit_review),
             ),
           ],
         ),

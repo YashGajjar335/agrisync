@@ -2,7 +2,6 @@
 
 import 'package:agrisync/screens/auth/email_verification_page.dart';
 import 'package:agrisync/screens/auth/login_screen.dart';
-import 'package:agrisync/screens/main_screen.dart';
 import 'package:agrisync/services/auth_services.dart';
 import 'package:agrisync/utils/agrisync_image_icon.dart';
 import 'package:agrisync/utils/globle.dart';
@@ -12,6 +11,7 @@ import 'package:agrisync/widget/long_button.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import 'package:image_picker/image_picker.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -40,6 +40,7 @@ class _SignupScreenState extends State<SignupScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -75,7 +76,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       Container(
                         padding: const EdgeInsets.fromLTRB(10, 10, 20, 100),
                         child: Text(
-                          'Welcome to Sign Up',
+                          appLocalizations.signup,
                           style: GoogleFonts.lato(
                             fontSize: 35,
                             color: theme.primary,
@@ -87,14 +88,14 @@ class _SignupScreenState extends State<SignupScreen> {
                       TextFormField(
                         validator: (value) {
                           return value == null || value.isEmpty
-                              ? "Enter UserName"
+                              ? appLocalizations.enterUserName
                               : null;
                         },
                         keyboardType: TextInputType.text,
                         controller: _userNamecontroller,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.person),
-                          labelText: 'UserName',
+                          labelText: appLocalizations.userName,
                           labelStyle: GoogleFonts.lato(
                             fontSize: 15,
                             color: Colors.black,
@@ -112,14 +113,14 @@ class _SignupScreenState extends State<SignupScreen> {
                       TextFormField(
                         validator: (value) {
                           return !emailValidator(_emailController.text)
-                              ? "Enter Valid Email"
+                              ? appLocalizations.enterValidEmail
                               : null;
                         },
                         keyboardType: TextInputType.emailAddress,
                         controller: _emailController,
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.email),
-                          labelText: 'Email',
+                          labelText: appLocalizations.email,
                           labelStyle: GoogleFonts.lato(
                             fontSize: 15,
                             color: Colors.black,
@@ -139,7 +140,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           return checkPassMatch(_passwordController.text,
                                   _passwordController2.text)
                               ? null
-                              : "PassWord not match";
+                              : appLocalizations.passwordNotMatch;
                         },
                         controller: _passwordController,
                         keyboardType: TextInputType.visiblePassword,
@@ -160,7 +161,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 icon2: ImageAssets(
                                     imagePath: AgrisyncImageIcon().closeEye)),
                           ),
-                          labelText: 'Password',
+                          labelText: appLocalizations.password,
                           labelStyle: GoogleFonts.lato(
                             fontSize: 15,
                             color: Colors.black,
@@ -179,7 +180,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           return checkPassMatch(_passwordController.text,
                                   _passwordController2.text)
                               ? null
-                              : "PassWord not match";
+                              : appLocalizations.passwordNotMatch;
                         },
                         controller: _passwordController2,
                         keyboardType: TextInputType.visiblePassword,
@@ -200,7 +201,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 icon2: ImageAssets(
                                     imagePath: AgrisyncImageIcon().closeEye)),
                           ),
-                          labelText: 'Confirm-Password',
+                          labelText: appLocalizations.forgorPass,
                           labelStyle: GoogleFonts.lato(
                             fontSize: 15,
                             color: Colors.black,
@@ -230,7 +231,7 @@ class _SignupScreenState extends State<SignupScreen> {
                               doc = result;
                             });
                           },
-                          buttonText: 'Select file',
+                          buttonText: appLocalizations.selectPhoto,
                           width: double.infinity,
                         ),
                       const SizedBox(height: 10),
@@ -240,7 +241,7 @@ class _SignupScreenState extends State<SignupScreen> {
                           onTap: () {
                             showImage(context, doc!);
                           },
-                          buttonText: 'Open file',
+                          buttonText: appLocalizations.openPhoto,
                           width: double.infinity,
                         ),
                     ],
@@ -255,11 +256,11 @@ class _SignupScreenState extends State<SignupScreen> {
                   ? LongButton(
                       width: double.infinity,
                       isLoading: _isLoad,
-                      buttonText: "Sign Up as Specialist",
+                      buttonText: appLocalizations.signUpWithSpecialist,
                       onTap: () {
                         if (_formKey.currentState!.validate()) {
                           if (doc == null) {
-                            showSnackBar("Upload your Document..!", context);
+                            showSnackBar(appLocalizations.uploadDoc, context);
                           } else {
                             signUpFunctionSpecialist();
                           }
@@ -268,7 +269,7 @@ class _SignupScreenState extends State<SignupScreen> {
                   : LongButton(
                       width: double.infinity,
                       isLoading: _isLoad,
-                      buttonText: "Sign Up",
+                      buttonText: appLocalizations.signup,
                       onTap: () {
                         if (_formKey.currentState!.validate()) {
                           signUpFunctionFarmer();
@@ -287,8 +288,8 @@ class _SignupScreenState extends State<SignupScreen> {
                 },
                 child: Text(
                   _isSpecialist
-                      ? 'Sign up with user '
-                      : 'Sign up with specialist ',
+                      ? appLocalizations.signUpWihUser
+                      : appLocalizations.signUpWithSpecialist,
                   style: GoogleFonts.lato(
                     fontSize: 15,
                     color: theme.secondary,
@@ -299,14 +300,14 @@ class _SignupScreenState extends State<SignupScreen> {
               // already have an account
               RichText(
                 text: TextSpan(
-                  text: 'Already have an account ? ',
+                  text: appLocalizations.alreadyAcc,
                   style: GoogleFonts.lato(
                     color: theme.onSecondaryContainer,
                     fontSize: 15,
                   ),
                   children: [
                     TextSpan(
-                        text: 'Sign In',
+                        text: appLocalizations.login,
                         style: GoogleFonts.lato(
                           fontSize: 20,
                           color: theme.primary,

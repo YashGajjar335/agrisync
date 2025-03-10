@@ -8,6 +8,7 @@ import 'package:agrisync/widget/image_assets.dart';
 import 'package:agrisync/widget/long_button.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:flutter/material.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -37,6 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context).colorScheme;
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     // double height = height(context);
     return Container(
       decoration: const BoxDecoration(
@@ -63,9 +65,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             image: AssetImage("assets/app_logo_half.JPG")),
                       )),
                 ),
-                const Center(
+                Center(
                   child: TextLato(
-                    text: "LOGIN",
+                    text: appLocalizations.login,
                     fontSize: 35,
                     fontWeight: FontWeight.bold,
                   ),
@@ -79,16 +81,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: _emailController,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Fill The Feild";
+                            return appLocalizations.fillTheFeild;
                           }
                           if (!emailValidator(value)) {
-                            return "Enter valid Email";
+                            return appLocalizations.enterValidEmail;
                           }
                           return null;
                         },
                         decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.email),
-                          labelText: 'Email',
+                          labelText: appLocalizations.email,
                           labelStyle: GoogleFonts.lato(
                             fontSize: 15,
                             color: Colors.black,
@@ -109,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         controller: _passwordController,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return "Fill the Feild";
+                            return appLocalizations.fillTheFeild;
                           }
                           return null;
                         },
@@ -132,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           filled: true,
-                          labelText: 'Password',
+                          labelText: appLocalizations.password,
                           labelStyle: GoogleFonts.lato(
                             fontSize: 15,
                             color: Colors.black,
@@ -155,7 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 showSnackBar(res, context);
                               },
                               child: TextLato(
-                                text: "Forgot Password?",
+                                text: appLocalizations.forgorPass,
                                 color: theme.primary,
                               ))),
                     ],
@@ -167,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: LongButton(
                       width: double.infinity,
                       isLoading: isLoad,
-                      buttonText: "Sign In",
+                      buttonText: appLocalizations.login,
                       onTap: () {
                         if (_formKey.currentState!.validate()) {
                           loginButtonFunction();
@@ -178,14 +180,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const TextLato(text: "Don't have account?"),
+                    TextLato(text: appLocalizations.doNotHaveAnAccount),
                     GestureDetector(
                         onTap: () => Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => const SignupScreen())),
                         child: TextLato(
-                          text: "Sign up",
+                          text: appLocalizations.signup,
                           color: theme.primary,
                           fontWeight: FontWeight.bold,
                           fontSize: 17,

@@ -35,13 +35,24 @@ class _ShowProductState extends State<ShowProduct> {
                           text: "No Product avilable..!",
                         ),
                       )
-                    : ListView.builder(
-                        itemCount: item,
-                        itemBuilder: (context, i) {
-                          return ProductCard(
-                              products:
-                                  Products.fromSnap(snapshot.data!.docs[i]));
-                        },
+                    : Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: item,
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.60,
+                            crossAxisSpacing: 10,
+                          ),
+                          itemBuilder: (context, index) => ProductCard(
+                            products: Products.fromSnap(
+                              snapshot.data!.docs[index],
+                            ),
+                          ),
+                        ),
                       );
               }
             }
