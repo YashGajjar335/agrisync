@@ -30,7 +30,7 @@ class _AddThreadState extends State<AddThread> {
     final _formKey = GlobalKey<FormState>();
     return Scaffold(
       appBar: AppBar(
-        title: AgriSyncIcon(title: appLocalizations.upload_thread),
+        title: AgriSyncIcon(title: appLocalizations.upload_thread, size: 25),
         centerTitle: true,
       ),
       body: Form(

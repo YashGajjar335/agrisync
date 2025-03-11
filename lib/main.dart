@@ -1,4 +1,3 @@
-import 'package:agrisync/screens/auth/email_verification_page.dart';
 import 'package:agrisync/screens/auth/login_screen.dart';
 import 'package:agrisync/screens/main_screen.dart';
 import 'package:agrisync/utils/stripe_keys.dart';

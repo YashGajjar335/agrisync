@@ -124,7 +124,7 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                         OutLinedButton(
                             icons: Icons.remove,
                             onPress: () {
-                              if (noOfProduct >= 1) {
+                              if (noOfProduct > 1) {
                                 setState(() {
                                   noOfProduct--;
                                 });

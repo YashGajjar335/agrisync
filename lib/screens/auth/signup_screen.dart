@@ -201,7 +201,7 @@ class _SignupScreenState extends State<SignupScreen> {
                                 icon2: ImageAssets(
                                     imagePath: AgrisyncImageIcon().closeEye)),
                           ),
-                          labelText: appLocalizations.forgorPass,
+                          labelText: appLocalizations.confirmPassword,
                           labelStyle: GoogleFonts.lato(
                             fontSize: 15,
                             color: Colors.black,

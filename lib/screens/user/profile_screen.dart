@@ -152,7 +152,7 @@ class _FarmerDetailState extends State<FarmerDetail> {
               ],
             ),
             Padding(
-              padding: EdgeInsets.only(top: 40, bottom: 20),
+              padding: const EdgeInsets.only(top: 40, bottom: 20),
               child: Center(
                   child: TextLato(
                 text: appLocalizations.your_thread,
@@ -174,13 +174,14 @@ class _FarmerDetailState extends State<FarmerDetail> {
                     if (snapshot.hasData) {
                       final int threadCount = snapshot.data!.size;
                       userThreads = threadCount;
-
                       return threadCount == 0
-                          ? SizedBox(
-                              height: 400,
-                              width: double.infinity,
-                              child: TextLato(
-                                text: appLocalizations.no_thread_available,
+                          ? Center(
+                              child: SizedBox(
+                                // height: 400,
+                                width: double.infinity,
+                                child: TextLato(
+                                  text: appLocalizations.no_thread_available,
+                                ),
                               ),
                             )
                           : GridView.builder(
@@ -489,7 +490,7 @@ class NumberAndText extends StatelessWidget {
           ),
           TextLato(
             text: lable,
-            fontSize: 20,
+            fontSize: 17,
             fontWeight: FontWeight.bold,
           ),
         ],
