@@ -17,14 +17,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
-class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+class UserProfileScreen extends StatefulWidget {
+  final String uid;
+  const UserProfileScreen({super.key, required this.uid});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<UserProfileScreen> createState() => _UserProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _UserProfileScreenState extends State<UserProfileScreen> {
   Farmer? farmer;
   Specialist? specialist;
   bool isLoad = false;
@@ -37,7 +38,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   loadUser() async {
     AuthServices authServices = AuthServices.instance;
-    final user = await authServices.getCurrentUserDetail();
+    final user = await authServices.getUserInfo(widget.uid);
     String role = await user["role"];
     print('role : $role');
     setState(() {

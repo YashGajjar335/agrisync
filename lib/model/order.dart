@@ -9,6 +9,7 @@ class OrderModel {
   String orderStatus; // e.g., "Pending", "Shipped", "Delivered", "Cancelled"
   DateTime orderDate;
   DateTime? deliveryDate;
+  DateTime? shippingDate;
   String addressId; // Reference to UserAddress
   String transactionId; // Payment transaction ID (if applicable)
 
@@ -21,21 +22,24 @@ class OrderModel {
     required this.orderStatus,
     required this.orderDate,
     this.deliveryDate,
+    this.shippingDate,
     required this.addressId,
     required this.transactionId,
   });
 
-  // Convert Order object to a Map (for Firebase/DB storage)
   Map<String, dynamic> toMap() {
     return {
       'orderId': orderId,
       'userId': userId,
-      'items': items, // This is already a Map<String, int>
+      'items': items,
       'totalAmount': totalAmount,
       // // 'paymentMethod': paymentMethod,
       'orderStatus': orderStatus,
-      'orderDate': orderDate.toIso8601String(),
-      'deliveryDate': deliveryDate?.toIso8601String(),
+      'orderDate': orderDate,
+      'deliveryDate':
+          deliveryDate != null ? Timestamp.fromDate(deliveryDate!) : null,
+      'shippingDate':
+          shippingDate != null ? Timestamp.fromDate(shippingDate!) : null,
       'addressId': addressId,
       'transactionId': transactionId,
     };
@@ -59,9 +63,12 @@ class OrderModel {
       totalAmount: (map['totalAmount'] ?? 0).toDouble(),
       // paymentMethod: map['paymentMethod'] ?? '',
       orderStatus: map['orderStatus'] ?? 'Pending',
-      orderDate: DateTime.parse(map['orderDate']),
+      orderDate: (map['orderDate'] as Timestamp).toDate(),
       deliveryDate: map['deliveryDate'] != null
-          ? DateTime.parse(map['deliveryDate'])
+          ? (map['deliveryDate'] as Timestamp).toDate()
+          : null,
+      shippingDate: map['shippingDate'] != null
+          ? (map['shippingDate'] as Timestamp).toDate()
           : null,
       addressId: map['addressId'] ?? '',
       transactionId: map['transactionId'] ?? '',

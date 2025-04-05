@@ -1,4 +1,5 @@
 import 'package:agrisync/model/product.dart';
+import 'package:agrisync/screens/agri_mart/agri_mart_search.dart';
 import 'package:agrisync/screens/agri_mart/my_cart_screen.dart';
 import 'package:agrisync/widget/product_card.dart';
 import 'package:agrisync/widget/agri_mart_categories.dart';
@@ -24,35 +25,27 @@ class _AgriMartScreenState extends State<AgriMartScreen> {
       appBar: AppBar(
         title: AgriSyncIcon(title: appLocalizations.agrimart),
         actions: [
-          IconButton(
-            padding: const EdgeInsets.only(right: 10),
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (_) => const MyCartScreen()));
-            },
-            icon: const Icon(Icons.shopping_cart_rounded),
+          Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {
+                  showSearch(
+                      context: context, delegate: AgriMartSearchDelegate());
+                }),
           ),
-        ],
-        bottom: PreferredSize(
-          preferredSize: const Size(double.infinity, 50),
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
-            child: TextField(
-              cursorColor: Colors.red,
-              decoration: InputDecoration(
-                border:
-                    OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-                isDense: true,
-                fillColor: Colors.transparent,
-                filled: true,
-                hintText: appLocalizations.search,
-                prefixIcon: const Icon(Icons.search),
-                iconColor: Colors.grey,
-              ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0),
+            child: IconButton(
+              padding: const EdgeInsets.only(right: 10),
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const MyCartScreen()));
+              },
+              icon: const Icon(Icons.shopping_cart_rounded),
             ),
           ),
-        ),
+        ],
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),

@@ -131,5 +131,6 @@
   "following": "ફોલોઈંગ",
   "followers": "ફોલોઅર્સ",
   "your_thread": "તમારી થ્રેડ",
-  "your_technologies": "તમારી ટેકનોલોજી"
+  "your_technologies": "તમારી ",
+  "technology" : "ટેકનોલોજી"
 }

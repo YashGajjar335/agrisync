@@ -87,8 +87,9 @@ class _AddTechnologyState extends State<AddTechnology> {
                 const SizedBox(height: 20),
                 // Description Field
                 TextFormField(
+                  maxLines: null,
                   controller: _descriptionController,
-                  keyboardType: TextInputType.text,
+                  keyboardType: TextInputType.multiline,
                   validator: (val) {
                     if (val!.isEmpty) {
                       return appLocalizations.enter_description;

@@ -44,6 +44,16 @@ class AgriMartServiceUser {
     }
   }
 
+  Future<List<Products>> getAllProductName() async {
+    try {
+      final productdata = await _firestore.collection(productCollection).get();
+      return productdata.docs.map(Products.fromSnap).toList();
+    } catch (e) {
+      print("ERROR TO GET PRODUCT NAME LIST : ${e.toString()}");
+      return [];
+    }
+  }
+
   Future<String?> updateUserAddress(
       String fullName,
       String phoneNumber,
@@ -55,7 +65,16 @@ class AgriMartServiceUser {
       String country,
       String postalCode) async {
     try {
-      String id = const Uuid().v4();
+      final querySnapshot = await _firestore
+          .collection("Address")
+          .where("userId", isEqualTo: uid)
+          .limit(1)
+          .get();
+
+      String id = querySnapshot.docs.isNotEmpty
+          ? querySnapshot.docs.first.id
+          : const Uuid().v4();
+
       UserAddress address = UserAddress(
         id: id,
         userId: uid,
@@ -69,7 +88,12 @@ class AgriMartServiceUser {
         country: country,
         postalCode: postalCode,
       );
-      await _firestore.collection("Address").doc(id).set(address.toMap());
+
+      await _firestore
+          .collection("Address")
+          .doc(id)
+          .set(address.toMap(), SetOptions(merge: true));
+
       return null;
     } catch (e) {
       return e.toString();

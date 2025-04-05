@@ -1,21 +1,21 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
-class Product {
-  final String image, title, description;
-  final double price, size, id;
-  final Color color;
+// class Product {
+//   final String image, title, description;
+//   final double price, size, id;
+//   final Color color;
 
-  Product({
-    required this.id,
-    required this.image,
-    required this.color,
-    required this.description,
-    required this.price,
-    required this.size,
-    required this.title,
-  });
-}
+//   Product({
+//     required this.id,
+//     required this.image,
+//     required this.color,
+//     required this.description,
+//     required this.price,
+//     required this.size,
+//     required this.title,
+//   });
+// }
 
 // for project implimantation
 class Products {

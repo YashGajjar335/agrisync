@@ -2,6 +2,7 @@ import 'package:agrisync/model/cart_items.dart';
 import 'package:agrisync/model/product.dart';
 import 'package:agrisync/screens/agri_mart/product_detail_screen.dart';
 import 'package:agrisync/screens/agri_mart/product_order_screen.dart';
+import 'package:agrisync/utils/globle.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:agrisync/widget/string_image_in_circle_avtar.dart';
 import 'package:agrisync/widget/text_lato.dart';
@@ -20,6 +21,8 @@ class MyCartScreen extends StatefulWidget {
 
 class _MyCartScreenState extends State<MyCartScreen> {
   final String uid = FirebaseAuth.instance.currentUser!.uid;
+  bool canBuy = true;
+  List<String> unavilableProduct = [];
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +77,16 @@ class _MyCartScreenState extends State<MyCartScreen> {
 
                     Products product = Products.fromSnap(productSnapshot.data!);
 
+                    if (product.stockQuantity <= 0 ||
+                        product.stockQuantity <= quantity) {
+                      print(unavilableProduct.contains(product.productName));
+                      if (!unavilableProduct.contains(product.productName)) {
+                        unavilableProduct.add(product.productName);
+                      }
+                      print(unavilableProduct.length);
+                      canBuy = false;
+                    }
+
                     return Card(
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(15)),
@@ -84,7 +97,15 @@ class _MyCartScreenState extends State<MyCartScreen> {
                         leading: StringImageInCircleAvatar(
                             base64ImageString: product.productImageUrl[0]),
                         title: TextLato(text: product.productName),
-                        subtitle: TextLato(text: "₹ ${product.price}"),
+                        subtitle: product.stockQuantity <= 0 ||
+                                product.stockQuantity <= quantity
+                            ? const TextLato(
+                                text:
+                                    "Product is unavilable so remove it's from cart ",
+                                color: Colors.red,
+                                fontWeight: FontWeight.bold,
+                              )
+                            : TextLato(text: "₹ ${product.price}"),
                         trailing: TextLato(text: "X $quantity"),
                         children: [
                           TextLato(
@@ -93,13 +114,43 @@ class _MyCartScreenState extends State<MyCartScreen> {
                               fontWeight: FontWeight.bold),
                           TextLato(text: product.description),
                           ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.green,
+                            ),
                             onPressed: () => Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (_) =>
-                                      ProductDetailsPage(products: product)),
+                                builder: (_) =>
+                                    ProductDetailsPage(products: product),
+                              ),
                             ),
-                            child: TextLato(text: appLocalizations.show_more),
+                            child: TextLato(
+                              text: appLocalizations.show_more,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                            ),
+                            onPressed: () async {
+                              final snap = await FirebaseFirestore.instance
+                                  .collection("userCart")
+                                  .doc(uid)
+                                  .get();
+                              CartItems cartItemsi = CartItems.fromSnap(snap);
+                              cartItemsi.products.remove(product.productId);
+                              await FirebaseFirestore.instance
+                                  .collection("userCart")
+                                  .doc(uid)
+                                  .set(cartItemsi.toJson());
+                            },
+                            child: const TextLato(
+                              text: "Remove From Cart",
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),
@@ -110,11 +161,16 @@ class _MyCartScreenState extends State<MyCartScreen> {
             ),
             floatingActionButton: Expanded(
               child: FloatingActionButton(
-                onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (_) => ProductOrderScreen(
-                            productList: cartItems.products))),
+                onPressed: () {
+                  canBuy
+                      ? Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => ProductOrderScreen(
+                                  productList: cartItems.products)))
+                      : showSnackBar(
+                          "$unavilableProduct are not avilable ", context);
+                },
                 child: TextLato(
                   text: "${appLocalizations.buy}  ",
                   fontWeight: FontWeight.bold,

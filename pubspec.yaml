@@ -65,12 +65,15 @@ dependencies:
   navigator_scope: ^1.0.1
   open_file: ^3.5.10
   page_animation_transition: ^1.0.0
+  path_provider: ^2.1.5
+  pdf: ^3.11.3
   permission_handler: ^11.3.1
   provider: ^6.1.2
   rating_summary: ^1.0.4
   shared_preferences: 2.3.3
   sliding_clipped_nav_bar: ^3.1.1
   smooth_page_indicator: ^1.2.0+3
+  stepper_list_view: ^0.0.2
   uuid: ^4.5.1
   weather_animation: ^1.1.1
 
@@ -94,6 +97,7 @@ flutter:
     - assets/
     - assets/icons/
     - assets/crop_cat/
+    - assets\font\Roboto-VariableFont_wdth,wght.ttf
   #   - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

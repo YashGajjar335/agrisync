@@ -132,5 +132,6 @@
   "following": "फॉलोइंग",
   "followers": "फॉलोअर्स",
   "your_thread": "आपकी थ्रेड",
-  "your_technologies": "आपकी टेक्नोलॉजी"
+  "your_technologies": "आपकी ",
+  "technology":"टेक्नोलॉजी"
 }

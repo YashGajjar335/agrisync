@@ -188,10 +188,13 @@ class _ProductOrderScreenState extends State<ProductOrderScreen> {
                                   child: TextButton(
                                     onPressed: () {
                                       Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const AddAddress()));
+                                              context,
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      const AddAddress()))
+                                          .then((value) {
+                                        setState(() {});
+                                      });
                                     },
                                     child: TextLato(
                                         text: userAddress == null

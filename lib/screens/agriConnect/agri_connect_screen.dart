@@ -1,3 +1,4 @@
+import 'package:agrisync/model/thread.dart';
 import 'package:agrisync/screens/user/profile_screen.dart';
 import 'package:agrisync/screens/agriConnect/save_thread_screen.dart';
 import 'package:agrisync/services/agri_connect_services.dart';
@@ -7,6 +8,7 @@ import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:agrisync/widget/image_assets.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:agrisync/widget/thread_card.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
@@ -137,13 +139,13 @@ class _AllThreadState extends State<AllThread> {
   @override
   Widget build(BuildContext context) {
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
-    return FutureBuilder(
-        future: AgriConnectService.instance.getAllThreads(),
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance.collection("Thread").snapshots(),
         builder: (context, snapshot) {
           // print(snapshot);
-          if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.connectionState == ConnectionState.active) {
             if (snapshot.hasData) {
-              final threadCount = snapshot.data!.length;
+              final threadCount = snapshot.data!.size;
               return threadCount == 0
                   ? Center(
                       child: TextLato(
@@ -156,16 +158,10 @@ class _AllThreadState extends State<AllThread> {
                       color: Theme.of(context).colorScheme.surface,
                       child: ListView.builder(
                           itemCount: threadCount,
-                          // gridDelegate:
-                          //     const SliverGridDelegateWithFixedCrossAxisCount(
-                          //   crossAxisCount: 1,
-                          //   childAspectRatio: 1 / 1,
-                          //   crossAxisSpacing: 1,
-                          //   mainAxisExtent: 500,
-                          // ),
                           itemBuilder: (context, index) {
                             return ThreadCard(
-                              thread: snapshot.data![index],
+                              thread:
+                                  Thread.fromSnap(snapshot.data!.docs[index]),
                             );
                           }),
                     );
