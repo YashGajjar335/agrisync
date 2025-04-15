@@ -7,6 +7,7 @@ import 'package:agrisync/widget/string_image_in_circle_avtar.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:agrisync/widget/waiting_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TechnologyCard extends StatefulWidget {
   final Technology technology;
@@ -81,6 +82,8 @@ class _TechnologyCardState extends State<TechnologyCard> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     return Card(
       shadowColor: Theme.of(context).colorScheme.secondary,
       surfaceTintColor: Theme.of(context).colorScheme.secondaryContainer,
@@ -90,7 +93,7 @@ class _TechnologyCardState extends State<TechnologyCard> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            technologyHeader(),
+            technologyHeader(appLocalizations),
             const SizedBox(height: 5),
             TextLato(
               text: widget.technology.title,
@@ -109,14 +112,14 @@ class _TechnologyCardState extends State<TechnologyCard> {
               ),
             ),
             const SizedBox(height: 5),
-            technologyBottom(),
+            technologyBottom(appLocalizations),
           ],
         ),
       ),
     );
   }
 
-  Widget technologyBottom() {
+  Widget technologyBottom(AppLocalizations applocalization) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -138,7 +141,7 @@ class _TechnologyCardState extends State<TechnologyCard> {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                     TextLato(
-                      text: "$totalLike Likes",
+                      text: "$totalLike ${applocalization.like}",
                       paddingAll: 0.0,
                     ),
                   ],
@@ -169,8 +172,8 @@ class _TechnologyCardState extends State<TechnologyCard> {
                   children: [
                     Icon(Icons.comment_rounded,
                         color: Theme.of(context).colorScheme.primary),
-                    const TextLato(
-                      text: "Comment",
+                    TextLato(
+                      text: applocalization.comment,
                       paddingAll: 0.0,
                     ),
                   ],
@@ -195,7 +198,9 @@ class _TechnologyCardState extends State<TechnologyCard> {
                             color: Theme.of(context).colorScheme.primary,
                           ),
                           TextLato(
-                            text: isSaved ? "Saved" : "Save",
+                            text: isSaved
+                                ? applocalization.saved
+                                : applocalization.save,
                             paddingAll: 0.0,
                           )
                         ],
@@ -208,7 +213,7 @@ class _TechnologyCardState extends State<TechnologyCard> {
     );
   }
 
-  Row technologyHeader() {
+  Row technologyHeader(AppLocalizations appLocalizations) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -241,11 +246,11 @@ class _TechnologyCardState extends State<TechnologyCard> {
         IconButton(
           iconSize: 25,
           onPressed: () {
-            alertMessage("Delete Technology",
-                "Do you really want to delete this Technology..?", () async {
+            alertMessage(appLocalizations.deleteTechnology,
+                appLocalizations.confirmDeleteTechnology, () async {
               final res = await agriTechService.deleteTechnology(
                   widget.technology.techId, widget.technology.uid);
-              showSnackBar(res ?? "Technology Deleted", context);
+              showSnackBar(res ?? appLocalizations.deleteTechnology, context);
             }, context);
           },
           icon: Icon(

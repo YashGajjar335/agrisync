@@ -3,9 +3,8 @@ import 'package:agrisync/services/agri_connect_services.dart';
 import 'package:agrisync/utils/globle.dart';
 import 'package:agrisync/widget/string_image_in_circle_avtar.dart';
 import 'package:agrisync/widget/text_lato.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CommentCard extends StatefulWidget {
   final String threadId;
@@ -59,12 +58,13 @@ class _CommentCardState extends State<CommentCard> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     return GestureDetector(
       onLongPress: () {
         if (isSameUser(comment!.uid)) {
-          alertMessage(
-              "Delete Thread", "Do you really want to delete this Thread..?",
-              () {
+          alertMessage(appLocalizations.deleteComment,
+              appLocalizations.confirmDeleteComment, () {
             deleteComment();
           }, context);
         }

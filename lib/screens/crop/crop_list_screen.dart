@@ -92,6 +92,8 @@ class _CropListScreenState extends State<CropListScreen> {
                                           MaterialPageRoute(
                                               builder: (_) => CropDetailScreen(
                                                     crop: crop,
+                                                    cropCatName: widget
+                                                        .cropCategoriesName,
                                                   ))),
                                       child: TextLato(
                                         text: AppLocalizations.of(context)!

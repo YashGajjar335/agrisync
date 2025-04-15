@@ -103,18 +103,44 @@ class AgriMartServiceUser {
   Future<String?> uploadProductReview(
       String productId, String review, double rating) async {
     try {
-      final String reviewId = const Uuid().v4();
-      ProductReview productReview = ProductReview(
-          productId: productId, uid: uid, review: review, rating: rating);
-      await _firestore
+      final querySnapshot = await _firestore
           .collection(productCollection)
           .doc(productId)
           .collection(reviewCollection)
-          .doc(reviewId)
-          .set(productReview.toJson());
-      return null;
+          .where('uid', isEqualTo: uid)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final existingDocId = querySnapshot.docs.first.id;
+        await _firestore
+            .collection(productCollection)
+            .doc(productId)
+            .collection(reviewCollection)
+            .doc(existingDocId)
+            .update({
+          'review': review,
+          'rating': rating,
+        });
+      } else {
+        final String reviewId = const Uuid().v4();
+        ProductReview productReview = ProductReview(
+          reviewId: reviewId,
+          productId: productId,
+          uid: uid,
+          review: review,
+          rating: rating,
+        );
+        await _firestore
+            .collection(productCollection)
+            .doc(productId)
+            .collection(reviewCollection)
+            .doc(reviewId)
+            .set(productReview.toJson());
+      }
+
+      return null; // success
     } catch (e) {
-      return e.toString();
+      return e.toString(); // return error string
     }
   }
 

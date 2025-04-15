@@ -40,6 +40,7 @@ class _EditProfileState extends State<EditProfile> {
         backgroundColor: Colors.transparent,
         title: AgriSyncIcon(
           title: appLocalizations.edit_profile,
+          size: 25,
         ),
       ),
       body: Container(
@@ -58,38 +59,37 @@ class _EditProfileState extends State<EditProfile> {
                     child: Stack(
                       children: [
                         SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: photoUrl!.isEmpty
-                                ? CircleAvatar(
-                                    radius: 40,
-                                    child: _isLoad
-                                        ? const Center(
-                                            child: CircularProgressIndicator(),
-                                          )
-                                        : const Icon(
-                                            Icons.person,
-                                            color: Colors.black,
-                                            size: 30,
-                                          ),
-                                  )
-                                : StringImageInCircleAvatar(
-                                    base64ImageString: photoUrl!,
-                                    radius: 40,
-                                  )),
+                          height: 100,
+                          width: 100,
+                          child: (photoUrl == null || photoUrl!.isEmpty)
+                              ? CircleAvatar(
+                                  radius: 40,
+                                  child: _isLoad
+                                      ? const Center(
+                                          child: CircularProgressIndicator())
+                                      : const Icon(Icons.person,
+                                          color: Colors.black, size: 30),
+                                )
+                              : StringImageInCircleAvatar(
+                                  base64ImageString: photoUrl!,
+                                  radius: 40,
+                                ),
+                        ),
                         Positioned(
                           bottom: 0,
                           right: 0,
                           child: InkWell(
                             onTap: () async {
-                              setState(() {
-                                _isLoad = !_isLoad;
-                              });
-                              photoUrl = await pickImageAndConvertToBase64();
+                              final pickedImage =
+                                  await pickImageAndConvertToBase64();
 
-                              setState(() {
-                                _isLoad = !_isLoad;
-                              });
+                              if (pickedImage != null) {
+                                setState(() {
+                                  photoUrl = pickedImage;
+                                });
+                              } else {
+                                showSnackBar("Fetch Image failed", context);
+                              }
                             },
                             child: CircleAvatar(
                               backgroundColor:
@@ -130,7 +130,7 @@ class _EditProfileState extends State<EditProfile> {
                             showSnackBar(
                                 appLocalizations.profile_updated_success,
                                 context);
-                            Navigator.pop(context);
+                            Navigator.pop(context, 'update');
                           } else {
                             showSnackBar(res, context);
                           }

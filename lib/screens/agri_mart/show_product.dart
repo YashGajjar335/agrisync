@@ -7,7 +7,10 @@ import 'package:flutter/material.dart';
 
 class ShowProduct extends StatefulWidget {
   final String categories;
-  const ShowProduct({super.key, required this.categories});
+  final String categoriesName;
+
+  const ShowProduct(
+      {super.key, required this.categories, required this.categoriesName});
 
   @override
   State<ShowProduct> createState() => _ShowProductState();
@@ -18,7 +21,7 @@ class _ShowProductState extends State<ShowProduct> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: TextLato(text: widget.categories),
+        title: TextLato(text: widget.categoriesName),
       ),
       body: StreamBuilder(
           stream: FirebaseFirestore.instance

@@ -1,5 +1,7 @@
 import 'package:agrisync/screens/agri_mart/user_order_screen.dart';
+import 'package:agrisync/screens/feedback/feedback_screen.dart';
 import 'package:agrisync/screens/auth/login_screen.dart';
+import 'package:agrisync/screens/feedback/help_screen.dart';
 import 'package:agrisync/screens/onbording_screen.dart';
 import 'package:agrisync/screens/change_language_screen.dart';
 import 'package:agrisync/screens/user/edit_profile.dart';
@@ -21,6 +23,7 @@ class DrawerChild extends StatefulWidget {
 }
 
 class _DrawerChildState extends State<DrawerChild> {
+  bool isProfileUpdate = false;
   @override
   Widget build(BuildContext context) {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
@@ -42,7 +45,9 @@ class _DrawerChildState extends State<DrawerChild> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => const ProfileScreen())),
-              child: const UserProfileCard()),
+              child: UserProfileCard(
+                isProfileUpdate: isProfileUpdate,
+              )),
         ),
         Expanded(
           child: ListView(
@@ -55,8 +60,18 @@ class _DrawerChildState extends State<DrawerChild> {
                   width: 30,
                 ),
                 title: TextLato(text: appLocalizations.edit_profile),
-                onTap: () => Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => const EditProfile())),
+                onTap: () async {
+                  final res = await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const EditProfile()),
+                  );
+
+                  if (res == 'update') {
+                    setState(() {
+                      isProfileUpdate = !isProfileUpdate;
+                    });
+                  }
+                },
               ),
               ListTile(
                 leading: Image.asset(
@@ -75,8 +90,11 @@ class _DrawerChildState extends State<DrawerChild> {
                   width: 30,
                 ),
                 title: TextLato(text: appLocalizations.language),
-                onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => const ChangeLangScreen())),
+                onTap: () {
+                  showDialog(
+                      context: context,
+                      builder: (_) => const ChangeLangScreen());
+                },
               ),
               ListTile(
                 leading: Image.asset(
@@ -97,7 +115,10 @@ class _DrawerChildState extends State<DrawerChild> {
                 ),
                 title: TextLato(text: appLocalizations.feedback),
                 onTap: () {
-                  showSnackBar("We have this work left to do.", context);
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (_) => const FeedbackScreen()));
                 },
               ),
               ListTile(
@@ -107,9 +128,8 @@ class _DrawerChildState extends State<DrawerChild> {
                   width: 30,
                 ),
                 title: TextLato(text: appLocalizations.help),
-                onTap: () {
-                  showSnackBar("We have this work left to do.", context);
-                },
+                onTap: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (_) => const HelpScreen())),
               ),
               divider,
               ListTile(
@@ -122,11 +142,13 @@ class _DrawerChildState extends State<DrawerChild> {
                 onTap: () async {
                   String? res = await AuthServices.instance.logOut();
                   res == null
-                      ? Navigator.pushReplacement(
+                      ? Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
                             builder: (_) => const LoginScreen(),
-                          ))
+                          ),
+                          (Route<dynamic> route) => false,
+                        )
                       : showSnackBar(res, context);
                 },
               ),

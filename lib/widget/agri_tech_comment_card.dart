@@ -5,6 +5,7 @@ import 'package:agrisync/widget/string_image_in_circle_avtar.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AgriTechCommentCard extends StatefulWidget {
   final String techId;
@@ -57,12 +58,12 @@ class _AgriTechCommentCardState extends State<AgriTechCommentCard> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return GestureDetector(
       onLongPress: () {
         if (isSameUser(widget.comment.uid)) {
-          alertMessage(
-              "Delete Thread", "Do you really want to delete this Thread..?",
-              () {
+          alertMessage(appLocalizations.deleteComment,
+              appLocalizations.confirmDeleteComment, () {
             deleteComment();
           }, context);
         }
@@ -88,7 +89,8 @@ class _AgriTechCommentCardState extends State<AgriTechCommentCard> {
                     ? Icons.favorite_rounded
                     : Icons.favorite_outline_rounded),
                 TextLato(
-                  text: "${widget.comment.like.length} like",
+                  text:
+                      "${widget.comment.like.length} ${appLocalizations.like}",
                   fontSize: 10,
                 )
               ],

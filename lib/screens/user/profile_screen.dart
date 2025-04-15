@@ -64,10 +64,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ? UserDetail(
                   user: farmer!,
                   isFarmer: true,
+                  onProfileUpadte: () async {
+                    await loadUser();
+                  },
                 )
               : UserDetail(
                   user: specialist!,
                   isFarmer: false,
+                  onProfileUpadte: () async {
+                    await loadUser();
+                  },
                 ),
     );
   }
@@ -76,7 +82,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 class UserDetail extends StatefulWidget {
   final dynamic user;
   final bool isFarmer;
-  const UserDetail({super.key, required this.user, required this.isFarmer});
+  final VoidCallback onProfileUpadte;
+  const UserDetail(
+      {super.key,
+      required this.user,
+      required this.isFarmer,
+      required this.onProfileUpadte});
 
   @override
   State<UserDetail> createState() => _UserDetailState();
@@ -121,20 +132,11 @@ class _UserDetailState extends State<UserDetail> {
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
       body: Container(
-        padding: const EdgeInsets.only(top: 30, bottom: 10),
+        padding: const EdgeInsets.only(top: 10, bottom: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildProfileHeader(appLocalizations),
-            const SizedBox(height: 10),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              child: TextLato(
-                text: widget.user.uname,
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
             const SizedBox(height: 20),
             _buildActionButtons(appLocalizations),
             if (!widget.isFarmer && widget.user.isVerified)
@@ -195,38 +197,44 @@ class _UserDetailState extends State<UserDetail> {
   }
 
   Widget _buildProfileHeader(AppLocalizations appLocalizations) {
-    return SizedBox(
-      height: 60,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Row(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Stack(
+          children: [
+            widget.user.profilePic.isEmpty
+                ? const CircleAvatar(
+                    backgroundImage: AssetImage("assets/app_logo_half.JPG"),
+                    radius: 30,
+                  )
+                : StringImageInCircleAvatar(
+                    base64ImageString: widget.user.profilePic,
+                    radius: 40,
+                  ),
+            if (!widget.isFarmer && widget.user.isVerified)
+              const Positioned(
+                top: 0,
+                right: 0,
+                child: CircleAvatar(
+                  radius: 12,
+                  child: TextLato(
+                    text: "S",
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+          ],
+        ),
+        const SizedBox(height: 5),
+        TextLato(
+          text: widget.user.uname,
+          fontSize: 25,
+          fontWeight: FontWeight.bold,
+        ),
+        const SizedBox(height: 10),
+        Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Stack(
-              children: [
-                widget.user.profilePic.isEmpty
-                    ? const CircleAvatar(
-                        backgroundImage: AssetImage("assets/app_logo_half.JPG"),
-                        radius: 30,
-                      )
-                    : StringImageInCircleAvatar(
-                        base64ImageString: widget.user.profilePic,
-                        radius: 30,
-                      ),
-                if (!widget.isFarmer && widget.user.isVerified)
-                  const Positioned(
-                    top: 0,
-                    right: 0,
-                    child: CircleAvatar(
-                      radius: 12,
-                      child: TextLato(
-                        text: "S",
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-              ],
-            ),
             NumberAndText(
               number: userThreads,
               lable: appLocalizations.thread,
@@ -245,8 +253,8 @@ class _UserDetailState extends State<UserDetail> {
               lable: appLocalizations.followers,
             ),
           ],
-        ),
-      ),
+        )
+      ],
     );
   }
 
@@ -257,10 +265,16 @@ class _UserDetailState extends State<UserDetail> {
         LongButton(
           width: width(context) * 0.4,
           buttonText: appLocalizations.edit_profile,
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const EditProfile()),
-          ),
+          onTap: () async {
+            final res = await Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => const EditProfile()),
+            );
+
+            if (res == 'update') {
+              widget.onProfileUpadte();
+            }
+          },
         ),
         LongButton(
           width: width(context) * 0.4,

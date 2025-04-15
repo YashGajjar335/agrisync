@@ -118,16 +118,24 @@ class _WeatherHomeScreenState extends State<WeatherHomeScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(
-                            height: 160,
-                            child: Center(
+                          Center(
+                            child: InkWell(
+                              onTap: () {
+                                print(
+                                    'https:${_weatherData!.current.condition.icon}');
+                              },
                               child: Image.network(
                                 'https:${_weatherData!.current.condition.icon}',
+                                fit: BoxFit.fill,
+                                height: 160,
+                                width: 160,
                                 errorBuilder: (context, error, stackTrace) {
                                   return Image.asset(
                                     'assets/cloud.png',
                                     // width: 2407,
-                                    fit: BoxFit.cover,
+                                    fit: BoxFit.fill,
+                                    height: 160,
+                                    width: 160,
                                   );
                                 },
                               ),

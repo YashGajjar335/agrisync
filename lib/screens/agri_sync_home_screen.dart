@@ -1,8 +1,10 @@
 import 'package:agrisync/screens/weather/weather_screen.dart';
 import 'package:agrisync/utils/agrisync_image_icon.dart';
+import 'package:agrisync/utils/globle.dart';
 import 'package:agrisync/widget/agri_mart_categories.dart';
 import 'package:agrisync/widget/drawer_child.dart';
 import 'package:agrisync/widget/thread_recommendation.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:agrisync/widget/animted_toggle_button.dart';
@@ -20,6 +22,17 @@ class AgriSyncHomeScreen extends StatefulWidget {
 
 class HomenScreenState extends State<AgriSyncHomeScreen> {
   bool _drawerOpen = false;
+
+  @override
+  void initState() {
+    refreshUser();
+    super.initState();
+  }
+
+  refreshUser() async {
+    await FirebaseAuth.instance.currentUser?.reload();
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {

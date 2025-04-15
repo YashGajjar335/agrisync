@@ -7,6 +7,7 @@ import 'package:agrisync/widget/string_image_in_circle_avtar.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:agrisync/widget/waiting_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ThreadCard extends StatefulWidget {
   final Thread thread;
@@ -63,6 +64,7 @@ class _ThreadCardState extends State<ThreadCard> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Card(
       shadowColor: Theme.of(context).colorScheme.secondary,
       surfaceTintColor: Theme.of(context).colorScheme.secondaryContainer,
@@ -72,7 +74,7 @@ class _ThreadCardState extends State<ThreadCard> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            threadHeader(),
+            threadHeader(appLocalizations),
             const SizedBox(height: 5),
             ClipRRect(
               borderRadius: BorderRadius.circular(10),
@@ -84,7 +86,7 @@ class _ThreadCardState extends State<ThreadCard> {
               ),
             ),
             const SizedBox(height: 5),
-            threadBottom(),
+            threadBottom(appLocalizations),
           ],
         ),
       ),
@@ -126,7 +128,7 @@ class _ThreadCardState extends State<ThreadCard> {
     }
   }
 
-  Widget threadBottom() {
+  Widget threadBottom(AppLocalizations applocalization) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
@@ -146,7 +148,7 @@ class _ThreadCardState extends State<ThreadCard> {
                       color: Theme.of(context).colorScheme.primary,
                     ),
                     TextLato(
-                      text: "$totalLike Likes",
+                      text: "$totalLike ${applocalization.like}",
                       paddingAll: 0.0,
                     ),
                   ],
@@ -177,8 +179,8 @@ class _ThreadCardState extends State<ThreadCard> {
                   children: [
                     Icon(Icons.comment_rounded,
                         color: Theme.of(context).colorScheme.primary),
-                    const TextLato(
-                      text: "Comment",
+                    TextLato(
+                      text: applocalization.comment,
                       paddingAll: 0.0,
                     ),
                   ],
@@ -203,7 +205,9 @@ class _ThreadCardState extends State<ThreadCard> {
                             color: Theme.of(context).colorScheme.primary,
                           ),
                           TextLato(
-                            text: isSaved ? "Saved" : "Save",
+                            text: isSaved
+                                ? applocalization.saved
+                                : applocalization.save,
                             paddingAll: 0.0,
                           )
                         ],
@@ -217,7 +221,7 @@ class _ThreadCardState extends State<ThreadCard> {
   }
 
   /// 🔹 Header Section with User Avatar
-  Row threadHeader() {
+  Row threadHeader(AppLocalizations appLocalizations) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -251,11 +255,11 @@ class _ThreadCardState extends State<ThreadCard> {
           IconButton(
             iconSize: 25,
             onPressed: () {
-              alertMessage("Delete Thread",
-                  "Do you really want to delete this Thread..?", () async {
+              alertMessage(appLocalizations.deleteThread,
+                  appLocalizations.confirmDeleteThread, () async {
                 final res = await agriConnect.deleteThread(
                     widget.thread.threadId, widget.thread.uid);
-                showSnackBar(res ?? "Thread Deleted", context);
+                showSnackBar(res ?? appLocalizations.deleteThread, context);
               }, context);
             },
             icon: Icon(

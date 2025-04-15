@@ -23,7 +23,10 @@ class _AgriMartScreenState extends State<AgriMartScreen> {
     final AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title: AgriSyncIcon(title: appLocalizations.agrimart),
+        title: AgriSyncIcon(
+          title: appLocalizations.agrimart,
+          size: 30,
+        ),
         actions: [
           Padding(
             padding: const EdgeInsets.only(left: 16),

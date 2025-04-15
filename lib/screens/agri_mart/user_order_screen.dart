@@ -12,6 +12,7 @@ import 'package:agrisync/widget/waiting_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class UserOrderScreen extends StatefulWidget {
   const UserOrderScreen({super.key});
@@ -24,187 +25,208 @@ class _UserOrderScreenState extends State<UserOrderScreen> {
   bool isDownload = false;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          bottomOpacity: 0,
-          leading: IconButton(
-            icon: const Icon(
-              Icons.arrow_back_ios,
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+    return PopScope(
+      onPopInvoked: (pop) async {
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const MainScreen(
+                    initPage: 2,
+                  )),
+          (route) => false,
+        );
+      },
+      child: Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            bottomOpacity: 0,
+            leading: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios,
+              ),
+              onPressed: () => Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (_) => const MainScreen())),
             ),
-            onPressed: () => Navigator.pushReplacement(
-                context, MaterialPageRoute(builder: (_) => const MainScreen())),
+            title: AgriSyncIcon(
+              title: appLocalizations.my_order,
+            ),
           ),
-          title: const AgriSyncIcon(
-            title: "My Orders",
-          ),
-        ),
-        body: StreamBuilder(
-          stream: FirebaseFirestore.instance
-              .collection(orderCollection)
-              .where("userId",
-                  isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.active) {
-              if (snapshot.hasData) {
-                int itemCount = snapshot.data!.size;
-                return itemCount == 0
-                    ? const Center(
-                        child: TextLato(
-                          text: "You have no orders yet. Start shopping now!",
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          textAlign: TextAlign.center,
-                        ),
-                      )
-                    : Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ListView.builder(
-                            itemCount: itemCount,
-                            itemBuilder: (context, item) {
-                              OrderModel orderModel = OrderModel.fromSnap(
-                                  snapshot.data!.docs[item]);
-                              return Card(
-                                child: ExpansionTile(
-                                    initiallyExpanded: true,
-                                    title: Text(
-                                        "Order At : ${simplyDateFormat(time: orderModel.orderDate, dateOnly: true)}"),
-                                    children: [
-                                      ListView.builder(
-                                        physics:
-                                            const NeverScrollableScrollPhysics(),
-                                        shrinkWrap: true,
-                                        itemCount: orderModel.items.length,
-                                        itemBuilder: (context, index) {
-                                          String productId = orderModel
-                                              .items.keys
-                                              .elementAt(index);
-                                          int quantity = orderModel.items.values
-                                              .elementAt(index);
+          body: StreamBuilder(
+            stream: FirebaseFirestore.instance
+                .collection(orderCollection)
+                .where("userId",
+                    isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.active) {
+                if (snapshot.hasData) {
+                  int itemCount = snapshot.data!.size;
+                  return itemCount == 0
+                      ? Center(
+                          child: TextLato(
+                            text: appLocalizations.noOrders,
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            textAlign: TextAlign.center,
+                          ),
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ListView.builder(
+                              itemCount: itemCount,
+                              itemBuilder: (context, item) {
+                                OrderModel orderModel = OrderModel.fromSnap(
+                                    snapshot.data!.docs[item]);
+                                return Card(
+                                  child: ExpansionTile(
+                                      initiallyExpanded: true,
+                                      title: TextLato(
+                                          text:
+                                              "${appLocalizations.my_order} : ${item + 1}"),
+                                      children: [
+                                        ListView.builder(
+                                          physics:
+                                              const NeverScrollableScrollPhysics(),
+                                          shrinkWrap: true,
+                                          itemCount: orderModel.items.length,
+                                          itemBuilder: (context, index) {
+                                            String productId = orderModel
+                                                .items.keys
+                                                .elementAt(index);
+                                            int quantity = orderModel
+                                                .items.values
+                                                .elementAt(index);
 
-                                          return FutureBuilder(
-                                            future: AgriMartServiceUser.instance
-                                                .getProduct(productId),
-                                            builder: (context, snap) {
-                                              if (snap.connectionState ==
-                                                  ConnectionState.waiting) {
-                                                return const Center(
-                                                    child:
-                                                        CircularProgressIndicator());
-                                              } else if (snap.hasError) {
-                                                return const Center(
-                                                    child: Text(
-                                                        'Error loading product'));
-                                              } else if (!snap.hasData ||
-                                                  snap.data == null) {
-                                                return const Center(
-                                                    child: Text(
-                                                        'Product not found'));
-                                              }
+                                            return FutureBuilder(
+                                              future: AgriMartServiceUser
+                                                  .instance
+                                                  .getProduct(productId),
+                                              builder: (context, snap) {
+                                                if (snap.connectionState ==
+                                                    ConnectionState.waiting) {
+                                                  return const Center(
+                                                      child:
+                                                          CircularProgressIndicator());
+                                                } else if (snap.hasError) {
+                                                  return const Center(
+                                                      child: Text(
+                                                          'Error loading product'));
+                                                } else if (!snap.hasData ||
+                                                    snap.data == null) {
+                                                  return const Center(
+                                                      child: Text(
+                                                          'Product not found'));
+                                                }
 
-                                              Products product = snap.data!;
-                                              return Card(
-                                                shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            15)),
-                                                elevation: 5,
-                                                margin: const EdgeInsets.only(
-                                                    bottom: 16,
-                                                    right: 10,
-                                                    left: 10),
-                                                child: ListTile(
-                                                  leading: StringImageInCircleAvatar(
-                                                      base64ImageString: product
-                                                          .productImageUrl[0]),
-                                                  title: TextLato(
-                                                    text: product.productName,
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
+                                                Products product = snap.data!;
+                                                return Card(
+                                                  shape: RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15)),
+                                                  elevation: 5,
+                                                  margin: const EdgeInsets.only(
+                                                      bottom: 16,
+                                                      right: 10,
+                                                      left: 10),
+                                                  child: ListTile(
+                                                    leading: StringImageInCircleAvatar(
+                                                        base64ImageString: product
+                                                            .productImageUrl[0]),
+                                                    title: TextLato(
+                                                      text: product.productName,
+                                                      fontSize: 18,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                    subtitle: TextLato(
+                                                      text:
+                                                          "₹ ${product.price}",
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                    trailing: TextLato(
+                                                      text:
+                                                          'X $quantity = ₹ ${product.price * quantity}',
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                                   ),
-                                                  subtitle: TextLato(
-                                                    text: "₹ ${product.price}",
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                  trailing: TextLato(
-                                                    text:
-                                                        'X $quantity = ₹ ${product.price * quantity}',
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        },
-                                      ),
-                                      OrderStatusCard(
-                                        orderDate: simplyDateFormat(
-                                            time: orderModel.orderDate,
-                                            dateOnly: true),
-                                        paymentStatus: "PAID",
-                                        shippedDate: orderModel.shippingDate ==
-                                                null
-                                            ? null
-                                            : simplyDateFormat(
-                                                time: orderModel.shippingDate!,
+                                                );
+                                              },
+                                            );
+                                          },
+                                        ),
+                                        OrderStatusCard(
+                                            orderDate: simplyDateFormat(
+                                                time: orderModel.orderDate,
                                                 dateOnly: true),
-                                        deliveryDate: orderModel.deliveryDate ==
-                                                null
-                                            ? null
-                                            : simplyDateFormat(
-                                                time: orderModel.deliveryDate!,
-                                                dateOnly: true),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 16),
-                                        child: Center(
-                                            child: LongButton(
-                                                isLoading: isDownload,
-                                                width: 200,
-                                                buttonText: "Download Bill",
-                                                onTap: () async {
-                                                  setState(() {
-                                                    isDownload = true;
-                                                  });
-                                                  final firstPdf =
-                                                      await InvoiceServices
-                                                          .generateInvoice(
-                                                    orderModel: orderModel,
-                                                  );
-                                                  InvoiceServices.openInvoice(
-                                                      firstPdf);
-                                                  setState(() {
-                                                    isDownload = false;
-                                                  });
-                                                })),
-                                      )
-                                    ]),
-                              );
-                            }),
-                      );
-              } else {
-                return const WaitingScreenWithWarnning();
+                                            paymentStatus: "PAID",
+                                            shippedDate:
+                                                orderModel.shippingDate,
+                                            // simplyDateFormat(
+                                            //     time: orderModel
+                                            //         .shippingDate!,
+                                            //     dateOnly: true),
+                                            deliveryDate:
+                                                orderModel.deliveryDate
+                                            // : simplyDateFormat(
+                                            //     time: orderModel
+                                            //         .deliveryDate!,
+                                            //     dateOnly: true),
+                                            ),
+                                        Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 16),
+                                          child: Center(
+                                              child: LongButton(
+                                                  isLoading: isDownload,
+                                                  width: 200,
+                                                  buttonText: appLocalizations
+                                                      .downloadInvoice,
+                                                  onTap: () async {
+                                                    setState(() {
+                                                      isDownload = true;
+                                                    });
+                                                    final firstPdf =
+                                                        await InvoiceServices
+                                                            .generateInvoice(
+                                                      orderModel: orderModel,
+                                                    );
+                                                    InvoiceServices.openInvoice(
+                                                        firstPdf);
+                                                    setState(() {
+                                                      isDownload = false;
+                                                    });
+                                                  })),
+                                        )
+                                      ]),
+                                );
+                              }),
+                        );
+                } else {
+                  return const WaitingScreenWithWarnning();
+                }
               }
-            }
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const WaitingScreen();
-            }
-            return const WaitingScreenWithWarnning();
-          },
-        ));
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const WaitingScreen();
+              }
+              return const WaitingScreenWithWarnning();
+            },
+          )),
+    );
   }
 }
 
 class OrderStatusCard extends StatelessWidget {
   final String orderDate;
   final String paymentStatus;
-  final String? shippedDate; // Nullable to handle pending state
-  final String? deliveryDate; // Nullable to handle pending state
+  final DateTime? shippedDate;
+  final DateTime? deliveryDate;
 
   const OrderStatusCard({
     super.key,
@@ -216,6 +238,8 @@ class OrderStatusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       elevation: 3,
@@ -225,15 +249,15 @@ class OrderStatusCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const TextLato(
-                text: "Order Status",
+            TextLato(
+                text: appLocalizations.orderStatus,
                 fontSize: 18,
                 fontWeight: FontWeight.bold),
             const SizedBox(height: 16),
             Stepper(
               physics: const NeverScrollableScrollPhysics(),
               currentStep: _getCurrentStep(),
-              steps: _buildSteps(),
+              steps: _buildSteps(context),
               controlsBuilder: (BuildContext context, ControlsDetails details) {
                 return Container();
               },
@@ -245,22 +269,52 @@ class OrderStatusCard extends StatelessWidget {
     );
   }
 
+  bool isSameDate(DateTime a, DateTime b) {
+    return a.year == b.year && a.month == b.month && a.day == b.day;
+  }
+
   int _getCurrentStep() {
-    String currentDate = simplyDateFormat(time: DateTime.now(), dateOnly: true);
-    if (deliveryDate != null && deliveryDate == currentDate) return 3;
-    if (shippedDate != null) return 2;
-    if (paymentStatus.toLowerCase() == "done") return 1;
+    DateTime now = DateTime.now();
+
+    if (deliveryDate != null &&
+        (isSameDate(deliveryDate!, now) || deliveryDate!.isBefore(now))) {
+      return 3;
+    }
+
+    if (shippedDate != null &&
+        (isSameDate(shippedDate!, now) || shippedDate!.isBefore(now))) {
+      return 2;
+    }
+
+    if (paymentStatus.toLowerCase() == "done") {
+      return 1;
+    }
+
     return 0;
   }
 
-  List<Step> _buildSteps() {
-    int currentStep = _getCurrentStep(); // Get current step once
+  List<Step> _buildSteps(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
+    int currentStep = _getCurrentStep();
 
     return [
-      _buildStep("Order Placed", orderDate, 0, currentStep),
-      _buildStep("Payment Processed", paymentStatus, 1, currentStep),
-      _buildStep("Shipped", shippedDate ?? "Pending", 2, currentStep),
-      _buildStep("Delivered", deliveryDate ?? "Pending", 3, currentStep),
+      _buildStep(appLocalizations.orderPlaced, orderDate, 0, currentStep),
+      _buildStep(
+          appLocalizations.paymentProcessed, paymentStatus, 1, currentStep),
+      _buildStep(
+          appLocalizations.shipped,
+          shippedDate != null
+              ? simplyDateFormat(time: shippedDate!, dateOnly: true)
+              : appLocalizations.pending,
+          2,
+          currentStep),
+      _buildStep(
+          appLocalizations.delivered,
+          deliveryDate != null
+              ? simplyDateFormat(time: deliveryDate!, dateOnly: true)
+              : appLocalizations.pending,
+          3,
+          currentStep),
     ];
   }
 
@@ -272,18 +326,14 @@ class OrderStatusCard extends StatelessWidget {
     return Step(
       title: TextLato(
         text: title,
-        fontWeight: isCurrent
-            ? FontWeight.bold
-            : FontWeight.normal, // Bold for current step
-        color: isCurrent ? Colors.green : Colors.black, // Highlight color
+        fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
+        color: isCurrent ? Colors.green : Colors.black,
       ),
       subtitle: Text(
         subtitle,
         style: TextStyle(
           fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
-          color: isCurrent
-              ? Colors.green
-              : Colors.grey, // Different color for current step
+          color: isCurrent ? Colors.green : Colors.grey,
         ),
       ),
       isActive: isActive,

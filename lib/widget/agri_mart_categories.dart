@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:agrisync/screens/agri_mart/show_product.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
@@ -65,6 +64,7 @@ class _AgriMartCategoriesState extends State<AgriMartCategories> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) => ShowProduct(
+                                        categoriesName: cropCategories[index],
                                         categories: textField[index]))),
                             child: Image.asset(
                               'assets/crop_cat/${textField[index]}.jpeg',

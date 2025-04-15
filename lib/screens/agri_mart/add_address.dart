@@ -6,6 +6,7 @@ import 'package:agrisync/widget/text_lato.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class AddAddress extends StatefulWidget {
   const AddAddress({super.key});
@@ -90,6 +91,7 @@ class _AddAddressState extends State<AddAddress> {
       }
 
       Position position = await Geolocator.getCurrentPosition(
+          // ignore: deprecated_member_use
           desiredAccuracy: LocationAccuracy.high);
       List<Placemark> placemarks =
           await placemarkFromCoordinates(position.latitude, position.longitude);
@@ -133,7 +135,7 @@ class _AddAddressState extends State<AddAddress> {
       );
       if (res == null) {
         showSnackBar("Address Updated successfully", context);
-        Navigator.pop(context, 'refresh');
+        Navigator.pop(context, 'address-added');
       } else {
         showSnackBar(res, context);
       }
@@ -142,12 +144,13 @@ class _AddAddressState extends State<AddAddress> {
 
   @override
   Widget build(BuildContext context) {
+    AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff338864),
-        title: const Text(
-          'Enter Shipping Address',
-          style: TextStyle(
+        title: Text(
+          appLocalizations.enterShippingAddress,
+          style: const TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
           ),
@@ -161,32 +164,43 @@ class _AddAddressState extends State<AddAddress> {
                 key: _formKey,
                 child: ListView(
                   children: [
-                    _buildTextField(_fullNameController, 'Full Name',
-                        'Enter your full name',
-                        validator: (value) =>
-                            value!.isEmpty ? 'Full Name is required' : null),
+                    _buildTextField(_fullNameController, appLocalizations.name,
+                        appLocalizations.enterFullName,
+                        validator: (value) => value!.isEmpty
+                            ? appLocalizations.fullNameRequired
+                            : null),
                     const SizedBox(height: 16),
-                    _buildTextField(_phoneController, 'Phone Number',
-                        'Enter your phone number',
+                    _buildTextField(
+                        _phoneController,
+                        appLocalizations.mobile_no,
+                        appLocalizations.enterMobileNumber,
                         keyboardType: TextInputType.phone,
                         maxLength: 10,
                         validator: (value) => value!.length != 10
-                            ? 'Enter valid phone number'
+                            ? appLocalizations.enterValidMobileNumber
                             : null),
                     const SizedBox(height: 16),
-                    _buildTextField(_flatNumberController, 'Flat Number',
-                        'Enter your flat number',
-                        validator: (value) =>
-                            value!.isEmpty ? 'Flat Number is required' : null),
+                    _buildTextField(
+                        _flatNumberController,
+                        appLocalizations.flat_no,
+                        appLocalizations.enterFlatNumber,
+                        validator: (value) => value!.isEmpty
+                            ? appLocalizations.flatNumberRequired
+                            : null),
                     const SizedBox(height: 16),
-                    _buildTextField(_streetRoadController, 'Street/Road Name',
-                        'Enter your street or road name',
-                        validator: (value) =>
-                            value!.isEmpty ? 'Street/Road is required' : null),
+                    _buildTextField(
+                        _streetRoadController,
+                        appLocalizations.street_road,
+                        appLocalizations.enterStreetName,
+                        validator: (value) => value!.isEmpty
+                            ? appLocalizations.streetRequired
+                            : null),
                     const SizedBox(height: 16),
-                    _buildTextField(_cityController, 'City', 'Enter your city',
-                        validator: (value) =>
-                            value!.isEmpty ? 'City is required' : null),
+                    _buildTextField(_cityController, appLocalizations.city,
+                        appLocalizations.enterCity,
+                        validator: (value) => value!.isEmpty
+                            ? appLocalizations.cityRequired
+                            : null),
                     const SizedBox(height: 16),
                     DropdownButtonFormField<String>(
                       value: selectedState,
@@ -196,22 +210,26 @@ class _AddAddressState extends State<AddAddress> {
                       }).toList(),
                       onChanged: (value) =>
                           setState(() => selectedState = value),
-                      decoration: const InputDecoration(
-                          labelText: 'State', border: OutlineInputBorder()),
+                      decoration: InputDecoration(
+                          labelText: appLocalizations.state,
+                          border: OutlineInputBorder()),
                     ),
                     const SizedBox(height: 16),
-                    _buildTextField(_postalCodeController, 'Postal Code',
-                        'Enter your postal code',
+                    _buildTextField(
+                        _postalCodeController,
+                        appLocalizations.postal_code,
+                        appLocalizations.enterPostalCode,
                         keyboardType: TextInputType.number,
-                        validator: (value) =>
-                            value!.isEmpty ? 'Postal Code is required' : null),
+                        validator: (value) => value!.isEmpty
+                            ? appLocalizations.postalCodeRequired
+                            : null),
                     const SizedBox(height: 32),
                     ElevatedButton(
                       onPressed: _submitForm,
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xff338864)),
-                      child: const TextLato(
-                        text: 'Submit Address',
+                      child: TextLato(
+                        text: appLocalizations.submitAddress,
                         color: Colors.white,
                         fontSize: 25,
                         fontWeight: FontWeight.bold,

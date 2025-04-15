@@ -65,7 +65,7 @@ class AddReviewForProductState extends State<AddReviewForProduct> {
     return Scaffold(
       appBar: AppBar(title: AgriSyncIcon(title: appLocalizations.add_review)),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

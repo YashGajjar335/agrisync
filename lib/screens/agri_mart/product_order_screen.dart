@@ -64,6 +64,15 @@ class _ProductOrderScreenState extends State<ProductOrderScreen> {
     setState(() {});
   }
 
+  void _navigateToAddress() async {
+    final result = await Navigator.push(
+        context, MaterialPageRoute(builder: (_) => const AddAddress()));
+
+    if (result == 'address-added') {
+      loadAddress();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
@@ -186,16 +195,7 @@ class _ProductOrderScreenState extends State<ProductOrderScreen> {
                                       borderRadius: BorderRadius.circular(18),
                                       border: Border.all(color: Colors.grey)),
                                   child: TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const AddAddress()))
-                                          .then((value) {
-                                        setState(() {});
-                                      });
-                                    },
+                                    onPressed: _navigateToAddress,
                                     child: TextLato(
                                         text: userAddress == null
                                             ? appLocalizations.add_address
@@ -297,10 +297,11 @@ class _ProductOrderScreenState extends State<ProductOrderScreen> {
                           if (res == null) {
                             showSnackBar(
                                 appLocalizations.order_confirmed, context);
-                            Navigator.pushReplacement(
+                            Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (_) => const UserOrderScreen()));
+                                    builder: (_) => const UserOrderScreen()),
+                                (Route<dynamic> route) => false);
                           } else {
                             showSnackBar(res.toString(), context);
                           }

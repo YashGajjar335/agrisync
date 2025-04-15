@@ -1,7 +1,6 @@
 import 'package:agrisync/model/thread.dart';
 import 'package:agrisync/screens/user/profile_screen.dart';
 import 'package:agrisync/screens/agriConnect/save_thread_screen.dart';
-import 'package:agrisync/services/agri_connect_services.dart';
 import 'package:agrisync/utils/agrisync_image_icon.dart';
 import 'package:agrisync/screens/agriConnect/add_thread.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';

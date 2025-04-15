@@ -170,12 +170,16 @@ class WeatherDetailPageState extends State<WeatherDetailPage> {
                             width: 150,
                             child: Image.network(
                               getForecastWeather(0)["weatherIcon"],
-                              width: 30,
+                              // width: 100,
+                              // height: 100,
+                              fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
                                 return Padding(
                                   padding:
                                       const EdgeInsets.only(left: 12, top: 12),
                                   child: Image.asset('assets/clear.png',
+                                      // width: 100,
+                                      // height: 100,
                                       fit: BoxFit.cover),
                                 );
                               },

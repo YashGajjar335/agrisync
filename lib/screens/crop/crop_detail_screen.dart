@@ -10,7 +10,9 @@ import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
 class CropDetailScreen extends StatefulWidget {
   final Crop crop;
-  const CropDetailScreen({super.key, required this.crop});
+  final String cropCatName;
+  const CropDetailScreen(
+      {super.key, required this.crop, required this.cropCatName});
 
   @override
   State<CropDetailScreen> createState() => _CropDetailScreenState();
@@ -73,7 +75,7 @@ class _CropDetailScreenState extends State<CropDetailScreen> {
               ),
               Center(
                 child: TextLato(
-                  text: widget.crop.category,
+                  text: widget.cropCatName,
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
                 ),

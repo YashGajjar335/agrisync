@@ -73,14 +73,24 @@ class LongButton extends StatelessWidget {
                         Icon(icon, color: iconColor ?? Colors.white, size: 24),
                         const SizedBox(width: 8),
                       ],
-                      Text(
-                        buttonText,
-                        style: GoogleFonts.lato(
-                          fontSize: fontSize ?? 20,
-                          fontWeight: FontWeight.bold,
-                          color: textColor ?? Colors.white,
+                      Container(
+                        // width: width ?? 300,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 16, vertical: 12),
+                        child: Center(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              buttonText,
+                              style: GoogleFonts.lato(
+                                fontSize: fontSize ?? 20,
+                                fontWeight: FontWeight.bold,
+                                color: textColor ?? Colors.white,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
+                      )
                     ],
                   ),
           ),

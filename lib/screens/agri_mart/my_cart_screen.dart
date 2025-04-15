@@ -35,150 +35,153 @@ class _MyCartScreenState extends State<MyCartScreen> {
         ),
         backgroundColor: const Color(0xff338864),
       ),
-      body: StreamBuilder<DocumentSnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection("userCart")
-            .doc(uid)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const WaitingScreen();
-          }
-          if (!snapshot.hasData || !snapshot.data!.exists) {
-            return Center(child: TextLato(text: appLocalizations.cart_empty));
-          }
+      body: SafeArea(
+        child: StreamBuilder<DocumentSnapshot>(
+          stream: FirebaseFirestore.instance
+              .collection("userCart")
+              .doc(uid)
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const WaitingScreen();
+            }
+            if (!snapshot.hasData || !snapshot.data!.exists) {
+              return Center(child: TextLato(text: appLocalizations.cart_empty));
+            }
 
-          CartItems cartItems = CartItems.fromSnap(snapshot.data!);
-          List<String> productIds = cartItems.products.keys.toList();
+            CartItems cartItems = CartItems.fromSnap(snapshot.data!);
+            List<String> productIds = cartItems.products.keys.toList();
 
-          return Scaffold(
-            body: ListView.builder(
-              itemCount: productIds.length,
-              itemBuilder: (context, index) {
-                String productId = productIds[index];
-                int quantity = cartItems.products[productId] ?? 1;
+            return Scaffold(
+              body: ListView.builder(
+                itemCount: productIds.length,
+                itemBuilder: (context, index) {
+                  String productId = productIds[index];
+                  int quantity = cartItems.products[productId] ?? 1;
 
-                return FutureBuilder<DocumentSnapshot>(
-                  future: FirebaseFirestore.instance
-                      .collection("Products")
-                      .doc(productId)
-                      .get(),
-                  builder: (context, productSnapshot) {
-                    if (productSnapshot.connectionState ==
-                        ConnectionState.waiting) {
-                      return const WaitingScreen();
-                    }
-                    if (!productSnapshot.hasData ||
-                        !productSnapshot.data!.exists) {
-                      return Center(
-                          child: TextLato(
-                              text: appLocalizations.product_not_found));
-                    }
-
-                    Products product = Products.fromSnap(productSnapshot.data!);
-
-                    if (product.stockQuantity <= 0 ||
-                        product.stockQuantity <= quantity) {
-                      print(unavilableProduct.contains(product.productName));
-                      if (!unavilableProduct.contains(product.productName)) {
-                        unavilableProduct.add(product.productName);
+                  return FutureBuilder<DocumentSnapshot>(
+                    future: FirebaseFirestore.instance
+                        .collection("Products")
+                        .doc(productId)
+                        .get(),
+                    builder: (context, productSnapshot) {
+                      if (productSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return const WaitingScreen();
                       }
-                      print(unavilableProduct.length);
-                      canBuy = false;
-                    }
+                      if (!productSnapshot.hasData ||
+                          !productSnapshot.data!.exists) {
+                        return Center(
+                            child: TextLato(
+                                text: appLocalizations.product_not_found));
+                      }
 
-                    return Card(
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15)),
-                      elevation: 5,
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 8),
-                      child: ExpansionTile(
-                        leading: StringImageInCircleAvatar(
-                            base64ImageString: product.productImageUrl[0]),
-                        title: TextLato(text: product.productName),
-                        subtitle: product.stockQuantity <= 0 ||
-                                product.stockQuantity <= quantity
-                            ? const TextLato(
-                                text:
-                                    "Product is unavilable so remove it's from cart ",
-                                color: Colors.red,
+                      Products product =
+                          Products.fromSnap(productSnapshot.data!);
+
+                      if (product.stockQuantity <= 0 ||
+                          product.stockQuantity <= quantity) {
+                        print(unavilableProduct.contains(product.productName));
+                        if (!unavilableProduct.contains(product.productName)) {
+                          unavilableProduct.add(product.productName);
+                        }
+                        print(unavilableProduct.length);
+                        canBuy = false;
+                      }
+
+                      return Card(
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)),
+                        elevation: 5,
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 8),
+                        child: ExpansionTile(
+                          leading: StringImageInCircleAvatar(
+                              base64ImageString: product.productImageUrl[0]),
+                          title: TextLato(text: product.productName),
+                          subtitle: product.stockQuantity <= 0 ||
+                                  product.stockQuantity <= quantity
+                              ? const TextLato(
+                                  text:
+                                      "Product is unavilable so remove it's from cart ",
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                )
+                              : TextLato(text: "₹ ${product.price}"),
+                          trailing: TextLato(text: "X $quantity"),
+                          children: [
+                            TextLato(
+                                text: appLocalizations.product_info,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold),
+                            TextLato(text: product.description),
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.green,
+                              ),
+                              onPressed: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) =>
+                                      ProductDetailsPage(products: product),
+                                ),
+                              ),
+                              child: TextLato(
+                                text: appLocalizations.show_more,
+                                color: Colors.white,
                                 fontWeight: FontWeight.bold,
-                              )
-                            : TextLato(text: "₹ ${product.price}"),
-                        trailing: TextLato(text: "X $quantity"),
-                        children: [
-                          TextLato(
-                              text: appLocalizations.product_info,
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold),
-                          TextLato(text: product.description),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.green,
-                            ),
-                            onPressed: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (_) =>
-                                    ProductDetailsPage(products: product),
                               ),
                             ),
-                            child: TextLato(
-                              text: appLocalizations.show_more,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.red,
+                              ),
+                              onPressed: () async {
+                                final snap = await FirebaseFirestore.instance
+                                    .collection("userCart")
+                                    .doc(uid)
+                                    .get();
+                                CartItems cartItemsi = CartItems.fromSnap(snap);
+                                cartItemsi.products.remove(product.productId);
+                                await FirebaseFirestore.instance
+                                    .collection("userCart")
+                                    .doc(uid)
+                                    .set(cartItemsi.toJson());
+                              },
+                              child: const TextLato(
+                                text: "Remove From Cart",
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
-                            ),
-                            onPressed: () async {
-                              final snap = await FirebaseFirestore.instance
-                                  .collection("userCart")
-                                  .doc(uid)
-                                  .get();
-                              CartItems cartItemsi = CartItems.fromSnap(snap);
-                              cartItemsi.products.remove(product.productId);
-                              await FirebaseFirestore.instance
-                                  .collection("userCart")
-                                  .doc(uid)
-                                  .set(cartItemsi.toJson());
-                            },
-                            child: const TextLato(
-                              text: "Remove From Cart",
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                );
-              },
-            ),
-            floatingActionButton: Expanded(
-              child: FloatingActionButton(
-                onPressed: () {
-                  canBuy
-                      ? Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => ProductOrderScreen(
-                                  productList: cartItems.products)))
-                      : showSnackBar(
-                          "$unavilableProduct are not avilable ", context);
+                          ],
+                        ),
+                      );
+                    },
+                  );
                 },
-                child: TextLato(
-                  text: "${appLocalizations.buy}  ",
-                  fontWeight: FontWeight.bold,
+              ),
+              floatingActionButton: Expanded(
+                child: FloatingActionButton(
+                  onPressed: () {
+                    canBuy
+                        ? Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => ProductOrderScreen(
+                                    productList: cartItems.products)))
+                        : showSnackBar(
+                            "$unavilableProduct are not avilable ", context);
+                  },
+                  child: TextLato(
+                    text: "${appLocalizations.buy}  ",
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            ),
-          );
-        },
+            );
+          },
+        ),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:agrisync/model/technology.dart';
+import 'package:agrisync/widget/agri_tech_card.dart';
 import 'package:agrisync/widget/string_image.dart';
 import 'package:agrisync/widget/text_lato.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -32,35 +33,51 @@ class HomeScreenTechnology extends StatelessWidget {
                         builder: (BuildContext context) {
                           return Padding(
                             padding: const EdgeInsets.only(top: 10),
-                            child: Stack(
-                              children: [
-                                StringImage(
-                                  base64ImageString: tech.photoUrl,
-                                  fit: BoxFit.fill,
-                                  width: MediaQuery.of(context).size.width,
-                                  height: MediaQuery.of(context).size.height,
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                Positioned(
-                                  bottom: 0,
-                                  left: 0,
-                                  right: 10,
-                                  child: Padding(
-                                    padding: const EdgeInsetsDirectional.only(
-                                        start: 10),
-                                    child: Text(
-                                      selectionColor: Colors.red,
-                                      tech.title,
-                                      style: GoogleFonts.lato(
-                                        color: Colors.white,
-                                        fontSize: 30,
-                                        fontWeight: FontWeight.bold,
+                            child: InkWell(
+                              onTap: () {
+                                showDialog(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                          title: TextLato(
+                                            text: tech.title,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          actions: [
+                                            TextLato(text: tech.description)
+                                          ],
+                                        ));
+                              },
+                              child: Stack(
+                                children: [
+                                  StringImage(
+                                    base64ImageString: tech.photoUrl,
+                                    fit: BoxFit.fill,
+                                    width: MediaQuery.of(context).size.width,
+                                    height: MediaQuery.of(context).size.height,
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  Positioned(
+                                    bottom: 0,
+                                    left: 0,
+                                    right: 10,
+                                    child: Padding(
+                                      padding: const EdgeInsetsDirectional.only(
+                                          start: 10),
+                                      child: Text(
+                                        selectionColor: Colors.red,
+                                        tech.title,
+                                        style: GoogleFonts.lato(
+                                          color: Colors.white,
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.left,
                                       ),
-                                      textAlign: TextAlign.left,
                                     ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           );
                         },

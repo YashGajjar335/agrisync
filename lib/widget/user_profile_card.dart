@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class UserProfileCard extends StatefulWidget {
-  const UserProfileCard({super.key});
+  final bool isProfileUpdate;
+  const UserProfileCard({super.key, required this.isProfileUpdate});
 
   @override
   State<UserProfileCard> createState() => _UserProfileCardState();
@@ -20,6 +21,14 @@ class _UserProfileCardState extends State<UserProfileCard> {
   void initState() {
     loadUserData();
     super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant UserProfileCard oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isProfileUpdate != widget.isProfileUpdate) {
+      loadUserData();
+    }
   }
 
   loadUserData() async {

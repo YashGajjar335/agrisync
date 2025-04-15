@@ -87,6 +87,10 @@ Future<Uint8List> base64StringToImage(String base64String) async {
   }
 }
 
+void refreshUser() async {
+  await FirebaseAuth.instance.currentUser?.reload();
+}
+
 void showImage(BuildContext context, String base64String) async {
   Uint8List imageBytes = await base64StringToImage(base64String);
 

@@ -76,7 +76,7 @@ class _PlantHealthReminderState extends State<PlantHealthReminder> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             LongButton(
-                              width: width(context) * 0.4,
+                              width: width(context) / 3,
                               buttonText: appLocalizations.previous,
                               onTap: () {
                                 setState(() {
@@ -88,20 +88,22 @@ class _PlantHealthReminderState extends State<PlantHealthReminder> {
                               },
                             ),
                             LongButton(
-                              width: width(context) * 0.4,
+                              width: width(context) / 3,
                               buttonText:
                                   pageNumber == widget.cropSteps.length - 1
                                       ? appLocalizations.finish
                                       : appLocalizations.next,
                               onTap: () {
                                 pageNumber == widget.cropSteps.length - 1
-                                    ? Navigator.pushReplacement(
+                                    ? Navigator.pushAndRemoveUntil(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
                                                 const MainScreen(
                                                   initPage: 0,
-                                                )))
+                                                )),
+                                        (Route<dynamic> route) => false,
+                                      )
                                     : setState(() {
                                         _pagecontroller.nextPage(
                                             duration: const Duration(

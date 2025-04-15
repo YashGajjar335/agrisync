@@ -27,6 +27,14 @@ class _StringImageInCircleAvatarState extends State<StringImageInCircleAvatar> {
   }
 
   @override
+  void didUpdateWidget(covariant StringImageInCircleAvatar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.base64ImageString != oldWidget.base64ImageString) {
+      loadImage();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return photoImageData == null
         ? const CircularProgressIndicator()
@@ -35,8 +43,12 @@ class _StringImageInCircleAvatarState extends State<StringImageInCircleAvatar> {
             backgroundImage: MemoryImage(photoImageData!));
   }
 
-  loadImage() async {
-    photoImageData = await base64StringToImage(widget.base64ImageString);
-    setState(() {});
+  Future<void> loadImage() async {
+    final decoded = await base64StringToImage(widget.base64ImageString);
+    if (mounted) {
+      setState(() {
+        photoImageData = decoded;
+      });
+    }
   }
 }
