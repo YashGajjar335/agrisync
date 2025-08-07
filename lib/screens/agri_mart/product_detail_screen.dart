@@ -220,12 +220,18 @@ class _ProductDetailsPageState extends State<ProductDetailsPage> {
                                     child: child,
                                   );
                                 },
-                                child: StringImage(
-                                  height: 380,
-                                  borderRadius: BorderRadius.circular(20),
-                                  base64ImageString:
-                                      widget.products.productImageUrl[0],
-                                  fit: BoxFit.cover,
+                                child: InkWell(
+                                  onTap: () {
+                                    showImage(context,
+                                        widget.products.productImageUrl[0]);
+                                  },
+                                  child: StringImage(
+                                    height: 380,
+                                    borderRadius: BorderRadius.circular(20),
+                                    base64ImageString:
+                                        widget.products.productImageUrl[0],
+                                    fit: BoxFit.contain,
+                                  ),
                                 ),
                               ),
                             ),

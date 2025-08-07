@@ -1,5 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:agrisync/model/crop_model.dart';
-import 'package:agrisync/screens/crop/plant_health_reminder.dart';
+import 'package:agrisync/screens/agri_sync_home_screen.dart';
+import 'package:agrisync/screens/crop/crop_categories_screen.dart';
+import 'package:agrisync/screens/main_screen.dart';
+import 'package:agrisync/services/crop_health_reminder_services.dart';
 import 'package:agrisync/utils/globle.dart';
 import 'package:agrisync/widget/agri_sync_icon.dart';
 import 'package:agrisync/widget/long_button.dart';
@@ -19,6 +24,7 @@ class CropDetailScreen extends StatefulWidget {
 }
 
 class _CropDetailScreenState extends State<CropDetailScreen> {
+  bool isLoad = false;
   int appLanguage() {
     AppLocalizations appLocalizations = AppLocalizations.of(context)!;
     String appLanguage = appLocalizations.appLanguage;
@@ -88,21 +94,39 @@ class _CropDetailScreenState extends State<CropDetailScreen> {
                     final step =
                         widget.crop.language[appLocalizations.appLanguage];
                     return InfoCrop(
-                        title: step![item].title, des: step![item].description);
+                        title: step![item].title, des: step[item].description);
                   }),
               LongButton(
+                  isLoading: isLoad,
                   width: double.infinity,
                   buttonText:
                       "${appLocalizations.crophealthreminder} ${appLocalizations.getStart}",
-                  onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => PlantHealthReminder(
-                              cropSteps: widget.crop
-                                      .language[appLocalizations.appLanguage] ??
-                                  [],
-                              cropName: widget.crop.cropName[appLang],
-                              cropImage: widget.crop.images,
-                            )));
+                  onTap: () async {
+                    setState(() {
+                      isLoad = true;
+                    });
+                    String? res = await CropHealthReminderServices.instance
+                        .addCropToCHR(widget.crop.cropId);
+                    showSnackBar(res ?? "Crop added into crop health reminder ",
+                        context);
+                    Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => const MainScreen(
+                                  initPage: 0,
+                                )),
+                        (Route<dynamic> route) => false);
+                    setState(() {
+                      isLoad = false;
+                    });
+                    // Navigator.of(context).push(MaterialPageRoute(
+                    //     builder: (context) => PlantHealthReminder(
+                    //           cropSteps: widget.crop
+                    //                   .language[appLocalizations.appLanguage] ??
+                    //               [],
+                    //           cropName: widget.crop.cropName[appLang],
+                    //           cropImage: widget.crop.images,
+                    //         )));
                   })
             ],
           ),

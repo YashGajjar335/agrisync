@@ -40,18 +40,20 @@ class ProductCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //
-                  Expanded(
-                    child: StringImage(
-                      borderRadius: BorderRadius.circular(12),
-                      base64ImageString: products.productImageUrl[0],
-                      fit: BoxFit.cover,
-                    ),
+                  StringImage(
+                    height: 150,
+                    width: double.infinity,
+                    borderRadius: BorderRadius.circular(12),
+                    base64ImageString: products.productImageUrl[0],
+                    fit: BoxFit.cover,
                   ),
                   Padding(
                     padding:
                         const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                     child: TextLato(
                       text: products.productName,
+                      maxLine: 2,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
                   Padding(

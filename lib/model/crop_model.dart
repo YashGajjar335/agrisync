@@ -19,7 +19,7 @@ class Crop {
     required this.images,
   });
 
-  factory Crop.fromJson(DocumentSnapshot snap) {
+  factory Crop.fromSnap(DocumentSnapshot snap) {
     final json = snap.data() as Map<String, dynamic>;
 
     return Crop(

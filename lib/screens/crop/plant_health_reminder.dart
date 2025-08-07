@@ -1,3 +1,4 @@
+import 'package:agrisync/model/crop_health_reminder.dart';
 import 'package:agrisync/model/crop_model.dart';
 import 'package:agrisync/screens/main_screen.dart';
 import 'package:agrisync/utils/globle.dart';
@@ -7,24 +8,32 @@ import 'package:agrisync/widget/text_lato.dart';
 import 'package:flutter/material.dart';
 import "package:flutter_gen/gen_l10n/app_localizations.dart";
 
-class PlantHealthReminder extends StatefulWidget {
+class PlantHealthReminderScreen extends StatefulWidget {
+  // final CropHealthReminder cropHealthReminder;
   final String cropName;
   final List<CropStep> cropSteps;
   final List<String> cropImage;
-  const PlantHealthReminder({
+  const PlantHealthReminderScreen({
     super.key,
+    // required this.cropHealthReminder,
     required this.cropSteps,
     required this.cropName,
     required this.cropImage,
   });
 
   @override
-  State<PlantHealthReminder> createState() => _PlantHealthReminderState();
+  State<PlantHealthReminderScreen> createState() =>
+      _PlantHealthReminderScreenState();
 }
 
-class _PlantHealthReminderState extends State<PlantHealthReminder> {
+class _PlantHealthReminderScreenState extends State<PlantHealthReminderScreen> {
   int pageNumber = 0;
   final PageController _pagecontroller = PageController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

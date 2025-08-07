@@ -73,10 +73,20 @@ class _AgriMartScreenState extends State<AgriMartScreen> {
               ),
             ),
             const SizedBox(height: 5),
-            const Text(
-              ' ',
-              textAlign: TextAlign.left,
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            Center(
+              child: Text(
+                appLocalizations.agrimart,
+                textAlign: TextAlign.center,
+                style:
+                    const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+            ),
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Divider(
+                height: 1,
+                color: Colors.black,
+              ),
             ),
             const SizedBox(
               height: 10,

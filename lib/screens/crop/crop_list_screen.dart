@@ -63,7 +63,7 @@ class _CropListScreenState extends State<CropListScreen> {
                     : ListView.builder(
                         itemCount: count,
                         itemBuilder: (context, item) {
-                          Crop crop = Crop.fromJson(snapshot.data!.docs[item]);
+                          Crop crop = Crop.fromSnap(snapshot.data!.docs[item]);
                           return Card(
                             child: ExpansionTile(
                               leading: crop.cropImage.isEmpty
